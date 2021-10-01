@@ -19,6 +19,7 @@ def homepage():
     collection.insert(data)
 
     # Check that data is in database
+    print("bleh")
     print(collection.find_one())
     return render_template('index.html')
 
