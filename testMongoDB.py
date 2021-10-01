@@ -1,14 +1,16 @@
-# MONGO DB
-# USERNAME: testUser
-# PASSWORD: AOt8tFZMFCsWHZOM
-
 import pymongo
-client = pymongo.MongoClient("mongodb+srv://testUser:AOt8tFZMFCsWHZOM@testingdb.e5b3v.mongodb.net/TestingDB?retryWrites=true&w=majority")
+import os
+
+# Connect to database
+client = pymongo.MongoClient(os.environ['DATABASE_URL'])
 db = client.test
 
+# Add data to db
 collection = db['testData']
 data = [
     {"name": "Cheese"}
 ]
 collection.insert(data)
+
+# Check that data is in database
 print(collection.find_one())
