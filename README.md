@@ -7,5 +7,3 @@ Project is divided into four sprints.
 Project Description:
 
 User Stories:
-
-test
