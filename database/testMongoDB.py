@@ -1,3 +1,8 @@
+"""
+This test code is for local connections to the mongodb.
+Add DATABASE_URL to environmental variables before testing.
+The url can be found in the heroku configs file.
+"""
 import pymongo
 import os
 

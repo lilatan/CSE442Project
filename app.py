@@ -1,31 +1,29 @@
-from flask import Flask, send_from_directory, render_template
+from flask import Flask, render_template
 import pymongo
 import os
 
 app = Flask(__name__)
 
+# Connect to database
+client = pymongo.MongoClient(os.environ['DATABASE_URL'])
+db = client.test
+
 
 @app.route('/')
 def homepage():
-    # Connect to database
-    client = pymongo.MongoClient(os.environ['DATABASE_URL'])
-    db = client.test
-
-    # Add data to db
-    collection = db['testData']
-    data = [
-        {"name": "Cheese"}
-    ]
-    collection.insert(data)
-
-    # Check that data is in database
-    print("bleh", flush=True)
-    print(collection.find_one(), flush=True)
     return render_template('index.html')
 
 
 @app.route('/leaderboard')
 def leaderboard():
+    collection = db['testData']
+    # Code to add data to a specific collection on mongodb
+    # data = [
+    #     {"name": "Cheese"}
+    # ]
+    # collection.insert(data)
+    print("Testing print functionality in the heroku server logs", flush=True)
+    print(collection.find_one(), flush=True)
     return render_template('leaderboard.html')
 
 
