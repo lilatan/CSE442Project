@@ -1,6 +1,12 @@
-from flask import Flask, send_from_directory, render_template
+from flask import Flask, render_template
+import pymongo
+import os
 
 app = Flask(__name__)
+
+# Connect to database
+client = pymongo.MongoClient(os.environ['DATABASE_URL'])
+db = client.test
 
 
 @app.route('/')
@@ -10,6 +16,14 @@ def homepage():
 
 @app.route('/leaderboard')
 def leaderboard():
+    collection = db['testData']
+    # Code to add data to a specific collection on mongodb
+    # data = [
+    #     {"name": "Cheese"}
+    # ]
+    # collection.insert(data)
+    print("Testing print functionality in the heroku server logs", flush=True)
+    print(collection.find_one(), flush=True)
     return render_template('leaderboard.html')
 
 
@@ -24,4 +38,5 @@ def jscript(filename):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8000)
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host="0.0.0.0", port=port)
