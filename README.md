@@ -4,6 +4,6 @@ Eliza Koster, Robert McManus, Lila Tan, William Hiltz, Chaktim Wong, Eric Yang
 
 Project is divided into four sprints. 
 
-Project Description: A platform game.
+Project Description: A time/point based platform game with an online leaderboard.
 
 
