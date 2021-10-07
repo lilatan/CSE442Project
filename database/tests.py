@@ -1,15 +1,14 @@
 """
 File: tests.py
 Author: Chaktim Wong
-Date Created: 10 October 2021
-Last Modified: 10 October 2021
-
+Date Created: 7 October 2021
+Last Modified: 7 October 2021
 Description:
   This file contains a basic db connection test and tests for the functions in database_tools.py
 """
 import pymongo
 import os
-from database.database_tools import MongoUser
+from database import database_tools
 
 
 # Basic db connection test
@@ -29,13 +28,33 @@ def basic_test():
     print("TESTING DATABASE CONNECTION......complete.")
 
 
-def test_add_get():
+def test_database_tools():
     """
-    test_add tests the add_leaderboard() and get_leaderboard() functions
-    by adding to the leaderboard and then printing the results of get_leaderboard()
+    test_database_tools tests the add, delete and get leaderboard functions in database_tools.py
+    :return: true if all tests pass, and false if any tests fails
+    """
+    print("----START OF database_tools.py TEST-----")
+    initial_state = database_tools.get_leaderboard()
+    test_str = "Testing add_leaderboard and get_leaderboard.......   "
+    database_tools.add_leaderboard("Bob", 1000, 2)
+    if str(database_tools.get_leaderboard()) != "[{'name': 'Bob', 'score': 1000, 'level': 2}]":
+        print(test_str + "FAILED")
+        return False
+    else:
+        print(test_str + "PASSED")
 
-    :return: None
-    """
-    db = MongoUser()
-    MongoUser.add_leaderboard(db, "Bob", 1000, 2)
-    print(MongoUser.get_leaderboard(db), flush=True)
+    test_str = "Testing delete_leaderboard.......                    "
+    database_tools.delete_leaderboard("Bob", 1000, 2)
+    if database_tools.get_leaderboard() != initial_state:
+        print(test_str + "FAILED")
+        return False
+    else:
+        print(test_str + "PASSED")
+
+    # all tests passed
+    print("............................ALL TESTS PASSED..........................")
+    print("-----END OF database_tools.py TEST------")
+    return True
+
+
+

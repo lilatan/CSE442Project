@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 import os
-import database
+from database import database_tools, tests
 
 app = Flask(__name__)
 
@@ -12,13 +12,20 @@ def homepage():
 
 @app.route('/leaderboard')
 def leaderboard():
-    database.tests.test_add_get()
     return render_template('leaderboard.html')
 
 
 @app.route('/load')
 def load():
     return render_template('load.html')
+
+
+@app.route('/test_leaderboard')
+def test_leaderboard():
+    if tests.test_database_tools():
+        return "all tests passed"
+    else:
+        return "test(s) failed...check logs"
 
 
 @app.route('/static/<path:filename>')
