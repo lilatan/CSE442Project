@@ -1,12 +1,9 @@
 from flask import Flask, render_template
-import pymongo
 import os
+import database.database_tools
+import database.tests
 
 app = Flask(__name__)
-
-# Connect to database
-client = pymongo.MongoClient(os.environ['DATABASE_URL'])
-db = client.test
 
 
 @app.route('/')
@@ -16,14 +13,7 @@ def homepage():
 
 @app.route('/leaderboard')
 def leaderboard():
-    collection = db['testData']
-    # Code to add data to a specific collection on mongodb
-    # data = [
-    #     {"name": "Cheese"}
-    # ]
-    # collection.insert(data)
-    print("Testing print functionality in the heroku server logs", flush=True)
-    print(collection.find_one(), flush=True)
+    database.tests.test_add_get()
     return render_template('leaderboard.html')
 
 
