@@ -9,7 +9,7 @@ Description:
 """
 import pymongo
 import os
-import database_tools
+from database.database_tools import MongoUser
 
 
 # Basic db connection test
@@ -36,5 +36,6 @@ def test_add_get():
 
     :return: None
     """
-    database_tools.add_leaderboard("Bob", 1000, 2)
-    print(database_tools.get_leaderboard(), flush=True)
+    db = MongoUser()
+    MongoUser.add_leaderboard(db, "Bob", 1000, 2)
+    print(MongoUser.get_leaderboard(db), flush=True)

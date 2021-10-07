@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 import os
-import database.database_tools
-import database.tests
+import database
 
 app = Flask(__name__)
 
