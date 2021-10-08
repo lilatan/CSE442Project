@@ -20,12 +20,20 @@ def load():
     return render_template('load.html')
 
 
+@app.route('/test_db')
+def test_db():
+    if tests.basic_test():
+        return "test passed"
+    else:
+        return "test failed"
+
+
 @app.route('/test_leaderboard')
 def test_leaderboard():
     if tests.test_database_tools():
         return "all tests passed"
     else:
-        return "test(s) failed...check logs"
+        return "test(s) failed...check logs and remember this test should be done on an empty collection"
 
 
 @app.route('/static/<path:filename>')
