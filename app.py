@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 import os
+import templates
 from database import database_tools, tests
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ def homepage():
 
 @app.route('/leaderboard')
 def leaderboard():
-    return render_template('leaderboard.html')
+    return render_template('leaderboard.html', list=database_tools.get_leaderboard())
 
 
 @app.route('/load')
