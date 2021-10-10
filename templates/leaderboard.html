@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
-  <link href="/static/main.css" rel="stylesheet" />
-  <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
+    <link href="/static/main.css" rel="stylesheet" />
+    <title>Leaderboard</title>
 </head>
 <body>
-  <div class="leaderboards_board"></div>
-  <span class="leaderboards_title">LEADERBOARD</span>
-  <span class="leaderboards_score">PLAYER - SCORE - TIME</span>
-  <section class="content">
-    {% if list %}
-    <h1>{{ list }}</h1>
-  </section>
-  <a href="/"><span class="back">BACK</span></a>
+<div class="leaderboards_board"></div>
+<span class="leaderboards_title">LEADERBOARD</span>
+<span class="leaderboards_score">PLAYER - SCORE - TIME</span>
+<p>{{ list }}</p>
+<a href="/"><span class="back">BACK</span></a>
 </body>
 </html>

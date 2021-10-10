@@ -1,9 +1,8 @@
 from flask import Flask, render_template
 import os
-import templates
 from database import database_tools, tests
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 
 @app.route('/')
