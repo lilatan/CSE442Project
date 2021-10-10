@@ -12,7 +12,8 @@ def homepage():
 
 @app.route('/leaderboard')
 def leaderboard():
-    return render_template('leaderboard.html', list=database_tools.get_leaderboard())
+    scores = database_tools.get_leaderboard()
+    return render_template('leaderboard.html', list=scores)
 
 
 @app.route('/load')

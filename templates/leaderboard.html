@@ -8,16 +8,14 @@
 <body>
     <h1>LEADERBOARD</h1>
     <h2>PLAYER - SCORE - TIME</h2>
-    <div class="leaderboards_board"></div>
     <!--
+<div class="leaderboards_board"></div>
 <span class="leaderboards_title">LEADERBOARD</span>
 <span class="leaderboards_score">PLAYER - SCORE - TIME</span>
 -->
-   <ol>
-       {%for i in list%}
-       {{ i }}
-       {%endfor%}
-   </ol>
+    {% for item in list %}
+    <p>{{ item }}</p>
+    {% endfor %}
 <a href="/"><span class="back">BACK</span></a>
 </body>
 </html>
