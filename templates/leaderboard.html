@@ -14,8 +14,8 @@
 <span class="leaderboards_score">PLAYER - SCORE - TIME</span>
 -->
 
-    {% for item in list %}
-        <p>{{ item.values }}</p>
+    {% for dict_item in list %}
+        <p>{{ dict_item.name }}</p> <p>{{dict_item.score}}</p> <p>{{dict_item.level}}</p>
     {% endfor %}
 <a href="/"><span class="back">BACK</span></a>
 </body>
