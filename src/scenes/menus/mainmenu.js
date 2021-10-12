@@ -1,5 +1,5 @@
-var mainMenu = function(){};
-
-mainMenu.prototype = {
-    
+class mainMenu extends Phaser.Scene {
+    constructor(){
+        super("mainMenu");
+    }
 }
