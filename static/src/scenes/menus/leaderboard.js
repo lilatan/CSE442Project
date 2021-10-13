@@ -1,7 +1,8 @@
-import { Constants } from "../../Constants";
+import { Constants } from "../../Constants.js";
+
 export class leaderboard extends Phaser.Scene {
     constructor(){
-        super(Constant.Scenes.leaderboard);
+        super(Constants.Scenes.leaderboard);
     }
     //Put in database information
     init(){

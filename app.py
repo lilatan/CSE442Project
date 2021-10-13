@@ -15,9 +15,9 @@ def homepage():
 
 
 @app.route("/static/<path:name>")
-def library(name):
+def staticFolder(name):
     return send_from_directory(
-        'lib', name
+        'static', name
     )
 
 
@@ -47,9 +47,9 @@ def load():
     return render_template('load.html')
 
 
-@app.route('/static/<path:filename>')
-def jscript(filename):
-    return render_template('static', filename)
+# @app.route('/static/<path:filename>')
+# def jscript(filename):
+#     return render_template('static', filename)
 
 
 if __name__ == '__main__':

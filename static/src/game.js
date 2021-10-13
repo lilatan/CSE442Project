@@ -1,10 +1,11 @@
-import { leaderboard } from "./scenes/menus/leaderboard";
-import { mainMenu } from "./scenes/menus/mainmenu";
+import { leaderboard } from "./scenes/menus/leaderboard.js";
+import { mainMenu } from "./scenes/menus/mainmenu.js";
+
 
 var config = {
     width:1000,
     height:800,
-    backgroundColor: 0xff0000,
-    scene:[mainMenu, leaderboard]
+    backgroundColor: 0x770000,
+    scene:[mainMenu,leaderboard]
 }
-var game = new Phaser.Game(config);
+var crewel = new Phaser.Game(config);
