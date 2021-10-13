@@ -1,5 +1,5 @@
 import { Constants } from "../../Constants.js";
-import { TextButton } from "../../game_objects/textButton.js";
+import { TextButton } from "../../game_objects/TextButton.js";
 
 export class leaderboard extends Phaser.Scene {
     constructor(){
