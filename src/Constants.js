@@ -1,4 +1,4 @@
-export const Constant = {
+export const Constants = {
     Scenes: {
         mainMenu: "mainMenu",
         leaderboard: "leaderboard",
