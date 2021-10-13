@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 import pymongo
 import os
 
@@ -11,7 +11,22 @@ db = client.test
 
 @app.route('/')
 def homepage():
-    return render_template('index.html')
+    return render_template('main.html')
+
+
+@app.route("/static/<path:name>")
+def library(name):
+    return send_from_directory(
+        'lib', name
+    )
+
+
+# @app.route("/static/src/<path:name>")
+# def source(name):
+#     return send_from_directory(
+#         'src', name
+#     )
+
 
 
 @app.route('/leaderboard')
