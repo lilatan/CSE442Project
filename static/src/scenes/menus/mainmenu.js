@@ -10,10 +10,14 @@ export class mainMenu extends Phaser.Scene {
 
     }
     preload(){
-
+        this.load.audio('bgm', '/static/src/assets/bgm/Prologue.mp3');
     }
 
     create(){
+        var music = this.sound.add('bgm');
+        this.sound.volume = 0.10;
+        music.play();
+        
         this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
         this.add.existing(this.startButton);
         this.loadButton = new TextButton(this, 25, 450,'LOAD',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.load));
