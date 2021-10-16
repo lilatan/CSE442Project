@@ -1,5 +1,6 @@
 export const Constants = {
     Scenes: {
+        mainMemuLoad: "mainMenuLoad",
         mainMenu: "mainMenu",
         leaderboard: "leaderboard",
         options: "options",
