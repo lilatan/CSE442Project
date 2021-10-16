@@ -12,7 +12,7 @@ export class mainMenuLoad extends Phaser.Scene {
     }
     create(){
         var music = this.sound.add('bgm');
-        this.sound.volume = 0.15;
+        this.sound.volume = 0.10;
 
         
         var prompt = new Phaser.GameObjects.Text(this, 200,200,'Press SPACE', {fill: '#ffffff'});
