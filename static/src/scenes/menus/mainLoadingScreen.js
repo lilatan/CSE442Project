@@ -12,12 +12,15 @@ export class mainMenuLoad extends Phaser.Scene {
     }
     create(){
         var music = this.sound.add('bgm');
+        this.sound.volume = 0.15;
+
         
         var prompt = new Phaser.GameObjects.Text(this, 200,200,'Press SPACE', {fill: '#ffffff'});
         prompt.setFontSize(72);
         this.add.existing(prompt);
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.keySpace.on('up',()=>this.next());
+        
         // this.scene.start(Constants.Scenes.mainMenu);
         music.play();
     }
