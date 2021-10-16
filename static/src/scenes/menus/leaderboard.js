@@ -10,7 +10,16 @@ export class leaderboard extends Phaser.Scene {
 
     }
     preload(){
-
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState != 4) return;
+            if (this.status == 200) {
+                // data var contains json received from the server
+                var data = JSON.parse(this.responseText);
+            }
+        };
+        xhr.open('GET', '/get-leaderboard', true);
+        xhr.send();
     }
     //make the leaderboard using the data grabbed in init
     create(){
