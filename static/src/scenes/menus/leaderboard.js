@@ -28,6 +28,7 @@ export class leaderboard extends Phaser.Scene {
         this.nameText = new Phaser.GameObjects.Text(this, 100, 120, 'NAME - SCORE - LEVEL', {fill: '#d4b2d8', align: 'center'});
         this.nameText.setFontSize(32);
         this.add.existing(this.nameText);
+
         // Iterating through the leaderboard Data
         for (let score of this.leaderboardData){
             console.log(score)
