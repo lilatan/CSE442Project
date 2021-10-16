@@ -6,37 +6,38 @@ export class leaderboard extends Phaser.Scene {
         super(Constants.Scenes.leaderboard);
     }
     //Put in database information
-    init(){
-
-    }
+    init(){}
+    leaderboardData;
+    xhr;
     preload(){
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (this.readyState != 4) return;
-            if (this.status == 200) {
-                // this.leaderboardData contains json received from the server
-                var leaderboardData = JSON.parse(this.responseText);
-            }
-        };
-        xhr.open('GET', '/get-leaderboard', true);
-        xhr.send();
+        this.xhr = new XMLHttpRequest();
+        this.xhr.onreadystatechange = this.stateChangeData();
+        console.log(this.leaderboardData);
+        this.xhr.open('GET', '/get-leaderboard', true);
+        this.xhr.send();
     }
     //make the leaderboard using the data grabbed in init
     create(){
-        this.leaderboardText = new Phaser.GameObjects.Text(this,275,200,'LEADERBOARD', {fill: '#d4b2d8'});
-        this.leaderboardText.setFontSize(72);
+        this.leaderboardText = new Phaser.GameObjects.Text(this, 100, 90,'LEADERBOARD', {fill: '#d4b2d8', align: 'center'});
+        this.leaderboardText.setFontSize(40);
         this.add.existing(this.leaderboardText);
-        this.nameText = new Phaser.GameObjects.Text(this, 250, 230, 'NAME - SCORE - LEVEL', {fill: '#d4b2d8'});
-        this.nameText.setFontSize(48);
+        this.nameText = new Phaser.GameObjects.Text(this, 100, 120, 'NAME - SCORE - LEVEL', {fill: '#d4b2d8', align: 'center'});
+        this.nameText.setFontSize(32);
         this.add.existing(this.nameText);
-
-        console.log(this.leaderboardData)
-        // for (let i = 0; i < this.leaderboardData.length; i++) {
-        //     console.log(this.leaderboardData[i]);
-        // }
 
         this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.mainMenu));
         this.add.existing(this.menuButton);
         // console.log('leader testing');
+    }
+    stateChangeData() {
+        if (this.xhr.readyState != 4) return;
+        if (this.xhr.status == 200) {
+            // this.leaderboardData contains json received from the server
+            this.leaderboardData = JSON.parse(this.responseText);
+            console.log(this.leaderboardData);
+            // for (let i = 0; i < this.leaderboardData.length; i++) {
+            //     console.log(this.leaderboardData[i]);
+            // }
+        }
     }
 }
