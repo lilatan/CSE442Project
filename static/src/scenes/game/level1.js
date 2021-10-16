@@ -1,4 +1,4 @@
-import { Constants } from "../../Constants.js"
+import { Constants } from "/static/src/Constants.js"
 export class level1 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl1);

@@ -1,5 +1,5 @@
-import { Constants } from "../../Constants.js";
-import { TextButton } from "../../game_objects/TextButton.js";
+import { Constants } from "/static/src/Constants.js";
+import { TextButton } from "/static/src/game_objects/TextButton.js";
 
 export class pauseMenu extends Phaser.Scene {
     constructor(){
