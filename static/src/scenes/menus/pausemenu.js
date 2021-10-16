@@ -17,7 +17,10 @@ export class pauseMenu extends Phaser.Scene {
     }
     create(){
         this.scene.bringToTop();
-        console.log(this.level.key);
+        // console.log(this.level.key);
+        this.pauseText = new Phaser.GameObjects.Text(this,275,200,'PAUSED',{fill: '#ffffff'});
+        this.pauseText.setFontSize(72);
+        this.add.existing(this.pauseText);
         this.resumeButton = new TextButton(this, 25, 400,'RESUME',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.resumeGame());
         this.add.existing(this.resumeButton);
         this.restartButton = new TextButton(this, 25, 450,'RESTART',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.restartGame());

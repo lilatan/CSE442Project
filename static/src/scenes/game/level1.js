@@ -123,7 +123,7 @@ export class level1 extends Phaser.Scene {
 
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
-        console.log(this.scene);
+        // console.log(this.scene);
         this.scene.pause();
     }
 
