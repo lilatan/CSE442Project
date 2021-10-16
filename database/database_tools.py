@@ -59,5 +59,5 @@ def get_leaderboard():
     :return: list (ascending order)
     """
     collection = db['leaderboard']
-    result = list(collection.find({}, {'_id': False}).sort("score", 1))
+    result = list(collection.find({}, {'_id': False}).sort("score", -1))
     return result
