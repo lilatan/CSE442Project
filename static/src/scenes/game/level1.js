@@ -1,4 +1,5 @@
 import { Constants } from "/static/src/Constants.js"
+// import { pause } from "../menus/pausemenu.js";
 export class level1 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl1);
@@ -38,6 +39,7 @@ export class level1 extends Phaser.Scene {
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.keyESC.on('up',()=>this.pause());
         
         
 
@@ -104,8 +106,12 @@ export class level1 extends Phaser.Scene {
         }
         if (this.cursors.down.isDown || this.keyS.isDown)
         {
-            this.player.setVelocityY(-170);
+            this.player.setVelocityY(170);
         }
+        // if(this.keyESC.isDown){
+        //     this.scene.pause();
+        //     this.scene.launch(Constants.Scenes.pause);
+        // }
     }
 
     collectcoin (player, coin){
@@ -113,6 +119,12 @@ export class level1 extends Phaser.Scene {
 
         this.crewels += 1;
         this.coinCount.setText('crewels: ' + this.crewels);
+    }
+
+    pause(){
+        this.scene.launch(Constants.Scenes.pause,this.scene);
+        console.log(this.scene);
+        this.scene.pause();
     }
 
 
