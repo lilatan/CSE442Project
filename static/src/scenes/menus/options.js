@@ -5,12 +5,17 @@ export class optionsMenu extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.options);
     }
+    data;
+    init(data){
+        this.data = data;
+    }
     create(){
+        this.scene.bringToTop();
         this.muteButton = new TextButton(this, 300, 300, "MUTE SOUND", {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.muteSound());
         this.xMark = new Phaser.GameObjects.Text(this, 250, 300, 'X', {fill: '#ffffff'});
         this.xMark.setFontSize(48);
         
-        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.mainMenu));
+        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(this.data.key));
         this.add.existing(this.menuButton);
         this.add.existing(this.muteButton);
         this.add.existing(this.xMark);
@@ -25,6 +30,7 @@ export class optionsMenu extends Phaser.Scene {
             this.sound.setMute(false);
             this.xMark.setVisible(false);
         }
+        console.log(this.sound.key + "  " + this.sound.isPlaying);
     }
     
 }
