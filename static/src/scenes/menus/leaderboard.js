@@ -19,6 +19,10 @@ export class leaderboard extends Phaser.Scene {
                 // data var contains json received from the server
                 parent.leaderboardData = JSON.parse(this.responseText);
 
+                // Iterating through the leaderboard Data
+                for (let score of parent.leaderboardData){
+                    console.log(score)
+                }
                 // PUT UPDATE LEADERBOARD PAGE CODE HERE
             }
         };
@@ -28,11 +32,11 @@ export class leaderboard extends Phaser.Scene {
 
     //make the leaderboard page (static content only)
     create(){
-        this.leaderboardText = new Phaser.GameObjects.Text(this, 275, 200, 'LEADERBOARD', {fill: '#ffffff'});
-        this.leaderboardText.setFontSize(72);
+        this.leaderboardText = new Phaser.GameObjects.Text(this, 100, 90, 'LEADERBOARD', {fill: '#d4b2d8', align: 'center'});
+        this.leaderboardText.setFontSize(40);
         this.add.existing(this.leaderboardText);
-        this.nameText = new Phaser.GameObjects.Text(this, 250, 230, 'NAME - SCORE - LEVEL', {fill: '#ffffff'});
-        this.nameText.setFontSize(48);
+        this.nameText = new Phaser.GameObjects.Text(this, 100, 120, 'NAME - SCORE - LEVEL', {fill: '#d4b2d8', align: 'center'});
+        this.nameText.setFontSize(32);
         this.add.existing(this.nameText);
 
         this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, () => this.scene.start(Constants.Scenes.mainMenu));
