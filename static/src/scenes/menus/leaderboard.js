@@ -8,13 +8,17 @@ export class leaderboard extends Phaser.Scene {
     //Put in database information
     init(){}
     leaderboardData;
-    xhr;
     preload(){
-        this.xhr = new XMLHttpRequest();
-        this.xhr.onreadystatechange = this.stateChangeData();
-        console.log(this.leaderboardData);
-        this.xhr.open('GET', '/get-leaderboard', true);
-        this.xhr.send();
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if (this.readyState != 4) return;
+            if (this.status == 200) {
+                // this.leaderboardData contains json received from the server
+                this.leaderboardData = JSON.parse(this.responseText);
+            }
+        }
+        xhr.open('GET', '/get-leaderboard', true);
+        xhr.send();
     }
     //make the leaderboard using the data grabbed in init
     create(){
@@ -24,20 +28,13 @@ export class leaderboard extends Phaser.Scene {
         this.nameText = new Phaser.GameObjects.Text(this, 100, 120, 'NAME - SCORE - LEVEL', {fill: '#d4b2d8', align: 'center'});
         this.nameText.setFontSize(32);
         this.add.existing(this.nameText);
+        // Iterating through the leaderboard Data
+        for (let score of this.leaderboardData){
+            console.log(score)
+        }
 
         this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.mainMenu));
         this.add.existing(this.menuButton);
         // console.log('leader testing');
-    }
-    stateChangeData() {
-        if (this.xhr.readyState != 4) return;
-        if (this.xhr.status == 200) {
-            // this.leaderboardData contains json received from the server
-            this.leaderboardData = JSON.parse(this.responseText);
-            console.log(this.leaderboardData);
-            // for (let i = 0; i < this.leaderboardData.length; i++) {
-            //     console.log(this.leaderboardData[i]);
-            // }
-        }
     }
 }
