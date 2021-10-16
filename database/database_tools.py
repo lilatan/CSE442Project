@@ -56,7 +56,7 @@ def get_leaderboard():
     """
     get_leaderboard retrieves the leaderboard collection from the database and
     returns it sorted (ascending) by score.
-    :return: list (ascending order)
+    :return: list (descending order)
     """
     collection = db['leaderboard']
     result = list(collection.find({}, {'_id': False}).sort("score", -1))

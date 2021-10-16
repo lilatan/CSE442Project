@@ -127,5 +127,14 @@ export class level1 extends Phaser.Scene {
         this.scene.pause();
     }
 
-
+    send_leaderboard_entry(name, score, level){
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '/update-leaderboard', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            name: name,
+            score: score,
+            level: level
+        }));
+    }
 }
