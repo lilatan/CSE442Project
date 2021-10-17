@@ -7,5 +7,8 @@ export const Constants = {
         load: "load",
         pause: "pause",
         lvl1: "level1"
+    },
+    BGM: {
+        mainMusic: "bgm",
     }
 }

@@ -14,13 +14,16 @@ export class mainMenu extends Phaser.Scene {
     }
 
     create(){
-        var music = this.sound.add('bgm');
-        this.sound.volume = 0.10;
-        console.log(this.sound.key + " - " + music.key);
-        if (this.sound.key != music.key){
+        var music = this.sound.add(Constants.BGM.mainMusic);
+        this.sound.setVolume(0.1);
+        this.sound.pauseOnBlur = false;
+        // console.log(this.sound.key + " - " + music.key);
+        console.log(this.sound.get(Constants.BGM.mainMusic).key +" "+ this.sound.get(Constants.BGM.mainMusic).isPlaying);
+        if (!this.sound.get(Constants.BGM.mainMusic).isPlaying){
+            music.loop=true;
             music.play();
         }
-        console.log(this.sound.key);
+        // console.log(this.sound.key);
 
         this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
         this.add.existing(this.startButton);

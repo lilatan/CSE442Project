@@ -19,7 +19,11 @@ export class optionsMenu extends Phaser.Scene {
         this.add.existing(this.menuButton);
         this.add.existing(this.muteButton);
         this.add.existing(this.xMark);
-        this.xMark.setVisible(false);
+        if(!this.sound.mute){
+            this.xMark.setVisible(false);
+        }else{
+            this.xMark.setVisible(true);
+        }
     }
 
     muteSound(){
@@ -30,7 +34,7 @@ export class optionsMenu extends Phaser.Scene {
             this.sound.setMute(false);
             this.xMark.setVisible(false);
         }
-        console.log(this.sound.key + "  " + this.sound.isPlaying);
+        // console.log(this.sound.key + "  " + this.sound.isPlaying);
     }
     
 }
