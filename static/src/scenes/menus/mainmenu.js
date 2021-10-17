@@ -14,14 +14,14 @@ export class mainMenu extends Phaser.Scene {
     }
 
     create(){
-        var music = this.sound.add(Constants.BGM.mainMusic);
+        this.music = this.sound.add(Constants.BGM.mainMusic);
         this.sound.setVolume(0.1);
         this.sound.pauseOnBlur = false;
         // console.log(this.sound.key + " - " + music.key);
         console.log(this.sound.get(Constants.BGM.mainMusic).key +" "+ this.sound.get(Constants.BGM.mainMusic).isPlaying);
         if (!this.sound.get(Constants.BGM.mainMusic).isPlaying){
-            music.loop=true;
-            music.play();
+            this.music.loop=true;
+            this.music.play();
         }
         // console.log(this.sound.key);
 

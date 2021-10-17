@@ -6,6 +6,7 @@ export const Constants = {
         options: "options",
         load: "load",
         pause: "pause",
+        nameInput: "nameInput",
         lvl1: "level1"
     },
     BGM: {

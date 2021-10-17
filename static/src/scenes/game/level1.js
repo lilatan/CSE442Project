@@ -10,6 +10,7 @@ export class level1 extends Phaser.Scene {
     cursors;
     crewels = 0;
     coinCount;
+    totalCoin = 12;
 
     keyW;
     keyA;
@@ -65,7 +66,7 @@ export class level1 extends Phaser.Scene {
 
         this.coin = this.physics.add.group({
             key: 'coin',
-            repeat: 11,
+            repeat: this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
 
@@ -112,6 +113,11 @@ export class level1 extends Phaser.Scene {
         //     this.scene.pause();
         //     this.scene.launch(Constants.Scenes.pause);
         // }
+        if(this.crewels==1){
+            // this.scene.pause();
+            // this.scene.launch(Constants.Scenes.nameInput, this.scene);
+            this.scene.start(Constants.Scenes.nameInput, this.scene);
+        }
     }
 
     collectcoin (player, coin){
@@ -125,16 +131,5 @@ export class level1 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
-    }
-
-    send_leaderboard_entry(name, score, level){
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", '/update-leaderboard', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({
-            name: name,
-            score: score,
-            level: level
-        }));
     }
 }
