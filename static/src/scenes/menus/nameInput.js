@@ -14,13 +14,27 @@ export class nameInput extends Phaser.Scene{
     }
     preload(){
         this.load.html('nameform', '/static/src/assets/html/nameform.html');
+
+        var name = prompt("Please enter your name", "user");
+        if (name != null) {
+            this.send_leaderboard_entry(name, this.score, this.level.key);
+        }
+        this.scene.stop(this.level.key);
+        this.scene.start(Constants.Scenes.mainMenu);
     }
     create(){
         this.scene.bringToTop();
         var prompt = this.add.text(300,100, "Enter your name", {fill: '#ffffff', fontSize: 48});
-        this.element = this.add.dom(200, 400).createFromCache('nameform');
+        this.element = this.add.dom(200, 200).createFromCache('nameform');
         this.element.addListener('click');
         this.element.on('click', ()=>this.getUsername());
+
+        this.tweens.add({
+            targets: this.element,
+            y: 300,
+            duration: 3000,
+            ease: 'Power3'
+        });
     }
 
     getUsername(event){

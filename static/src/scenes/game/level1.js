@@ -116,7 +116,8 @@ export class level1 extends Phaser.Scene {
         if(this.crewels==1){
             // this.scene.pause();
             // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-            this.scene.start(Constants.Scenes.nameInput, this.scene);
+            console.log(this.scene.key)
+            this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         }
     }
 
