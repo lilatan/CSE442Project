@@ -23,31 +23,31 @@ export class nameInput extends Phaser.Scene{
         this.scene.start(Constants.Scenes.mainMenu);
     }
     create(){
-        this.scene.bringToTop();
-        var prompt = this.add.text(300,100, "Enter your name", {fill: '#ffffff', fontSize: 48});
-        this.element = this.add.dom(200, 200).createFromCache('nameform');
-        this.element.addListener('click');
-        this.element.on('click', ()=>this.getUsername());
+        // this.scene.bringToTop();
+        // var prompt = this.add.text(300,100, "Enter your name", {fill: '#ffffff', fontSize: 48});
+        // this.element = this.add.dom(200, 200).createFromCache('nameform');
+        // this.element.addListener('click');
+        // this.element.on('click', ()=>this.getUsername());
 
-        this.tweens.add({
-            targets: this.element,
-            y: 300,
-            duration: 3000,
-            ease: 'Power3'
-        });
+        // this.tweens.add({
+        //     targets: this.element,
+        //     y: 300,
+        //     duration: 3000,
+        //     ease: 'Power3'
+        // });
     }
 
-    getUsername(event){
-        if(event.target.name ==='enterButton'){
-            this.username = this.element.getChildByName('nameField');
-            if(this.username !==''){
-                this.element.removeListener('click');
-                this.send_leaderboard_entry(this.username, this.score, this.level.key);
-                this.scene.stop(this.level.key);
-                this.scene.start(Constants.Scenes.leaderboard);
-            }
-        }
-    }
+    // getUsername(event){
+    //     if(event.target.name ==='enterButton'){
+    //         this.username = this.element.getChildByName('nameField');
+    //         if(this.username !==''){
+    //             this.element.removeListener('click');
+    //             this.send_leaderboard_entry(this.username, this.score, this.level.key);
+    //             this.scene.stop(this.level.key);
+    //             this.scene.start(Constants.Scenes.leaderboard);
+    //         }
+    //     }
+    // }
     send_leaderboard_entry(name, score, level){
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/update-leaderboard', true);
