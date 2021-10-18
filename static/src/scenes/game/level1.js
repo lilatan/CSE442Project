@@ -11,6 +11,8 @@ export class level1 extends Phaser.Scene {
     crewels = 0;
     coinCount;
     totalCoin = 12;
+    spikes;
+    zoom;
 
     keyW;
     keyA;
@@ -29,6 +31,7 @@ export class level1 extends Phaser.Scene {
         this.load.image('ground', '/static/src/assets/sand_platform.png');
         this.load.image('coin', '/static/src/assets/single_coin.png');
         this.load.image('player_one', '/static/src/assets/spear_player.png');
+        this.load.image('spike', '/static/src/assets/spikes.png');
     }
 
     create(){
@@ -47,6 +50,7 @@ export class level1 extends Phaser.Scene {
         this.add.image(400, 300, 'background');
 
         this.platforms = this.physics.add.staticGroup();
+        this.spikes = this.physics.add.staticGroup();
 
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
@@ -56,6 +60,8 @@ export class level1 extends Phaser.Scene {
         this.platforms.create(700, 450, 'ground');
         this.platforms.create(550, 150, 'ground');
         this.platforms.create(25, 125, 'ground');
+
+        this.spikes.create(400, 500, 'spike');
 
         this.player = this.physics.add.sprite(100, 450, 'player_one');
 
@@ -76,12 +82,18 @@ export class level1 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '32px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
+
+        this.cameras.main.setBounds(0, 0, 800, 600);
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setZoom(3);
+       
+        this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
 
     }
 
@@ -109,6 +121,7 @@ export class level1 extends Phaser.Scene {
         {
             this.player.setVelocityY(170);
         }
+        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         // if(this.keyESC.isDown){
         //     this.scene.pause();
         //     this.scene.launch(Constants.Scenes.pause);
@@ -119,6 +132,10 @@ export class level1 extends Phaser.Scene {
             console.log(this.scene.key)
             this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         }
+    }
+
+    playerHitSpike(){
+        this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
     }
 
     collectcoin (player, coin){
