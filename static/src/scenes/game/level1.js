@@ -84,6 +84,8 @@ export class level1 extends Phaser.Scene {
 
         this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
 
+        this.crewels = 0;
+
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
 
