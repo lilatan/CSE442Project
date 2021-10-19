@@ -9,8 +9,8 @@ import { level1 } from "./scenes/game/level1.js";
 //figure out way to not import every single scene in here
 
 var config = {
-    width:800,
-    height:600,
+    // width:800,
+    // height:600,
     backgroundColor: 0x000000,
     // transparent: true,
     scene:[mainMenuLoad, mainMenu, leaderboard, optionsMenu, loadGame, pauseMenu, nameInput, level1],
@@ -26,6 +26,17 @@ var config = {
     },
     dom: {
         createContainer: true
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        width:800,
+        height:600,
+        min: {
+            width: 800,
+            height: 600
+        },
+        autoCenter: Phaser.Scale.CENTER_BOTH
     }
 }
 var crewel = new Phaser.Game(config);
+
