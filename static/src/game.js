@@ -2,6 +2,7 @@ import { leaderboard } from "./scenes/menus/leaderboard.js";
 import { mainMenu } from "./scenes/menus/mainmenu.js";
 import { optionsMenu } from "./scenes/menus/options.js";
 import { loadGame } from "./scenes/menus/loadgamemenu.js";
+import { controlsScene } from "./scenes/menus/controls.js";
 import { pauseMenu } from "./scenes/menus/pausemenu.js";
 import { mainMenuLoad } from "./scenes/menus/mainLoadingScreen.js";
 import { nameInput } from "./scenes/menus/nameInput.js";
@@ -13,7 +14,7 @@ var config = {
     // height:600,
     backgroundColor: 0x000000,
     // transparent: true,
-    scene:[mainMenuLoad, mainMenu, leaderboard, optionsMenu, loadGame, pauseMenu, nameInput, level1],
+    scene:[mainMenuLoad, mainMenu, leaderboard, optionsMenu, loadGame, controlsScene, pauseMenu, nameInput, level1],
     physics: {
         default: 'arcade',
         arcade: {

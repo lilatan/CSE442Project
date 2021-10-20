@@ -14,11 +14,14 @@ export class optionsMenu extends Phaser.Scene {
         this.muteButton = new TextButton(this, 300, 300, "MUTE SOUND", {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.muteSound());
         this.xMark = new Phaser.GameObjects.Text(this, 250, 300, 'X', {fill: '#ffffff'});
         this.xMark.setFontSize(48);
+
+        this.controlsButton = new TextButton(this,300, 350, "CONTROLS", {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.control));
         
         this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(this.data.key));
         this.add.existing(this.menuButton);
         this.add.existing(this.muteButton);
         this.add.existing(this.xMark);
+        this.add.existing(this.controlsButton);
         if(!this.sound.mute){
             this.xMark.setVisible(false);
         }else{

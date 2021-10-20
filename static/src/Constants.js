@@ -5,6 +5,7 @@ export const Constants = {
         leaderboard: "leaderboard",
         options: "options",
         load: "load",
+        control: "controlsScene",
         pause: "pause",
         nameInput: "nameInput",
         lvl1: "level1"
