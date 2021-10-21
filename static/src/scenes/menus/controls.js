@@ -8,6 +8,7 @@ export class controlsScene extends Phaser.Scene {
     x=200;
     y;
     create(){
+        this.scene.bringToTop();
         this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.options));
         this.add.existing(this.menuButton);
         this.y = 100;
