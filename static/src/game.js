@@ -7,6 +7,7 @@ import { pauseMenu } from "./scenes/menus/pausemenu.js";
 import { mainMenuLoad } from "./scenes/menus/mainLoadingScreen.js";
 import { nameInput } from "./scenes/menus/nameInput.js";
 import { level1 } from "./scenes/game/level1.js";
+import { levelsMenu } from "./scenes/menus/levelsMenu.js"
 //figure out way to not import every single scene in here
 
 var config = {
@@ -14,7 +15,7 @@ var config = {
     // height:600,
     backgroundColor: 0x000000,
     // transparent: true,
-    scene:[mainMenuLoad, mainMenu, leaderboard, optionsMenu, loadGame, controlsScene, pauseMenu, nameInput, level1],
+    scene:[mainMenuLoad, mainMenu, leaderboard, optionsMenu, loadGame, controlsScene, pauseMenu, nameInput, level1, levelsMenu],
     physics: {
         default: 'arcade',
         arcade: {

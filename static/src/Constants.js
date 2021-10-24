@@ -8,7 +8,8 @@ export const Constants = {
         control: "controlsScene",
         pause: "pause",
         nameInput: "nameInput",
-        lvl1: "level1"
+        lvl1: "level1",
+        levelsMenu: "levelsMenu"
     },
     BGM: {
         mainMusic: "bgm",
