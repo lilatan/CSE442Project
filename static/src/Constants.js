@@ -4,6 +4,7 @@ export const Constants = {
         mainMenu: "mainMenu",
         leaderboard: "leaderboard",
         options: "options",
+        audio: "audioMenu",
         load: "load",
         control: "controlsScene",
         pause: "pause",
@@ -12,6 +13,11 @@ export const Constants = {
         levelsMenu: "levelsMenu"
     },
     BGM: {
-        mainMusic: "bgm",
+        default: "Prologue",
+        rosemoon: "Battle-Rosemoon",
+        sanctuary: "Battle-Sanctuary",
+        nostalgia: "Nostalgia",
+        remotest: "Remotest-Liblary",
+        wanderers: "Wanderers-City"
     }
 }

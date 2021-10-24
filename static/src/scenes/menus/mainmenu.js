@@ -10,16 +10,21 @@ export class mainMenu extends Phaser.Scene {
 
     }
     preload(){
-        this.load.audio('bgm', '/static/src/assets/bgm/Prologue.mp3');
+        this.load.audio('Prologue', '/static/src/assets/bgm/Prologue.mp3');
+        this.load.audio('Battle-Rosemoon', '/static/src/assets/bgm/Battle-Rosemoon.mp3');
+        this.load.audio('Battle-Sanctuary', '/static/src/assets/bgm/Battle-Sanctuary.mp3');
+        this.load.audio('Nostalgia', '/static/src/assets/bgm/Nostalgia.mp3');
+        this.load.audio('Remotest-Liblary', '/static/src/assets/bgm/Remotest-Liblary.mp3');
+        this.load.audio('Wanderers-City', '/static/src/assets/bgm/Wanderers-City.mp3');
     }
 
     create(){
-        this.music = this.sound.add(Constants.BGM.mainMusic);
-        this.sound.setVolume(0.1);
+        this.music = this.sound.add(this.game.config.audio.music);
+        this.sound.setVolume(this.game.config.audio.volume / 100);
         this.sound.pauseOnBlur = false;
         // console.log(this.sound.key + " - " + music.key);
-        console.log(this.sound.get(Constants.BGM.mainMusic).key +" "+ this.sound.get(Constants.BGM.mainMusic).isPlaying);
-        if (!this.sound.get(Constants.BGM.mainMusic).isPlaying){
+        console.log(this.sound.get(this.game.config.audio.music).key +" "+ this.sound.get(this.game.config.audio.music).isPlaying);
+        if (!this.sound.get(this.game.config.audio.music).isPlaying){
             this.music.loop=true;
             this.music.play();
         }

@@ -8,6 +8,8 @@ import { mainMenuLoad } from "./scenes/menus/mainLoadingScreen.js";
 import { nameInput } from "./scenes/menus/nameInput.js";
 import { level1 } from "./scenes/game/level1.js";
 import { levelsMenu } from "./scenes/menus/levelsMenu.js"
+import { audioMenu } from "./scenes/menus/options_audio.js";
+import { Constants } from "./Constants.js";
 //figure out way to not import every single scene in here
 
 var config = {
@@ -15,7 +17,19 @@ var config = {
     // height:600,
     backgroundColor: 0x000000,
     // transparent: true,
-    scene:[mainMenuLoad, mainMenu, leaderboard, optionsMenu, loadGame, controlsScene, pauseMenu, nameInput, level1, levelsMenu],
+    scene:[
+        mainMenuLoad,
+        mainMenu,
+        leaderboard,
+        optionsMenu,
+        audioMenu,
+        loadGame,
+        controlsScene,
+        pauseMenu,
+        nameInput,
+        level1,
+        levelsMenu
+    ],
     physics: {
         default: 'arcade',
         arcade: {
@@ -24,7 +38,9 @@ var config = {
         }
     },
     audio:{
-        disableWebAudio: true
+        disableWebAudio: true,
+        volume: 5,
+        music: Constants.BGM.default
     },
     dom: {
         createContainer: true
@@ -41,4 +57,5 @@ var config = {
     }
 }
 var crewel = new Phaser.Game(config);
+// crewel.config.audio.volume = 0.05;
 
