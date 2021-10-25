@@ -43,6 +43,18 @@
     let keyW;
     let keyD;
     let keyS;
+    
+    var p1y
+    
+    class VPlatformMovement { //vertical platform movement
+
+        constructor(increasing, y) {
+            this.increasing = increasing;
+            this.y = y;
+        }
+
+    }
+
 
     var game = new Phaser.Game(config);
 
@@ -56,7 +68,8 @@
     }
 
     function create ()
-    {
+    {   
+        p1y = 150
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -74,7 +87,8 @@
         platforms.create(400, 230, 'ground').setScale(0.5).refreshBody();
         platforms.create(100, 400, 'ground');
         platforms.create(700, 450, 'ground');
-        platforms.create(550, 150, 'ground');
+        platform1Movement = new VPlatformMovement(true,150)
+        platforms.create(550, platform1Movement.y, 'ground');
         platforms.create(25, 125, 'ground');
 
         player = this.physics.add.sprite(100, 450, 'player_one');
@@ -104,8 +118,31 @@
         this.physics.add.overlap(player, coin, collectcoin, null, this);
     }
 
+    function VIncremenent(upperBound, lowerBound, platformInfo){ 
+
+        if (platformInfo.y == upperBound) { 
+            
+            platformInfo.increasing = true 
+
+        } else { 
+
+            platformInfo.increasing = false
+
+        }
+        if (platformInfo.increasing == true) { 
+            platformInfo.y += 10
+
+        } else{ 
+            platformInfo.y -= 5
+        }
+
+        return platformInfo
+    }
+
     function update ()
-    {
+    {   
+        
+         
         if (cursors.left.isDown || keyA.isDown)
         {
             player.setVelocityX(-200);

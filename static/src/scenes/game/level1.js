@@ -13,6 +13,8 @@ export class level1 extends Phaser.Scene {
     totalCoin = 12;
     spikes;
     zoom;
+    spike1; 
+    increasing; 
 
     keyW;
     keyA;
@@ -20,6 +22,7 @@ export class level1 extends Phaser.Scene {
     keyD;
 
     keyESC;
+    movingup; 
 
 
     init(){
@@ -61,7 +64,7 @@ export class level1 extends Phaser.Scene {
         this.platforms.create(550, 150, 'ground');
         this.platforms.create(25, 125, 'ground');
 
-        this.spikes.create(400, 500, 'spike');
+        this.spike1 = this.spikes.create(400, 500, 'spike');
 
         this.player = this.physics.add.sprite(100, 450, 'player_one');
 
@@ -96,15 +99,26 @@ export class level1 extends Phaser.Scene {
         this.cameras.main.setZoom(3);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
-
+        this.increasing = false 
     }
 
     update(){
+        if (this.spike1.y <= 200) { 
+            this.increasing = true 
+
+        } 
+        if (this.spike1.y >= 500 ) { 
+            this.increasing = false 
+            console.log("test")
+        }
+        if (this.increasing == true) { 
+            this.spike1.y += 2
+        } else { 
+            this.spike1.y -= 5 
+        }
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
-
-         
         }
         else if (this.cursors.right.isDown || this.keyD.isDown)
         {
