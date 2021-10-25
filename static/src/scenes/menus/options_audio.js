@@ -112,7 +112,7 @@ export class audioMenu extends Phaser.Scene {
 
     selectMusic(musicIndex, y_coord){
         // Stop all sounds
-        this.game.sound.stopAll();
+        this.game.sound.removeAll();
 
         // Set selected song title
         const next = this.musicPieces[musicIndex]
