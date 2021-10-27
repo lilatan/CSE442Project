@@ -1,7 +1,6 @@
 import { leaderboard } from "./scenes/menus/leaderboard.js";
 import { mainMenu } from "./scenes/menus/mainmenu.js";
 import { optionsMenu } from "./scenes/menus/options.js";
-import { loadGame } from "./scenes/menus/loadgamemenu.js";
 import { controlsScene } from "./scenes/menus/controls.js";
 import { pauseMenu } from "./scenes/menus/pausemenu.js";
 import { mainMenuLoad } from "./scenes/menus/mainLoadingScreen.js";
@@ -23,7 +22,6 @@ var config = {
         leaderboard,
         optionsMenu,
         audioMenu,
-        loadGame,
         controlsScene,
         pauseMenu,
         nameInput,

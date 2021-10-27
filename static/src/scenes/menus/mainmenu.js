@@ -30,10 +30,8 @@ export class mainMenu extends Phaser.Scene {
         }
         // console.log(this.sound.key);
 
-        this.startButton = new TextButton(this, 25, 325,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
+        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
         this.add.existing(this.startButton);
-        this.loadButton = new TextButton(this, 25, 400,'LOAD',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.load));
-        this.add.existing(this.loadButton);
         this.optionsButton = new TextButton(this, 25, 450,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.options, this.scene));
         this.add.existing(this.optionsButton);
         this.leaderButton = new TextButton(this, 25, 500, 'LEADERBOARD', {fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.leaderboard));
