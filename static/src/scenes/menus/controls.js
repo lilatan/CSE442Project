@@ -13,10 +13,10 @@ export class controlsScene extends Phaser.Scene {
         this.add.existing(this.menuButton);
         this.y = 100;
         // console.log(this.sound.key);
-        this.controlTextLine('W', '🠕', "MOVE UP/JUMP");
-        this.controlTextLine('A', '🠔', "MOVE LEFT   ");
-        this.controlTextLine('S', '🠗', "MOVE DOWN   ");
-        this.controlTextLine('D', '🠖', "MOVE RIGHT  ");
+        this.controlTextLine('W', '\u{1f815}', "MOVE UP/JUMP");
+        this.controlTextLine('A', '\u{1f814}', "MOVE LEFT   ");
+        this.controlTextLine('S', '\u{1f817}', "MOVE DOWN   ");
+        this.controlTextLine('D', '\u{1f816}', "MOVE RIGHT  ");
     }
 
     controlTextLine(control1, control2, usage){
