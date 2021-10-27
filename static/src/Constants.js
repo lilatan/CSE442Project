@@ -9,7 +9,8 @@ export const Constants = {
         pause: "pause",
         nameInput: "nameInput",
         lvl1: "level1",
-        levelsMenu: "levelsMenu"
+        levelsMenu: "levelsMenu",
+        shop: "shop"
     },
     BGM: {
         default: "Prologue",

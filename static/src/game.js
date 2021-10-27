@@ -9,6 +9,7 @@ import { level1 } from "./scenes/game/level1.js";
 import { levelsMenu } from "./scenes/menus/levelsMenu.js"
 import { audioMenu } from "./scenes/menus/options_audio.js";
 import { Constants } from "./Constants.js";
+import { shop } from "./scenes/menus/shop.js";
 //figure out way to not import every single scene in here
 
 var config = {
@@ -26,7 +27,8 @@ var config = {
         pauseMenu,
         nameInput,
         level1,
-        levelsMenu
+        levelsMenu,
+        shop
     ],
     physics: {
         default: 'arcade',
