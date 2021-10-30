@@ -1,0 +1,289 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <title>Level_2</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var config = {
+        type: Phaser.AUTO,
+        backgroundColor: 0x000000,
+       // width: 1920,
+       // height: 1080,
+
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 700 },
+                debug: true
+            }
+        },
+        scale: {
+        mode: Phaser.Scale.FIT,
+        width:800,
+        height:600,
+        min: {
+            width: 800,
+            height: 600
+        },
+        max: {
+            width: 1920,
+            height:1080
+        },
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var player;
+    var spikes;
+    var platforms;
+    var cursors;
+    var door1;
+    var door2;
+
+    let keyA;
+    let keyW;
+    let keyD;
+    let keyS;
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+
+        this.load.video('background', 'assets2/city-lights.mp4', 'loadeddata', false, false);
+       // this.load.video('background', 'assets2/zelda-background1.mp4', 'loadeddata', false, false);
+
+        //this.load.image('background', 'assets1/sand_gw2.png');
+      // this.load.image('door_1', 'assets2/door1.png');
+      //  this.load.image('door_2', 'assets2/door2.png');
+        this.load.image('ground', 'assets2/sand_platform.png');
+      //  this.load.image('player_one', 'assets2/spear_player.png');
+     // this.load.spritesheet('dude', 'assets2/dude.png', { frameWidth: 32, frameHeight: 48 });
+        //this.load.image('spike', 'assets2/spikes.png');
+
+        //----------------------------------------------------------------------------------------------------------------------------------
+        this.load.spritesheet('player_one', 'assets2/brawler.png', { frameWidth: 48, frameHeight: 48 });
+        //----------------------------------------------------------------------------------------------------------------------------------
+        
+    }
+
+    function create ()
+    {
+        //for fullscreen
+        var button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+
+        button.on('pointerup', function () {
+
+            if (this.scale.isFullscreen)
+            {
+                button.setFrame(0);
+
+                this.scale.stopFullscreen();
+            }
+            else
+            {
+                button.setFrame(1);
+
+                this.scale.startFullscreen();
+            }
+
+        }, this);
+
+        var FKey = this.input.keyboard.addKey('F');
+
+        FKey.on('down', function () {
+
+            if (this.scale.isFullscreen)
+            {
+                button.setFrame(0);
+                this.scale.stopFullscreen();
+            }
+            else
+            {
+                button.setFrame(1);
+                this.scale.startFullscreen();
+            }
+
+        }, this);
+
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        
+        platforms = this.physics.add.staticGroup();
+        //spikes = this.physics.add.staticGroup();
+       // door1 = this.physics.add.staticGroup();
+        door2 = this.physics.add.staticGroup();
+        //delete this line if adding an actual door and not an invisible door
+       // door2.create(860, 590, null).setScale(4).refreshBody();
+        door2.create(862, 300, null).setScale(4).refreshBody();
+
+        platforms.create(50, 600, null).setScale(4).refreshBody();
+        platforms.create(100, 600, null).setScale(4).refreshBody();
+        platforms.create(200, 600, null).setScale(4).refreshBody();
+        platforms.create(300, 600, null).setScale(4).refreshBody();
+        platforms.create(400, 600, null).setScale(4).refreshBody();
+        platforms.create(500, 600, null).setScale(4).refreshBody();
+        platforms.create(600, 600, null).setScale(4).refreshBody();
+        platforms.create(700, 600, null).setScale(4).refreshBody();
+        platforms.create(800, 600, null).setScale(4).refreshBody();
+        platforms.create(900, 600, null).setScale(4).refreshBody();
+        //platforms to climb higher
+
+        platforms.create(25, 500, null).setScale(1).refreshBody();
+        platforms.create(100, 400, null).setScale(1).refreshBody();
+        platforms.create(25, 300, null).setScale(1).refreshBody();
+        platforms.create(150, 300, null).setScale(1).refreshBody();
+        platforms.create(200, 300, null).setScale(1).refreshBody();
+        platforms.create(250, 300, null).setScale(1).refreshBody();
+        platforms.create(300, 300, null).setScale(1).refreshBody();
+        platforms.create(350, 300, null).setScale(1).refreshBody();
+        platforms.create(400, 300, null).setScale(1).refreshBody();
+        platforms.create(450, 300, null).setScale(1).refreshBody();
+        platforms.create(500, 300, null).setScale(1).refreshBody();
+        platforms.create(550, 300, null).setScale(1).refreshBody();
+        platforms.create(600, 300, null).setScale(1).refreshBody();
+        platforms.create(650, 300, null).setScale(1).refreshBody();
+        platforms.create(700, 300, null).setScale(1).refreshBody();
+
+
+
+        var vid = this.add.video(400, 300, 'background');
+        vid.play(true);
+        vid.setPaused(false);
+
+        
+        
+        //platforms.create(400, 650, 'ground').setScale(4).refreshBody();
+
+      //  door1.create(100, 450, 'door_1');
+     //   door2.create(700, 450, 'door_2');
+      //  spikes.create(400, 568, 'spike');
+
+       // enemy =  this.physics.add.sprite(700, 450, null);
+        player = this.physics.add.sprite(100, 450, 'player_one');
+        //remove this if you want
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('player_one', { frames: [ 0, 1, 2, 3 ] }),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('player_one', { frames: [ 0, 1, 2, 3 ] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('player_one', { frames: [ 5, 6, 7, 8 ] }),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'jump',
+            frames: this.anims.generateFrameNumbers('player_one', { frames: [ 20, 21, 22, 23 ] }),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'die',
+            frames: this.anims.generateFrameNumbers('player_one', { frames: [ 35, 36, 37 ] }),
+            frameRate: 8,
+        });
+      //remove this if you want
+
+    //    enemy.setCollideWorldBounds(true);
+        player.setBounce(0.1);
+        player.setCollideWorldBounds(true);
+
+        cursors = this.input.keyboard.createCursorKeys();
+
+     
+  //      this.physics.add.collider(enemy, platforms);
+        this.physics.add.collider(player, platforms);
+
+        // make the camera follow the player
+       
+      // this.physics.add.overlap(player, door2,)
+      player.setScale(1.5, 1.5);
+    }
+    //Attempting to reset player
+    function playerHitDoor(player, door2){
+       // player.anims.play('die', true);
+        //this.physics.world.wrap(player, 100)
+    }
+
+    function gofull() {
+
+        if (game.scale.isFullScreen)
+        {
+             game.scale.stopFullScreen();
+        }
+        else
+        {
+         game.scale.startFullScreen(false);
+        }
+    }
+
+    function update ()
+    {
+    //    if (player.body.touching.down || enemy.body.blocked.up){
+   //         player.anims.play('die', true);
+    //    }
+        if (cursors.left.isDown || keyA.isDown)
+        {
+            player.setVelocityX(-200);
+            player.anims.play('left', true);
+            player.flipX = false;
+         
+        }
+        else if (cursors.right.isDown || keyD.isDown)
+        {
+            player.setVelocityX(200);
+            player.anims.play('right', true);
+            player.flipX = true;
+          //  player.scale.setTo(-1,1);
+        }
+        else
+        {
+            player.setVelocityX(0); 
+            player.anims.play('idle');
+        }
+        if (cursors.up.isDown && player.body.touching.down || keyW.isDown && player.body.touching.down)
+        {
+            player.setVelocityY(-400);
+            player.anims.play('jump');
+        }
+        if (cursors.down.isDown || keyS.isDown)
+        {
+            player.setVelocityY(170);
+        }
+         
+    }
+
+
+</script>
+
+</body>
+</html>
