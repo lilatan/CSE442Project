@@ -11,19 +11,22 @@ export class level2_3 extends Phaser.Scene {
     cursors;
     door1;
     door2;
+    button;
 
+    vid;
+    keyF;
     keyA;
     keyW;
     keyD;
     keyS;
     keyESC;
 
-    game = new Phaser.Game(config);
+
 
     preload ()
     {
 
-        this.load.video('background', '/static/src/assets/bar-music-background.mp4', 'loadeddata', false, false);
+        this.load.video('background', '/static/src/assets/bar-music-background.mp4', 'loadeddata', false, true);
         this.load.image('ground', '/static/src/assets/sand_platform.png');
         //----------------------------------------------------------------------------------------------------------------------------------
         this.load.spritesheet('player_one', '/static/src/assets/brawler.png', { frameWidth: 48, frameHeight: 48 });
@@ -35,7 +38,7 @@ export class level2_3 extends Phaser.Scene {
     {
         console.log("im at level 2-3");
         //for fullscreen
-        button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+        this.button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
 
         this.button.on('pointerup', function () {
 
@@ -54,9 +57,9 @@ export class level2_3 extends Phaser.Scene {
 
         }, this);
 
-        FKey = this.input.keyboard.addKey('F');
+        this.keyF = this.input.keyboard.addKey('F');
 
-        this.FKey.on('down', function () {
+        this.keyF.on('down', function () {
 
             if (this.scale.isFullscreen)
             {
@@ -115,7 +118,7 @@ export class level2_3 extends Phaser.Scene {
 
 
 
-        vid = this.add.video(400, 300, 'background');
+        this.vid = this.add.video(400, 300, 'background');
         this.vid.play(true);
         this.vid.setPaused(false);
 
@@ -158,7 +161,7 @@ export class level2_3 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
      
-        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(this.player, this.platforms);
 
         this.player.setScale(3, 3);
     }

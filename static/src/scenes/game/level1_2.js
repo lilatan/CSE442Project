@@ -1,31 +1,39 @@
 import { Constants } from "/static/src/Constants.js"
 // import { pause } from "../menus/pausemenu.js";
-export class level3_4 extends Phaser.Scene {
+export class level1_2 extends Phaser.Scene {
     constructor(){
-        super(Constants.Scenes.lvl3_4);
+        super(Constants.Scenes.lvl1_2);
     }
-
     player;
-        spikes;
+    spikes;
     platforms;
     cursors;
     door1;
     door2;
-
+    button;
+    
+    vid;
+    keyF;
     keyA;
     keyW;
     keyD;
     keyS;
     keyESC;
 
-    game = new Phaser.Game(config);
 
     preload ()
     {
 
-        this.load.video('background', '/static/src/assets/rainy-theatre.mp4', 'loadeddata', false, false);
-        this.load.image('ground', '/static/src/assets/sand_platform.png');
+        this.load.video('background', '/static/src/assets/city-lights.mp4', 'loadeddata', false, true);
+       // this.load.video('background', 'assets2/zelda-background1.mp4', 'loadeddata', false, false);
 
+        //this.load.image('background', 'assets1/sand_gw2.png');
+      // this.load.image('door_1', 'assets2/door1.png');
+      //  this.load.image('door_2', 'assets2/door2.png');
+        this.load.image('ground', '/static/src/assets/sand_platform.png');
+      //  this.load.image('player_one', 'assets2/spear_player.png');
+     // this.load.spritesheet('dude', 'assets2/dude.png', { frameWidth: 32, frameHeight: 48 });
+        //this.load.image('spike', 'assets2/spikes.png');
 
         //----------------------------------------------------------------------------------------------------------------------------------
         this.load.spritesheet('player_one', '/static/src/assets/brawler.png', { frameWidth: 48, frameHeight: 48 });
@@ -35,9 +43,9 @@ export class level3_4 extends Phaser.Scene {
 
     create ()
     {
-        console.log("im at level 3-4");
+        console.log("im at level 1-2");
         //for fullscreen
-        button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+        this.button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
 
         this.button.on('pointerup', function () {
 
@@ -56,9 +64,9 @@ export class level3_4 extends Phaser.Scene {
 
         }, this);
 
-        FKey = this.input.keyboard.addKey('F');
+        this.keyF = this.input.keyboard.addKey('F');
 
-        this.FKey.on('down', function () {
+        this.keyF.on('down', function () {
 
             if (this.scale.isFullscreen)
             {
@@ -101,6 +109,9 @@ export class level3_4 extends Phaser.Scene {
        this.platforms.create(900, 600, null).setScale(4).refreshBody();
         //platforms to climb higher
 
+        this.platforms.create(25, 500, null).setScale(1).refreshBody();
+        this.platforms.create(100, 400, null).setScale(1).refreshBody();
+        this.platforms.create(25, 300, null).setScale(1).refreshBody();
         this.platforms.create(150, 300, null).setScale(1).refreshBody();
         this.platforms.create(200, 300, null).setScale(1).refreshBody();
         this.platforms.create(250, 300, null).setScale(1).refreshBody();
@@ -116,12 +127,20 @@ export class level3_4 extends Phaser.Scene {
 
 
 
-        vid = this.add.video(400, 300, 'background');
+        this.vid = this.add.video(400, 300, 'background');
         this.vid.play(true);
         this.vid.setPaused(false);
 
         
-        this.player = this.physics.add.sprite(100, 450, 'player_one');
+        
+        //platforms.create(400, 650, 'ground').setScale(4).refreshBody();
+
+      //  door1.create(100, 450, 'door_1');
+     //   door2.create(700, 450, 'door_2');
+      //  spikes.create(400, 568, 'spike');
+
+       // enemy =  this.physics.add.sprite(700, 450, null);
+       this.player = this.physics.add.sprite(100, 450, 'player_one');
         //remove this if you want
         this.anims.create({
             key: 'left',
@@ -163,18 +182,20 @@ export class level3_4 extends Phaser.Scene {
 
      
   //      this.physics.add.collider(enemy, platforms);
-        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(this.player, this.platforms);
 
-        this.player.setScale(2, 2);
-
+        // make the camera follow the player
+       
+      // this.physics.add.overlap(player, door2,)
+      this.player.setScale(1.5, 1.5);
     }
     //Attempting to reset player
     playerHitDoor(player, door2){
-        // player.anims.play('die', true);
-         //this.physics.world.wrap(player, 100)
-     }
+       // player.anims.play('die', true);
+        //this.physics.world.wrap(player, 100)
+    }
 
-     gofull() {
+    gofull() {
 
         if (game.scale.isFullScreen)
         {
@@ -188,7 +209,10 @@ export class level3_4 extends Phaser.Scene {
 
     update ()
     {
-     if(this.cursors.left.isDown || this.keyA.isDown)
+    //    if (player.body.touching.down || enemy.body.blocked.up){
+   //         player.anims.play('die', true);
+    //    }
+        if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
             this.player.anims.play('left', true);

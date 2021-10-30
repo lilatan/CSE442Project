@@ -6,10 +6,10 @@ import { pauseMenu } from "./scenes/menus/pausemenu.js";
 import { mainMenuLoad } from "./scenes/menus/mainLoadingScreen.js";
 import { nameInput } from "./scenes/menus/nameInput.js";
 import { level1 } from "./scenes/game/level1.js";
-import { level2 } from "/scenes/game/level2.js";
-import { level1_2 } from "./scenes/game/level1.js";
-import { level2_3 } from "./scenes/game/level1.js";
-import { level3_4 } from "./scenes/game/level1.js";
+import { level2 } from "./scenes/game/level2.js";
+import { level1_2 } from "./scenes/game/level1_2.js";
+import { level2_3 } from "./scenes/game/level2_3.js";
+import { level3_4 } from "./scenes/game/level3_4.js";
 import { levelsMenu } from "./scenes/menus/levelsMenu.js"
 import { audioMenu } from "./scenes/menus/options_audio.js";
 import { Constants } from "./Constants.js";
@@ -32,7 +32,11 @@ var config = {
         nameInput,
         level1,
         levelsMenu,
-        shop
+        shop,
+        level1_2,
+        level2_3,
+        level3_4,
+        level2
     ],
     physics: {
         default: 'arcade',
