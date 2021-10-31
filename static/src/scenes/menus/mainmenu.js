@@ -24,6 +24,9 @@ export class mainMenu extends Phaser.Scene {
         this.load.audio('start-click', 'static/src/assets/audio/sfx/item-02.wav');
         this.load.audio('back-click', 'static/src/assets/audio/sfx/cancel-01.wav');
         this.load.audio('collect-coin', 'static/src/assets/audio/sfx/kettei-01.wav');
+        this.load.audio('take-damage', 'static/src/assets/audio/sfx/14_nekketsu_damage.wav');
+        this.load.audio('jump', 'static/src/assets/audio/sfx/07_priest_attack.wav');
+        this.load.audio('land-ground', 'static/src/assets/audio/sfx/damage01.wav');
     }
 
     create(){

@@ -13,6 +13,7 @@ export class level1 extends Phaser.Scene {
     totalCoin = 12;
     spikes;
     zoom;
+    inAir;
 
     keyW;
     keyA;
@@ -115,9 +116,17 @@ export class level1 extends Phaser.Scene {
             this.player.setVelocityX(0); 
         }
 
+        // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down)
         {
             this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+        }
+        // landing sound
+        if (this.inAir && this.player.body.touching.down) {
+            this.inAir = false;
+            this.sound.play(Constants.SFX.land);
         }
         if (this.cursors.down.isDown || this.keyS.isDown)
         {
@@ -137,6 +146,9 @@ export class level1 extends Phaser.Scene {
     }
 
     playerHitSpike(){
+        // play take damage sound
+        this.sound.play(Constants.SFX.damage);
+
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
     }
 

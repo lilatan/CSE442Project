@@ -24,6 +24,9 @@ export const Constants = {
         start: "start-click",
         menu: "menu-click",
         back: "back-click",
-        coin: "collect-coin"
+        coin: "collect-coin",
+        damage: "take-damage",
+        jump: "jump",
+        land: "land-ground"
     }
 }
