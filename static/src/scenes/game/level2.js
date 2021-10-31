@@ -126,7 +126,7 @@ export class level2 extends Phaser.Scene {
         this.anims.create({
             key: 'jump',
             frames: this.anims.generateFrameNumbers('player_one_jump', { frames: [0, 1, 2, 3, 4, 5 ] }),
-            frameRate: 6,
+            frameRate: 10,
             repeat: -1
         });
         this.anims.create({
@@ -233,6 +233,7 @@ export class level2 extends Phaser.Scene {
     update(){
 
     //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
+        var idle = false;
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -249,17 +250,22 @@ export class level2 extends Phaser.Scene {
         else //else
         {
             this.player.setVelocityX(0); 
-            this.player.anims.play('idle',true);
+            // this.player.anims.play('idle',true);
+            idle = true;
         }
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
             this.player.setVelocityY(-400);
             this.player.anims.play('jump',true);
+            idle = false;
         }
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170); 
         }  
+        if(idle&& this.player.body.touching.down){
+            this.player.anims.play('idle',true);
+        }
     //-----------------PLAYER ANIMATION ABOVE------------------------------------------------------------
 
     //-----------------BIG BOY ANIMATION BELOW-----------------------------------------------------------
