@@ -7,6 +7,8 @@ import { mainMenuLoad } from "./scenes/menus/mainLoadingScreen.js";
 import { nameInput } from "./scenes/menus/nameInput.js";
 import { level1 } from "./scenes/game/level1.js";
 import { level2 } from "./scenes/game/level2.js";
+import { level3 } from "./scenes/game/level3.js";
+import { level4 } from "./scenes/game/level4.js";
 import { level1_2 } from "./scenes/game/level1_2.js";
 import { level2_3 } from "./scenes/game/level2_3.js";
 import { level3_4 } from "./scenes/game/level3_4.js";
@@ -31,18 +33,21 @@ var config = {
         pauseMenu,
         nameInput,
         level1,
+        level2,
+        level3,
+        level4,
         levelsMenu,
         shop,
         level1_2,
         level2_3,
-        level3_4,
-        level2
+        level3_4
+       
     ],
     physics: {
         default: 'arcade',
         arcade: {
             gravity: {y: 700},
-            debug: false
+            debug: true
         }
     },
     audio:{
@@ -55,8 +60,8 @@ var config = {
     },
     scale: {
         mode: Phaser.Scale.FIT,
-        width:800,
-        height:600,
+        width:800, //800
+        height:600, //600
         min: {
             width: 800,
             height: 600

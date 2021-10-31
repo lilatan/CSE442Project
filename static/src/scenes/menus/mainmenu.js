@@ -6,10 +6,16 @@ export class mainMenu extends Phaser.Scene {
         super(Constants.Scenes.mainMenu);
         
     }
+    video;
+    vid;
     init(){
 
     }
     preload(){
+        //this.load.video('background', '/static/src/assets/high_way_view.mp4', 'loadeddata', false, true);
+        //this.load.video('background', '/static/src/assets/main_menu_foot.mp4', 'loadeddata', false, true);
+        //this.load.video('background', '/static/src/assets/main_menu_background.mp4', 'loadeddata', false, true);
+
         this.load.audio('Prologue', '/static/src/assets/bgm/Prologue.mp3');
         this.load.audio('Battle-Rosemoon', '/static/src/assets/bgm/Battle-Rosemoon.mp3');
         this.load.audio('Battle-Sanctuary', '/static/src/assets/bgm/Battle-Sanctuary.mp3');
@@ -19,6 +25,7 @@ export class mainMenu extends Phaser.Scene {
     }
 
     create(){
+        
         this.music = this.sound.add(this.game.config.audio.music);
         this.sound.setVolume(this.game.config.audio.volume / 100);
         this.sound.pauseOnBlur = false;
@@ -28,7 +35,22 @@ export class mainMenu extends Phaser.Scene {
             this.music.loop=true;
             this.music.play();
         }
+        //video code below
+        //this.vid = this.add.video(390, 325, 'background'); //400, 300
+      //  this.vid.play(true);
+      //  this.vid.setPaused(false);
+       // this.vid.setDisplaySize(800,600);
+        //this.vid.setScale(1);
+        //this.vid.Scale = PHASER.SCALE.FIT;
+       //this.video = document.createElement('video');
+
+      // this.video.playsinline = true;
+      // this.video.src = '/static/src/assets/high_way_view.mp4';
+      // this.video.width = 1280;
+     //  this.video.height = 720;
+      // this.video.autoplay = true;
         // console.log(this.sound.key);
+
 
         this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
         this.add.existing(this.startButton);
@@ -41,6 +63,7 @@ export class mainMenu extends Phaser.Scene {
         // this.button = new Phaser.GameObjects.Text(this, 10, 10,'hello', '#ffffff');
 
         // console.log('testing');
+        
     }
 
     // startButtonFunction
