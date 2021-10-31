@@ -19,5 +19,10 @@ export const Constants = {
         nostalgia: "Nostalgia",
         remotest: "Remotest-Liblary",
         wanderers: "Wanderers-City"
+    },
+    SFX: {
+        start: "start-click",
+        menu: "menu-click",
+        back: "back-click"
     }
 }

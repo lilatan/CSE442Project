@@ -10,12 +10,18 @@ export class mainMenu extends Phaser.Scene {
 
     }
     preload(){
-        this.load.audio('Prologue', '/static/src/assets/bgm/Prologue.mp3');
-        this.load.audio('Battle-Rosemoon', '/static/src/assets/bgm/Battle-Rosemoon.mp3');
-        this.load.audio('Battle-Sanctuary', '/static/src/assets/bgm/Battle-Sanctuary.mp3');
-        this.load.audio('Nostalgia', '/static/src/assets/bgm/Nostalgia.mp3');
-        this.load.audio('Remotest-Liblary', '/static/src/assets/bgm/Remotest-Liblary.mp3');
-        this.load.audio('Wanderers-City', '/static/src/assets/bgm/Wanderers-City.mp3');
+        // music bgm
+        this.load.audio('Prologue', '/static/src/assets/audio/bgm/Prologue.mp3');
+        this.load.audio('Battle-Rosemoon', '/static/src/assets/audio/bgm/Battle-Rosemoon.mp3');
+        this.load.audio('Battle-Sanctuary', '/static/src/assets/audio/bgm/Battle-Sanctuary.mp3');
+        this.load.audio('Nostalgia', '/static/src/assets/audio/bgm/Nostalgia.mp3');
+        this.load.audio('Remotest-Liblary', '/static/src/assets/audio/bgm/Remotest-Liblary.mp3');
+        this.load.audio('Wanderers-City', '/static/src/assets/audio/bgm/Wanderers-City.mp3');
+
+        // sound effects
+        this.load.audio('menu-click', 'static/src/assets/audio/sfx/cursor-01.wav');
+        this.load.audio('back-click', 'static/src/assets/audio/sfx/cursor-02.wav');
+        this.load.audio('start-click', 'static/src/assets/audio/sfx/item-02.wav');
     }
 
     create(){
