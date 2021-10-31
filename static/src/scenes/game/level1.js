@@ -53,7 +53,8 @@ export class level1 extends Phaser.Scene {
         this.add.image(400, 300, 'background');
 
         this.platforms = this.physics.add.staticGroup();
-        this.spikes = this.physics.add.staticGroup();
+        this.spikes = this.physics.add.group();
+       // this.spikes.body.setAllowGravity(false);
 
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
@@ -64,7 +65,8 @@ export class level1 extends Phaser.Scene {
         this.platforms.create(550, 150, 'ground');
         this.platforms.create(25, 125, 'ground');
 
-        this.spike1 = this.spikes.create(400, 500, 'spike');
+        this.spike1 = this.spikes.create(450, 500, 'spike').body.setAllowGravity(false);
+        //this.spikes.add(this.spike1)
 
         this.player = this.physics.add.sprite(100, 450, 'player_one');
 
@@ -91,30 +93,31 @@ export class level1 extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
+        //this.physics.add.collider(this.spikes,this.platforms);
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(3);
-       
-        this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null,this)
         this.increasing = false 
+        
     }
 
     update(){
         if (this.spike1.y <= 200) { 
-            this.increasing = true 
+            this.increasing = true ;
 
         } 
-        if (this.spike1.y >= 500 ) { 
-            this.increasing = false 
-            console.log("test")
+        if (this.spike1.y >= 500) { 
+            this.increasing = false ;
+            console.log("test");
         }
         if (this.increasing == true) { 
-            this.spike1.y += 2
+            this.spike1.y += 4;
         } else { 
-            this.spike1.y -= 5 
+            this.spike1.y -= 4 ;
         }
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
