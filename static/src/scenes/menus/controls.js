@@ -9,7 +9,8 @@ export class controlsScene extends Phaser.Scene {
     y;
     create(){
         this.scene.bringToTop();
-        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.options));
+        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48,
+            ()=>{this.scene.start(Constants.Scenes.options); this.sound.play(Constants.SFX.back)});
         this.add.existing(this.menuButton);
         this.y = 100;
         // console.log(this.sound.key);

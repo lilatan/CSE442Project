@@ -19,9 +19,10 @@ export class mainMenu extends Phaser.Scene {
         this.load.audio('Wanderers-City', '/static/src/assets/audio/bgm/Wanderers-City.mp3');
 
         // sound effects
-        this.load.audio('menu-click', 'static/src/assets/audio/sfx/cursor-01.wav');
-        this.load.audio('back-click', 'static/src/assets/audio/sfx/cursor-02.wav');
+        // this.load.audio('', 'static/src/assets/audio/sfx/cursor-01.wav');
+        this.load.audio('menu-click', 'static/src/assets/audio/sfx/cursor-02.wav');
         this.load.audio('start-click', 'static/src/assets/audio/sfx/item-02.wav');
+        this.load.audio('back-click', 'static/src/assets/audio/sfx/cancel-01.wav');
     }
 
     create(){
@@ -36,19 +37,21 @@ export class mainMenu extends Phaser.Scene {
         }
         // console.log(this.sound.key);
 
-        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
+        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72,
+            ()=> {this.scene.start(Constants.Scenes.lvl1); this.sound.play(Constants.SFX.start)});
         this.add.existing(this.startButton);
-        this.optionsButton = new TextButton(this, 25, 450,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.options, this.scene));
+        this.optionsButton = new TextButton(this, 25, 450,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48,
+            ()=> {this.scene.start(Constants.Scenes.options, this.scene); this.sound.play(Constants.SFX.menu)});
         this.add.existing(this.optionsButton);
-        this.leaderButton = new TextButton(this, 25, 500, 'LEADERBOARD', {fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.leaderboard));
+        this.leaderButton = new TextButton(this, 25, 500, 'LEADERBOARD', {fill: '#ffffff'}, {fill: '#888888'},48,
+            ()=> {this.scene.start(Constants.Scenes.leaderboard); this.sound.play(Constants.SFX.menu)});
         this.add.existing(this.leaderButton);
-        this.levelsMenuButton = new TextButton(this, 25, 550, 'LEVELS', {fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.levelsMenu));
+        this.levelsMenuButton = new TextButton(this, 25, 550, 'LEVELS', {fill: '#ffffff'}, {fill: '#888888'},48,
+            ()=> {this.scene.start(Constants.Scenes.levelsMenu); this.sound.play(Constants.SFX.menu)});
         this.add.existing(this.levelsMenuButton);
         // this.button = new Phaser.GameObjects.Text(this, 10, 10,'hello', '#ffffff');
 
         // console.log('testing');
     }
-
-    // startButtonFunction
 
 }

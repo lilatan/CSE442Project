@@ -43,7 +43,7 @@ export class level1 extends Phaser.Scene {
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        this.keyESC.on('up',()=>this.pause());
+        this.keyESC.on('up',()=>{this.pause();this.sound.play(Constants.SFX.back);});
         
         
 

@@ -13,9 +13,12 @@ export class optionsMenu extends Phaser.Scene {
         this.scene.bringToTop();
 
         // Create buttons
-        this.audioButton = new TextButton(this, 300, 300, "AUDIO", {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.audio));
-        this.controlsButton = new TextButton(this,300, 350, "CONTROLS", {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.control));
-        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(this.data.key));
+        this.audioButton = new TextButton(this, 300, 300, "AUDIO", {fill: '#ffffff'}, {fill: '#888888'}, 48,
+            ()=> {this.scene.start(Constants.Scenes.audio); this.sound.play(Constants.SFX.menu)});
+        this.controlsButton = new TextButton(this,300, 350, "CONTROLS", {fill: '#ffffff'}, {fill: '#888888'}, 48,
+            ()=> {this.scene.start(Constants.Scenes.control); this.sound.play(Constants.SFX.menu)});
+        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48,
+            ()=> {this.scene.start(this.data.key); this.sound.play(Constants.SFX.back)});
 
         // Add buttons to scene
         this.add.existing(this.audioButton);
