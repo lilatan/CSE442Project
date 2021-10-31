@@ -23,6 +23,7 @@ export class mainMenu extends Phaser.Scene {
         this.load.audio('menu-click', 'static/src/assets/audio/sfx/cursor-02.wav');
         this.load.audio('start-click', 'static/src/assets/audio/sfx/item-02.wav');
         this.load.audio('back-click', 'static/src/assets/audio/sfx/cancel-01.wav');
+        this.load.audio('collect-coin', 'static/src/assets/audio/sfx/kettei-01.wav');
     }
 
     create(){

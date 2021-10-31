@@ -145,6 +145,9 @@ export class level1 extends Phaser.Scene {
 
         this.crewels += 1;
         this.coinCount.setText('crewels: ' + this.crewels);
+
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
     }
 
     pause(){

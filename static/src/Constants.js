@@ -23,6 +23,7 @@ export const Constants = {
     SFX: {
         start: "start-click",
         menu: "menu-click",
-        back: "back-click"
+        back: "back-click",
+        coin: "collect-coin"
     }
 }
