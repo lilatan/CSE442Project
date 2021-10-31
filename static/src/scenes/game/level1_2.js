@@ -20,6 +20,7 @@ export class level1_2 extends Phaser.Scene {
     keyS;
     keyESC;
 
+    keyE;
 
     preload ()
     {
@@ -88,7 +89,9 @@ export class level1_2 extends Phaser.Scene {
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
-        
+        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        this.keyE.on('up', ()=>this.shop());
+
         this.platforms = this.physics.add.staticGroup();
         //spikes = this.physics.add.staticGroup();
        // door1 = this.physics.add.staticGroup();
@@ -246,5 +249,9 @@ export class level1_2 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
+    }
+    shop(){
+        this.scene.launch(Constants.Scenes.shop, this.scene);
+        this.scene.shop();
     }
 }
