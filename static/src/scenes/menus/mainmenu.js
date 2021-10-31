@@ -12,9 +12,9 @@ export class mainMenu extends Phaser.Scene {
 
     }
     preload(){
-        //this.load.video('background', '/static/src/assets/high_way_view.mp4', 'loadeddata', false, true);
-        //this.load.video('background', '/static/src/assets/main_menu_foot.mp4', 'loadeddata', false, true);
-        //this.load.video('background', '/static/src/assets/main_menu_background.mp4', 'loadeddata', false, true);
+        this.load.video('background_main', '/static/src/assets/high_way_view.mp4', 'loadeddata', false, true);
+        this.load.video('background_main', '/static/src/assets/main_menu_foot.mp4', 'loadeddata', false, true);
+        this.load.video('background_main', '/static/src/assets/main_menu_background.mp4', 'loadeddata', false, true);
 
         this.load.audio('Prologue', '/static/src/assets/bgm/Prologue.mp3');
         this.load.audio('Battle-Rosemoon', '/static/src/assets/bgm/Battle-Rosemoon.mp3');
@@ -36,19 +36,12 @@ export class mainMenu extends Phaser.Scene {
             this.music.play();
         }
         //video code below
-        //this.vid = this.add.video(390, 325, 'background'); //400, 300
-      //  this.vid.play(true);
-      //  this.vid.setPaused(false);
-       // this.vid.setDisplaySize(800,600);
-        //this.vid.setScale(1);
-        //this.vid.Scale = PHASER.SCALE.FIT;
-       //this.video = document.createElement('video');
-
-      // this.video.playsinline = true;
-      // this.video.src = '/static/src/assets/high_way_view.mp4';
-      // this.video.width = 1280;
-     //  this.video.height = 720;
-      // this.video.autoplay = true;
+        this.vid = this.add.video(390, 325, 'background_main'); //400, 300
+        this.vid.play(true);
+        this.vid.setPaused(false);
+        this.vid.displayWidth = this.sys.canvas.width;
+        this.vid.displayHeight = this.sys.canvas.height;
+       
         // console.log(this.sound.key);
 
 

@@ -34,11 +34,11 @@ export class level2 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('coin', '/static/src/assets/single_coin.png');
+        this.load.image('background2', '/static/src/assets/cyber_city_lvl2.png');
+        this.load.image('ground2', '/static/src/assets/cyberpunk_platform.png');
+        this.load.image('coin2', '/static/src/assets/single_coin.png');
         //this.load.image('player_one', '/static/src/assets/spear_player.png');
-        this.load.image('spike', '/static/src/assets/spikes.png');
+        this.load.image('spike2', '/static/src/assets/spikes.png');
          //----PLAYER SPRITE SHEET ---------
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
@@ -77,16 +77,27 @@ export class level2 extends Phaser.Scene {
         
         
 
-        this.add.image(400, 300, 'background');
+        this.add.image(400, 300, 'background2');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
 
-        this.platforms.create(200, 600, 'ground').setScale(1).refreshBody();
-        this.platforms.create(400, 600, 'ground').setScale(1).refreshBody();
-        this.platforms.create(600, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(200, 600, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(400, 600, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(600, 600, 'ground2').setScale(1).refreshBody();
 
-        this.spikes.create(300, 300, 'spike');
+        this.platforms.create(300, 150, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(150, 150, 'ground2').setScale(1).refreshBody();
+
+
+        this.platforms.create(800, 250, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(400, 250, 'ground2').setScale(1).refreshBody();
+        
+        this.platforms.create(100, 350, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(300, 500, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(700, 500, 'ground2').setScale(1).refreshBody();
+
+        this.spikes.create(300, 100, 'spike2');
 
         //--- PLAYER CODE BELOW----------
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
@@ -188,7 +199,7 @@ export class level2 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin',
+            key: 'coin2',
             repeat: 1,//this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
@@ -211,9 +222,9 @@ export class level2 extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
-        this.cameras.main.setBounds(0, 0, 800, 600);
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(2);
+       // this.cameras.main.setBounds(0, 0, 800, 600);
+       // this.cameras.main.startFollow(this.player);
+       // this.cameras.main.setZoom(2);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
 
@@ -271,11 +282,11 @@ export class level2 extends Phaser.Scene {
             this.bigboy_enemy.flipX = true;
 
         }
-        //if(this.bigboy_enemy.x > 650 || this.bigboy_enemy.x < 649)
+       // if(this.bigboy_enemy.x > 650 || this.bigboy_enemy.x < 649)
        // {
-          //this.bigboy_enemy.setVelocityX(0);
-        //  this.bigboy_enemy.anims.play('attack_boy', true);
-       // }
+        //  this.bigboy_enemy.setVelocityX(0);
+       //   this.bigboy_enemy.anims.play('attack_boy', true);
+      //  }
     //-------------------BIG BOY ANIMATION ABOVE ------------------------------------------------------------
 
     //-------WATCHER ANIMATION BELOW-------

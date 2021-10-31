@@ -28,8 +28,8 @@ export class level2_3 extends Phaser.Scene {
     preload ()
     {
 
-        this.load.video('background', '/static/src/assets/bar-music-background.mp4', 'loadeddata', false, true);
-        this.load.image('ground', '/static/src/assets/sand_platform.png');
+        this.load.video('background2_3', '/static/src/assets/background_2_3.mp4', 'loadeddata', false, true);
+        this.load.image('ground2_3', '/static/src/assets/sand_platform.png');
         //----------------------------------------------------------------------------------------------------------------------------------
         //this.load.spritesheet('player_one', '/static/src/assets/brawler.png', { frameWidth: 48, frameHeight: 48 });
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
@@ -100,40 +100,30 @@ export class level2_3 extends Phaser.Scene {
        // door2.create(860, 590, null).setScale(4).refreshBody();
        this.door2.create(862, 300, null).setScale(4).refreshBody();
 
-       this.platforms.create(50, 650, null).setScale(4).refreshBody();
-       this.platforms.create(100, 650, null).setScale(4).refreshBody();
-       this.platforms.create(200, 650, null).setScale(4).refreshBody();
-       this.platforms.create(300, 650, null).setScale(4).refreshBody();
-       this.platforms.create(400, 650, null).setScale(4).refreshBody();
-       this.platforms.create(500, 650, null).setScale(4).refreshBody();
-       this.platforms.create(600, 650, null).setScale(4).refreshBody();
-       this.platforms.create(700, 650, null).setScale(4).refreshBody();
-       this.platforms.create(800, 650, null).setScale(4).refreshBody();
-       this.platforms.create(900, 650, null).setScale(4).refreshBody();
+       this.platforms.create(50, 520, null).setScale(4).refreshBody();
+       this.platforms.create(100, 520, null).setScale(4).refreshBody();
+       this.platforms.create(200, 520, null).setScale(4).refreshBody();
+       this.platforms.create(300, 520, null).setScale(4).refreshBody();
+       this.platforms.create(400, 520, null).setScale(4).refreshBody();
+       this.platforms.create(500, 520, null).setScale(4).refreshBody();
+       this.platforms.create(600, 520, null).setScale(4).refreshBody();
+       this.platforms.create(700, 520, null).setScale(4).refreshBody();
+       this.platforms.create(800, 520, null).setScale(4).refreshBody();
+       this.platforms.create(900, 520, null).setScale(4).refreshBody();
         //platforms to climb higher
 
 
-        this.platforms.create(150, 300, null).setScale(1).refreshBody();
-        this.platforms.create(200, 300, null).setScale(1).refreshBody();
-        this.platforms.create(250, 300, null).setScale(1).refreshBody();
-        this.platforms.create(300, 300, null).setScale(1).refreshBody();
-        this.platforms.create(350, 300, null).setScale(1).refreshBody();
-        this.platforms.create(400, 300, null).setScale(1).refreshBody();
-        this.platforms.create(450, 300, null).setScale(1).refreshBody();
-        this.platforms.create(500, 300, null).setScale(1).refreshBody();
-        this.platforms.create(550, 300, null).setScale(1).refreshBody();
-        this.platforms.create(600, 300, null).setScale(1).refreshBody();
-        this.platforms.create(650, 300, null).setScale(1).refreshBody();
-        this.platforms.create(700, 300, null).setScale(1).refreshBody();
 
 
 
-        this.vid = this.add.video(400, 300, 'background');
+        this.vid = this.add.video(400, 300, 'background2_3');
         this.vid.play(true);
         this.vid.setPaused(false);
+        this.vid.displayWidth = this.sys.canvas.width;
+        this.vid.displayHeight = this.sys.canvas.height;
 
         
-        this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
+        this.player = this.physics.add.sprite(100, 300, 'player_one_idle');
         this.player.body.offset.x=15;
         this.player.body.offset.y=32;
         this.anims.create({
@@ -176,7 +166,7 @@ export class level2_3 extends Phaser.Scene {
      
         this.physics.add.collider(this.player, this.platforms);
 
-        this.player.setScale(3, 3);
+        this.player.setScale(2, 2);
     }
     //Attempting to reset player
     playerHitDoor(player, door2){

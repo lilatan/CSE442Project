@@ -29,11 +29,11 @@ export class level4 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background', '/static/src/assets/sand_gw2.png');
-        this.load.image('ground', '/static/src/assets/sand_platform.png');
-        this.load.image('coin', '/static/src/assets/single_coin.png');
+        this.load.image('background4', '/static/src/assets/sand_gw2.png');
+        this.load.image('ground4', '/static/src/assets/sand_platform.png');
+        this.load.image('coin4', '/static/src/assets/single_coin.png');
      //   this.load.image('player_one', '/static/src/assets/spear_player.png');
-        this.load.image('spike', '/static/src/assets/spikes.png');
+        this.load.image('spike4', '/static/src/assets/spikes.png');
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
@@ -57,21 +57,21 @@ export class level4 extends Phaser.Scene {
         
         
 
-        this.add.image(400, 300, 'background');
+        this.add.image(400, 300, 'background4');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
 
-        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        this.platforms.create(400, 568, 'ground4').setScale(2).refreshBody();
 
-        this.platforms.create(150, 300, 'ground').setScale(0.5).refreshBody();
-        this.platforms.create(400, 230, 'ground').setScale(0.5).refreshBody();
-        this.platforms.create(100, 400, 'ground');
-        this.platforms.create(700, 450, 'ground');
-        this.platforms.create(550, 150, 'ground');
-        this.platforms.create(25, 125, 'ground');
+        this.platforms.create(150, 300, 'ground4').setScale(0.5).refreshBody();
+        this.platforms.create(400, 230, 'ground4').setScale(0.5).refreshBody();
+        this.platforms.create(100, 400, 'ground4');
+        this.platforms.create(700, 450, 'ground4');
+        this.platforms.create(550, 150, 'ground4');
+        this.platforms.create(25, 125, 'ground4');
 
-        this.spikes.create(400, 500, 'spike');
+        this.spikes.create(400, 500, 'spike4');
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         this.player.body.offset.x=15;
@@ -113,7 +113,7 @@ export class level4 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin',
+            key: 'coin4',
             repeat: this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
@@ -195,7 +195,7 @@ export class level4 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1,this.scene)
         this.scene.stop(Constants.Scenes.lvl4,this.scene);
     }
 }

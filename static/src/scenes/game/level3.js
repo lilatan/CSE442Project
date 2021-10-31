@@ -33,11 +33,11 @@ export class level3 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('coin', '/static/src/assets/single_coin.png');
+        this.load.image('background3', '/static/src/assets/cyber_city_lvl2.png');
+        this.load.image('ground3', '/static/src/assets/cyberpunk_platform.png');
+        this.load.image('coin3', '/static/src/assets/single_coin.png');
         //this.load.image('player_one', '/static/src/assets/spear_player.png');
-        this.load.image('spike', '/static/src/assets/spikes.png');
+        this.load.image('spike3', '/static/src/assets/spikes.png');
          //----PLAYER SPRITE SHEET ---------
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
@@ -58,7 +58,7 @@ export class level3 extends Phaser.Scene {
         //----WATCHER SPRITE SHEET
 
         //-------FLYING ALIEN SPRITE SHEET----------------------------
-        this.load.image('flying_idle', '/static/src/assets/assets_2/flying_idle.png');
+       // this.load.image('flying_idle', '/static/src/assets/assets_2/flying_idle.png');
         this.load.spritesheet('flying_walk', '/static/src/assets/assets_2/flying_alien.png', { frameWidth: 64, frameHeight: 64 });
 
         //-----------FLYING ALIEN SPRITE SHEET--------------------------
@@ -67,7 +67,7 @@ export class level3 extends Phaser.Scene {
     create(){
 
         
-        console.log("im at level 2");
+        console.log("im at level 3");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -82,16 +82,16 @@ export class level3 extends Phaser.Scene {
         
         
 
-        this.add.image(400, 300, 'background');
+        this.add.image(400, 300, 'background3');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
 
-        this.platforms.create(200, 600, 'ground').setScale(1).refreshBody();
-        this.platforms.create(400, 600, 'ground').setScale(1).refreshBody();
-        this.platforms.create(600, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(200, 600, 'ground3').setScale(1).refreshBody();
+        this.platforms.create(400, 600, 'ground3').setScale(1).refreshBody();
+        this.platforms.create(600, 600, 'ground3').setScale(1).refreshBody();
 
-        this.spikes.create(300, 300, 'spike');
+        this.spikes.create(300, 300, 'spike3');
 
         //--- PLAYER CODE BELOW----------
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
@@ -172,7 +172,7 @@ export class level3 extends Phaser.Scene {
         //--------------------------BIG BOY CODE ABOVE-----------------------------------
 
 
-        //-----------------WATCH CODE BELOW-----------------------------------------------
+        //-----------------WATCHER CODE BELOW-----------------------------------------------
        // this.watcher_enemy = this.physics.add.sprite(500, 300, 'watcher_idle');
       //  this.watcher_enemy.setGravity(0,-700);
       //  this.watcher_enemy.setSize(19,19,false);
@@ -186,10 +186,10 @@ export class level3 extends Phaser.Scene {
      //   });
      //   this.watcher_enemy.setScale(1.5,1.5);
      //   this.watcher_enemy.setCollideWorldBounds(true);
-        //-----------------WATCH CODE ABOVE-----------------------------------------------
+        //-----------------WATCHER CODE ABOVE-----------------------------------------------
 
         //---------------------------FLYING ALIEN CODE BELOW------------------------
-        this.flying_enemy = this.physics.add.sprite(500, 300, 'flying_idle');
+        this.flying_enemy = this.physics.add.sprite(500, 300, 'flying_walk');
         this.flying_enemy.setGravity(0,-700);
         this.flying_enemy.setSize(33,33,false);
         this.flying_enemy.body.offset.x=15;
@@ -208,7 +208,7 @@ export class level3 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin',
+            key: 'coin3',
             repeat: 1,//this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });

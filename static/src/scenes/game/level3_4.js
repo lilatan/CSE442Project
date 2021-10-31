@@ -27,8 +27,8 @@ export class level3_4 extends Phaser.Scene {
     preload ()
     {
 
-        this.load.video('background', '/static/src/assets/rainy-theatre.mp4', 'loadeddata', false, true);
-        this.load.image('ground', '/static/src/assets/sand_platform.png');
+        this.load.video('background3_4', '/static/src/assets/background_3_4.mp4', 'loadeddata', false, true);
+        this.load.image('ground3_4', '/static/src/assets/sand_platform.png');
 
 
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -101,39 +101,30 @@ export class level3_4 extends Phaser.Scene {
        // door2.create(860, 590, null).setScale(4).refreshBody();
        this.door2.create(862, 300, null).setScale(4).refreshBody();
 
-       this.platforms.create(50, 600, null).setScale(4).refreshBody();
-       this.platforms.create(100, 600, null).setScale(4).refreshBody();
-       this.platforms.create(200, 600, null).setScale(4).refreshBody();
-       this.platforms.create(300, 600, null).setScale(4).refreshBody();
-       this.platforms.create(400, 600, null).setScale(4).refreshBody();
-       this.platforms.create(500, 600, null).setScale(4).refreshBody();
-       this.platforms.create(600, 600, null).setScale(4).refreshBody();
-       this.platforms.create(700, 600, null).setScale(4).refreshBody();
-       this.platforms.create(800, 600, null).setScale(4).refreshBody();
-       this.platforms.create(900, 600, null).setScale(4).refreshBody();
+       this.platforms.create(50, 580, null).setScale(4).refreshBody();
+       this.platforms.create(100, 580, null).setScale(4).refreshBody();
+       this.platforms.create(200, 580, null).setScale(4).refreshBody();
+       this.platforms.create(300, 580, null).setScale(4).refreshBody();
+       this.platforms.create(400, 580, null).setScale(4).refreshBody();
+       this.platforms.create(500, 580, null).setScale(4).refreshBody();
+       this.platforms.create(600, 580, null).setScale(4).refreshBody();
+       this.platforms.create(700, 580, null).setScale(4).refreshBody();
+       this.platforms.create(800, 580, null).setScale(4).refreshBody();
+       this.platforms.create(900, 580, null).setScale(4).refreshBody();
         //platforms to climb higher
 
-        this.platforms.create(150, 300, null).setScale(1).refreshBody();
-        this.platforms.create(200, 300, null).setScale(1).refreshBody();
-        this.platforms.create(250, 300, null).setScale(1).refreshBody();
-        this.platforms.create(300, 300, null).setScale(1).refreshBody();
-        this.platforms.create(350, 300, null).setScale(1).refreshBody();
-        this.platforms.create(400, 300, null).setScale(1).refreshBody();
-        this.platforms.create(450, 300, null).setScale(1).refreshBody();
-        this.platforms.create(500, 300, null).setScale(1).refreshBody();
-        this.platforms.create(550, 300, null).setScale(1).refreshBody();
-        this.platforms.create(600, 300, null).setScale(1).refreshBody();
-        this.platforms.create(650, 300, null).setScale(1).refreshBody();
-        this.platforms.create(700, 300, null).setScale(1).refreshBody();
+      
 
 
 
-        this.vid = this.add.video(400, 300, 'background');
+        this.vid = this.add.video(400, 300, 'background3_4');
         this.vid.play(true);
         this.vid.setPaused(false);
+        this.vid.displayWidth = this.sys.canvas.width;
+        this.vid.displayHeight = this.sys.canvas.height;
 
         
-        this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
+        this.player = this.physics.add.sprite(100, 300, 'player_one_idle');
         this.player.body.offset.x=15;
         this.player.body.offset.y=32;
         this.anims.create({
@@ -230,6 +221,7 @@ export class level3_4 extends Phaser.Scene {
             //this.player.body.touching.down
             this.player.setVelocityY(-400);
             this.player.anims.play('jump',true);
+            
          
           // this.player.anims.play('jump', this.player)
         }
