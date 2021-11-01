@@ -91,10 +91,17 @@ export class level1 extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
+<<<<<<< Updated upstream
         this.cameras.main.setZoom(3);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
 
+=======
+        this.cameras.main.setZoom(1.5);
+        this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null,this)
+        this.increasing = false 
+        
+>>>>>>> Stashed changes
     }
 
     update(){

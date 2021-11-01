@@ -73,7 +73,7 @@
         this.add.image(400, 300, 'background');
 
         platforms = this.physics.add.staticGroup();
-        spikes = this.physics.add.staticGroup();
+        //spikes = this.physics.add.staticGroup();
 
         platforms.create(400, 650, 'ground').setScale(4).refreshBody();
         platforms.create(150, 300, 'ground').setScale(0.5).refreshBody();
@@ -82,9 +82,9 @@
         platforms.create(700, 450, 'ground');
         platforms.create(550, 150, 'ground');
         platforms.create(25, 125, 'ground');
-
-        spikes.create(400, 568, 'spike');
-
+        
+        this.spikes = new spike(this, 400,568,'spike', {isStatic: true})
+        //spikes.create(400, 568, 'spike');
 
         player = this.physics.add.sprite(100, 450, 'player_one');
 
@@ -114,7 +114,7 @@
 
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(coin, platforms);
-      //  this.physics.add.collider(spikes, platforms);
+       //this.physics.add.collider(spikes, player);
 
         this.physics.add.overlap(player, coin, collectcoin, null, this);
 
@@ -123,7 +123,8 @@
         this.cameras.main.setBounds(0, 0, 600, 800);
         this.cameras.main.startFollow(player);
        
-        this.physics.add.overlap(player, spikes, playerHitSpike)
+        this.physics.add.collider(player, spikes, playerHitSpike, null, this)
+
     }
     //Attempting to reset player
     function playerHitSpike(player, spikes){
