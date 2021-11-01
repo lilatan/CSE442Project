@@ -8,17 +8,12 @@ export class shop extends Phaser.Scene {
     }
     // These are the transition scenes
     lvl1_2;
-    lvl2_3;
-    lvl3_4;
-    crewels;
     // Keyboard key to access the shop
     keyE;
     // FIGURE OUT HOW TO IMPORT CREWELS CURRENCY INTO THIS FILE SOMEHOW TO USE
-    init(lvl1_2, lvl2_3, lvl3_4, crewels){
+    init(lvl1_2){
         this.lvl1_2 = lvl1_2;
-        this.lvl2_3 = lvl2_3;
-        this.lvl3_4 = lvl3_4;
-        this.crewels = crewels;
+        
     }
 
     create(){
@@ -47,7 +42,7 @@ export class shop extends Phaser.Scene {
         this.add.existing(this.buyButton);
 
         // Figure out how to make this work for all transition levels
-        this.backButton = new TextButton(this, 25, 550, 'BACK', {fill: '#d4b2d8'}, {fill: '#888888'}, 48, () => this.scene.start(Constants.Scenes.lvl1_2));
+        this.backButton = new TextButton(this, 25, 550, 'BACK', {fill: '#d4b2d8'}, {fill: '#888888'}, 48, () => this.resumeGame());
         this.add.existing(this.backButton);
 
         //Access to shop by pressing the E key
@@ -55,7 +50,8 @@ export class shop extends Phaser.Scene {
         this.keyE.on('up', ()=>this.resumeGame());
     }
     resumeGame(){
-        this.scene.resume(this.lvl1_2.key);
+        
+        // this.scene.resume(this.lvl1_2.key);
         // this.scene.resume(this.lvl2_3.key);
         // this.scene.resume(this.lvl3_4.key);
         this.scene.stop();

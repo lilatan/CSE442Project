@@ -12,9 +12,10 @@ import { level2_3 } from "./scenes/game/level2_3.js";
 import { level3_4 } from "./scenes/game/level3_4.js";
 import { levelsMenu } from "./scenes/menus/levelsMenu.js"
 import { audioMenu } from "./scenes/menus/options_audio.js";
+import { shop } from "./scenes/game/shop.js";
+
+
 import { Constants } from "./Constants.js";
-import { shop } from "./scenes/menus/shop.js";
-//figure out way to not import every single scene in here
 
 var config = {
     // width:800,
@@ -42,7 +43,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 700},
-            debug: false
+            debug: true
         }
     },
     audio:{
