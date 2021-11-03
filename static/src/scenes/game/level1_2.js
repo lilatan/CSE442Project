@@ -27,7 +27,7 @@ export class level1_2 extends Phaser.Scene {
     data;
 
 
-    inti(data){
+    init(data){
         this.data = data;
         this.data.level = this.scene;
     }
