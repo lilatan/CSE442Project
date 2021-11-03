@@ -4,13 +4,15 @@ export class level2 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl2);
     }
-   
+
     player;
     bigboy_enemy;
     bigboy_speed = 100;
     watcher_enemy;
     rotation_watcher;
     coin;
+    door1;
+    door2;
     platforms;
     cursors;
     crewels = 0;
@@ -37,7 +39,7 @@ export class level2 extends Phaser.Scene {
         this.load.image('background2', '/static/src/assets/cyber_city_lvl2.png');
         this.load.image('ground2', '/static/src/assets/cyberpunk_platform.png');
         this.load.image('coin2', '/static/src/assets/single_coin.png');
-        //this.load.image('player_one', '/static/src/assets/spear_player.png');
+        this.load.image('laser_beam_2', '/static/src/assets_2/laser_bullet.png');
         this.load.image('spike2', '/static/src/assets/spikes.png');
          //----PLAYER SPRITE SHEET ---------
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
@@ -60,7 +62,6 @@ export class level2 extends Phaser.Scene {
     }
 
     create(){
-
         
         console.log("im at level 2");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -75,6 +76,14 @@ export class level2 extends Phaser.Scene {
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
         
+       this.door1 = this.physics.add.staticGroup();
+       this.door2 = this.physics.add.staticGroup();
+       this.door1.create(-63, 290, null).setScale(4).refreshBody();
+       this.door1.create(-63, 420, null).setScale(4).refreshBody();
+       this.door1.create(-63, 550, null).setScale(4).refreshBody();
+       this.door2.create(862, 300, null).setScale(4).refreshBody();
+       this.door2.create(862, 400, null).setScale(4).refreshBody();
+       this.door2.create(862, 500, null).setScale(4).refreshBody();
         
 
         this.add.image(400, 300, 'background2');
@@ -227,6 +236,8 @@ export class level2 extends Phaser.Scene {
        // this.cameras.main.setZoom(2);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
 
@@ -326,7 +337,16 @@ export class level2 extends Phaser.Scene {
             this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         }
     }
-
+    playerHitdoor1()
+    {
+        this.scene.stop(Constants.Scenes.lvl2,this.scene);
+        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+    }
+    playerHitdoor2()
+    {
+        this.scene.stop(Constants.Scenes.lvl2,this.scene);
+        this.scene.launch(Constants.Scenes.lvl2_3,this.scene)
+    }
     playerHitSpike(){
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
     }

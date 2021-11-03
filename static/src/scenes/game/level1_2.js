@@ -108,10 +108,14 @@ export class level1_2 extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         //spikes = this.physics.add.staticGroup();
        // door1 = this.physics.add.staticGroup();
+       this.door1 = this.physics.add.staticGroup();
        this.door2 = this.physics.add.staticGroup();
-        //delete this line if adding an actual door and not an invisible door
-       // door2.create(860, 590, null).setScale(4).refreshBody();
+       this.door1.create(-63, 290, null).setScale(4).refreshBody();
+       this.door1.create(-63, 420, null).setScale(4).refreshBody();
+       this.door1.create(-63, 550, null).setScale(4).refreshBody();
        this.door2.create(862, 300, null).setScale(4).refreshBody();
+       this.door2.create(862, 400, null).setScale(4).refreshBody();
+       this.door2.create(862, 500, null).setScale(4).refreshBody();
 
        this.platforms.create(50, 575, null).setScale(4).refreshBody();
        this.platforms.create(100, 575, null).setScale(4).refreshBody();
@@ -210,11 +214,8 @@ export class level1_2 extends Phaser.Scene {
        
       // this.physics.add.overlap(player, door2,)
       this.player.setScale(2, 2);
-    }
-    //Attempting to reset player
-    playerHitDoor(player, door2){
-       // player.anims.play('die', true);
-        //this.physics.world.wrap(player, 100)
+      this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+      this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
     }
 
     gofull() {
@@ -271,6 +272,16 @@ export class level1_2 extends Phaser.Scene {
            // this.player.anims.play('jump',true);
          
         }  
+    }
+    playerHitdoor1()
+    {
+        this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
+        this.scene.launch(Constants.Scenes.lvl1,this.scene)
+    }
+    playerHitdoor2()
+    {
+        this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
+        this.scene.launch(Constants.Scenes.lvl2,this.scene)
     }
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);

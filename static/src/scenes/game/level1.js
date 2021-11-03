@@ -6,6 +6,8 @@ export class level1 extends Phaser.Scene {
     }
     player;
     coin;
+    door1;
+    door2;
     platforms;
     cursors;
     crewels = 0;
@@ -58,12 +60,24 @@ export class level1 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
-        
-        
 
+        this.door1 = this.physics.add.staticGroup();
+       this.door2 = this.physics.add.staticGroup();
+        //delete this line if adding an actual door and not an invisible door
+       // door2.create(860, 590, null).setScale(4).refreshBody();
+       this.door1.create(-63, 290, null).setScale(4).refreshBody();
+       this.door1.create(-63, 420, null).setScale(4).refreshBody();
+       this.door1.create(-63, 550, null).setScale(4).refreshBody();
+
+       this.door2.create(862, 300, null).setScale(4).refreshBody();
+       this.door2.create(862, 400, null).setScale(4).refreshBody();
+       this.door2.create(862, 500, null).setScale(4).refreshBody();
+        
+        
         this.add.image(400, 300, 'background1');
 
         this.platforms = this.physics.add.staticGroup();
+        this.pillar = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
 
         this.platforms.create(400, 568, 'ground1').setScale(2).refreshBody();
@@ -150,6 +164,8 @@ export class level1 extends Phaser.Scene {
         this.cameras.main.setZoom(2);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
  //  delayDone(){
@@ -208,10 +224,20 @@ export class level1 extends Phaser.Scene {
         }
     }
 
-    playerHitSpike(){
+    playerHitSpike()
+    {
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
     }
-
+    playerHitdoor1()
+    {
+        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        this.scene.launch(Constants.Scenes.lvl4,this.scene)
+    }
+    playerHitdoor2()
+    {
+        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+    }
     collectcoin (player, coin){
         coin.disableBody(true, true);
 

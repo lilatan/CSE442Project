@@ -10,6 +10,8 @@ export class level3 extends Phaser.Scene {
     watcher_enemy;
     flying_enemy;
     coin;
+    door1;
+    door2;
     platforms;
     cursors;
     crewels = 0;
@@ -80,7 +82,14 @@ export class level3 extends Phaser.Scene {
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
         
-        
+        this.door1 = this.physics.add.staticGroup();
+        this.door2 = this.physics.add.staticGroup();
+        this.door1.create(-63, 290, null).setScale(4).refreshBody();
+        this.door1.create(-63, 420, null).setScale(4).refreshBody();
+        this.door1.create(-63, 550, null).setScale(4).refreshBody();
+        this.door2.create(862, 300, null).setScale(4).refreshBody();
+        this.door2.create(862, 400, null).setScale(4).refreshBody();
+        this.door2.create(862, 500, null).setScale(4).refreshBody();
 
         this.add.image(400, 300, 'background3');
 
@@ -232,11 +241,13 @@ export class level3 extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
-       this.cameras.main.setBounds(0, 0, 800, 600);
-       this.cameras.main.startFollow(this.player);
-      this.cameras.main.setZoom(2);
+      // this.cameras.main.setBounds(0, 0, 800, 600);
+      // this.cameras.main.startFollow(this.player);
+     // this.cameras.main.setZoom(2);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
     
@@ -342,6 +353,16 @@ export class level3 extends Phaser.Scene {
         }
     }
 
+    playerHitdoor1()
+    {
+        this.scene.stop(Constants.Scenes.lvl3,this.scene);
+        this.scene.launch(Constants.Scenes.lvl2_3,this.scene)
+    }
+    playerHitdoor2()
+    {
+        this.scene.stop(Constants.Scenes.lvl3, this.scene);
+        this.scene.launch(Constants.Scenes.lv3_4,this.scene)
+    }
     playerHitSpike(){
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
     }
