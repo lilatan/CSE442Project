@@ -28,6 +28,8 @@ export class shop extends Phaser.Scene {
         graphics.fillStyle(0xffffff, 1);
         graphics.fillRect(100, 200, 600, 300);
 
+        //Can add a pop up with the noMoneyText
+
         this.shopText = new Phaser.GameObjects.Text(this, 120, 110,'SHOP', {fill: '#d4b2d8'});
         this.shopText.setFontSize(52);
         this.add.existing(this.shopText);
@@ -42,14 +44,28 @@ export class shop extends Phaser.Scene {
         this.noMoneyText.setVisible(false);
 
         // *** item 1 ****
-        this.doubleJumpText = new Phaser.GameObjects.Text(this, 120, 250,'DOUBLE JUMP', {fill: '#799ced'});
-        this.doubleJumpText.setFontSize(48);
+        this.doubleJumpText = new Phaser.GameObjects.Text(this, 110, 250,'DOUBLE JUMP', {fill: '#799ced'});
+        this.doubleJumpText.setFontSize(40);
         this.add.existing(this.doubleJumpText);
 
-        this.doubleJumpBuyButton = new TextButton(this, 120, 300,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},48, ()=>this.doubleJump());
+        this.doubleJumpBuyButton = new TextButton(this, 110, 300,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.doubleJump());
         this.add.existing(this.doubleJumpBuyButton);
 
-        //Add in the text and buy buttons for other 2 items
+        // *** item 2 ****
+        this.dashText = new Phaser.GameObjects.Text(this, 110, 350,'DASH', {fill: '#799ced'});
+        this.dashText.setFontSize(40);
+        this.add.existing(this.dashText);
+
+        this.dashBuyButton = new TextButton(this, 110, 400,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.dash());
+        this.add.existing(this.dashBuyButton);
+
+        // *** item 3 ****
+        this.wallJumpText = new Phaser.GameObjects.Text(this, 400, 250,'WALL JUMP', {fill: '#799ced'});
+        this.wallJumpText.setFontSize(40);
+        this.add.existing(this.wallJumpText);
+
+        this.doubleJumpBuyButton = new TextButton(this, 400, 300,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.wallJump());
+        this.add.existing(this.doubleJumpBuyButton);
 
         this.backButton = new TextButton(this, 25, 550, 'BACK', {fill: '#d4b2d8'}, {fill: '#888888'}, 48, () => this.resumeGame());
         this.add.existing(this.backButton);
@@ -67,7 +83,7 @@ export class shop extends Phaser.Scene {
         }
         // deduct crewels when item is "bought"
     }
-    // Have functions for each item and all call buy, Input could be the amount required to buy it
+    // Item functions that call buy func with cost
     doubleJump(){
         this.scene.buy(this.items.doubleJump);
     }
