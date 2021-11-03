@@ -47,7 +47,8 @@ export class audioMenu extends Phaser.Scene {
 
 
         // Add buttons to scene
-        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.scene.start(Constants.Scenes.options));
+        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48,
+            ()=> {this.scene.start(Constants.Scenes.options); this.sound.play(Constants.SFX.back)});
         this.add.existing(this.menuButton);
         this.add.existing(this.muteButton);
         this.add.existing(this.plusButton);
@@ -85,6 +86,10 @@ export class audioMenu extends Phaser.Scene {
             this.sound.setMute(false);
             this.muteMark.setVisible(false);
         }
+
+        // add sfx for pressing button
+        this.sound.play(Constants.SFX.menu);
+
         // console.log(this.sound.key + "  " + this.sound.isPlaying);
     }
 
@@ -96,6 +101,10 @@ export class audioMenu extends Phaser.Scene {
         this.game.config.audio.volume = volume;
         this.sound.setVolume(volume / 100);
         this.volumeText.setText(volume);
+
+        // add sfx for pressing button
+        this.sound.play(Constants.SFX.menu);
+
         console.log("Volume is set to: " + volume);
     }
 
@@ -107,12 +116,16 @@ export class audioMenu extends Phaser.Scene {
         this.game.config.audio.volume = volume;
         this.sound.setVolume(volume / 100);
         this.volumeText.setText(volume);
+
+        // add sfx for pressing button
+        this.sound.play(Constants.SFX.menu);
+
         console.log("Volume is set to: " + volume);
     }
 
     selectMusic(musicIndex, y_coord){
         // Stop all sounds
-        this.game.sound.stopAll();
+        this.game.sound.removeAll();
 
         // Set selected song title
         const next = this.musicPieces[musicIndex]
@@ -125,6 +138,9 @@ export class audioMenu extends Phaser.Scene {
 
         // Update checkmark to indicate current song
         this.musicMark.setY(y_coord)
+
+        // add sfx for pressing button
+        this.sound.play(Constants.SFX.menu);
 
         console.log("Music is set to: " + next);
     }

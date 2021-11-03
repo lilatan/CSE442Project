@@ -25,7 +25,8 @@ export class pauseMenu extends Phaser.Scene {
         this.add.existing(this.resumeButton);
         this.restartButton = new TextButton(this, 25, 450,'RESTART',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.restartGame());
         this.add.existing(this.restartButton);
-        this.optionsButton = new TextButton(this, 25, 500,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.options,this.scene));
+        this.optionsButton = new TextButton(this, 25, 500,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48,
+            ()=> {this.scene.start(Constants.Scenes.options,this.scene); this.sound.play(Constants.SFX.menu)});
         this.add.existing(this.optionsButton);
         this.exitButton = new TextButton(this, 25, 550,'EXIT',{fill: '#ffffff'}, {fill: '#888888'}, 48, ()=>this.exitGame());
         this.add.existing(this.exitButton);
@@ -44,15 +45,18 @@ export class pauseMenu extends Phaser.Scene {
     resumeGame(){
         this.scene.resume(this.level.key);
         this.scene.stop();
+        this.sound.play(Constants.SFX.back);
 
     }
     restartGame(){
         this.scene.start(this.level.key);
         // this.scene.stop();
+        this.sound.play(Constants.SFX.start);
     }
     exitGame(){
         this.scene.stop(this.level.key);
         this.scene.start(Constants.Scenes.mainMenu);
+        this.sound.play(Constants.SFX.back);
     }
-    
+
 }

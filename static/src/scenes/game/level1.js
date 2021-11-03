@@ -6,6 +6,8 @@ export class level1 extends Phaser.Scene {
     }
     player;
     coin;
+    door1;
+    door2;
     platforms;
     cursors;
     crewels = 0;
@@ -13,6 +15,7 @@ export class level1 extends Phaser.Scene {
     totalCoin = 12;
     spikes;
     zoom;
+    inAir;
 
     keyW;
     keyA;
@@ -20,6 +23,8 @@ export class level1 extends Phaser.Scene {
     keyD;
 
     keyESC;
+    //testing level transition
+    keyP;
 
 
     init(){
@@ -27,11 +32,19 @@ export class level1 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background', '/static/src/assets/sand_gw2.png');
-        this.load.image('ground', '/static/src/assets/sand_platform.png');
-        this.load.image('coin', '/static/src/assets/single_coin.png');
-        this.load.image('player_one', '/static/src/assets/spear_player.png');
-        this.load.image('spike', '/static/src/assets/spikes.png');
+        this.load.image('background1', '/static/src/assets/sand_gw2.png');
+        this.load.image('ground1', '/static/src/assets/sand_platform.png');
+        this.load.image('coin1', '/static/src/assets/single_coin.png');
+        // this.load.image('player_one', '/static/src/assets/spear_player.png');
+        //-----------
+       this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
+       this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
+       this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
+       this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
+       //----------------------------------------------------------------------------------------------------------------------
+
+       //--------------------
+        this.load.image('spike1', '/static/src/assets/spikes.png');
     }
 
     create(){
@@ -41,29 +54,86 @@ export class level1 extends Phaser.Scene {
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        //testing level transition
+        this.keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        this.keyP.on('up',()=>this.transition());
+        
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        this.keyESC.on('up',()=>this.pause());
-        
+        this.keyESC.on('up',()=>{this.pause();this.sound.play(Constants.SFX.back);});
         
 
-        this.add.image(400, 300, 'background');
+        this.door1 = this.physics.add.staticGroup();
+       this.door2 = this.physics.add.staticGroup();
+        //delete this line if adding an actual door and not an invisible door
+       // door2.create(860, 590, null).setScale(4).refreshBody();
+       this.door1.create(-63, 290, null).setScale(4).refreshBody();
+       this.door1.create(-63, 420, null).setScale(4).refreshBody();
+       this.door1.create(-63, 550, null).setScale(4).refreshBody();
+
+       this.door2.create(862, 300, null).setScale(4).refreshBody();
+       this.door2.create(862, 400, null).setScale(4).refreshBody();
+       this.door2.create(862, 500, null).setScale(4).refreshBody();
+        
+        
+        this.add.image(400, 300, 'background1');
 
         this.platforms = this.physics.add.staticGroup();
+        this.pillar = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
 
-        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        this.platforms.create(400, 568, 'ground1').setScale(2).refreshBody();
 
-        this.platforms.create(150, 300, 'ground').setScale(0.5).refreshBody();
-        this.platforms.create(400, 230, 'ground').setScale(0.5).refreshBody();
-        this.platforms.create(100, 400, 'ground');
-        this.platforms.create(700, 450, 'ground');
-        this.platforms.create(550, 150, 'ground');
-        this.platforms.create(25, 125, 'ground');
+        this.platforms.create(150, 300, 'ground1').setScale(0.5).refreshBody();
+        this.platforms.create(400, 230, 'ground1').setScale(0.5).refreshBody();
+        this.platforms.create(100, 400, 'ground1');
+        this.platforms.create(700, 450, 'ground1');
+        this.platforms.create(550, 150, 'ground1');
+        this.platforms.create(25, 125, 'ground1');
 
-        this.spikes.create(400, 500, 'spike');
+        this.spikes.create(400, 500, 'spike1');
 
-        this.player = this.physics.add.sprite(100, 450, 'player_one');
+        this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
+        //TRYING TO CHANGE PLAYER HITBOX WITH CODE BELOW
+        this.player.body.offset.x=15;
+        this.player.body.offset.y=32;
+
+
+       // this.player.setSize(12,12, false);
+      //  this.time.addEvent({delay: 100, callback: this.delayDone, callbackScope: this, loop: false});
+       // this.player.setScale(1);
+       // this.player.body.setSize(this.player.width,this.player.height,true);
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('player_one_idle_sheet', { frames: [0,1,2,3,4,5] }),
+            frameRate: 6,
+            repeat: -1,
+            
+        });
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('player_one_walk', { frames: [ 0, 1, 2, 3, 4,  5, 6, 7, 8] }),
+            frameRate: 9,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('player_one_walk', { frames: [ 0, 1, 2, 3, 4,  5, 6, 7, 8] }),
+            frameRate: 9,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'jump',
+            frames: this.anims.generateFrameNumbers('player_one_jump', { frames: [0, 1, 2, 3, 4, 5 ] }),
+            frameRate: 6,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'die',
+            frames: this.anims.generateFrameNumbers('player_one_death', { frames: [0,1,2,3,4,5,6,7,8,9,10,11 ] }),
+            frameRate: 15,
+        });
 
         this.player.setBounce(0.1);
         this.player.setCollideWorldBounds(true);
@@ -71,7 +141,7 @@ export class level1 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin',
+            key: 'coin1',
             repeat: this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
@@ -93,36 +163,66 @@ export class level1 extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(3);
+        this.cameras.main.setZoom(2);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
+ //  delayDone(){
+       // this.player.body.setSize(this.player.width/2,this.player.height/1,true);
+  //     this.player.body.setSize(64/2,32,true);
+   // }
 
     update(){
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
-
+            this.player.anims.play('left', true);
+            this.player.flipX = true;
          
         }
         else if (this.cursors.right.isDown || this.keyD.isDown)
         {
             this.player.setVelocityX(200);
+            this.player.anims.play('right', true);
+            this.player.flipX = false;
+         
+          //  player.scale.setTo(-1,1);
         }
-        else
+        else //else
         {
             this.player.setVelocityX(0); 
+            this.player.anims.play('idle',true);
+         
         }
 
+        // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down)
         {
+            //Phaser.Input.Keyboard.JustDown(this.cursors.up)
+            //this.player.body.onFloor()
+            //this.player.body.touching.down
             this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
         }
-        if (this.cursors.down.isDown || this.keyS.isDown)
+        // landing sound
+        if (this.inAir && this.player.body.touching.down) {
+            this.inAir = false;
+            this.sound.play(Constants.SFX.land);
+            
+         
+          // this.player.anims.play('jump', this.player)
+        }
+        if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
-        }
+           // this.player.anims.play('jump',true);
+         
+        }  
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         // if(this.keyESC.isDown){
         //     this.scene.pause();
@@ -137,19 +237,39 @@ export class level1 extends Phaser.Scene {
     }
 
     playerHitSpike(){
+        // play take damage sound
+        this.sound.play(Constants.SFX.damage);
+
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
     }
-
+    playerHitdoor1()
+    {
+        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        this.scene.launch(Constants.Scenes.lvl4,this.scene)
+    }
+    playerHitdoor2()
+    {
+        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+    }
     collectcoin (player, coin){
         coin.disableBody(true, true);
 
         this.crewels += 1;
         this.coinCount.setText('crewels: ' + this.crewels);
+
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
     }
 
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
+    }
+    transition(){
+        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+        
     }
 }
