@@ -6,13 +6,10 @@ export class shop extends Phaser.Scene {
     constructor() {
         super(Constants.Scenes.shop);
     }
-    // These are the transition scenes
     data;
     // Keyboard key to access the shop
     keyE;
-    // FIGURE OUT HOW TO IMPORT CREWELS CURRENCY INTO THIS FILE SOMEHOW TO USE
-
-    static items = {
+    items = {
         doubleJump : 1000,
         dash : 500,
         wallJump : 250,
@@ -24,7 +21,6 @@ export class shop extends Phaser.Scene {
 
     create(){
         this.scene.bringToTop();
-        // Double jump, fast forward/zoom
 
         // Create a popup window for the shop
         let graphics = this.add.graphics();
@@ -36,18 +32,25 @@ export class shop extends Phaser.Scene {
         this.shopText.setFontSize(52);
         this.add.existing(this.shopText);
 
-        this.moneyText = new Phaser.GameObjects.Text(this, 120, 150,'CREWELS: 0', {fill: '#d4b2d8'});
+        this.moneyText = new Phaser.GameObjects.Text(this, 120, 150,'CREWELS: ' + this.data.crewels, {fill: '#d4b2d8'});
         this.moneyText.setFontSize(30);
         this.add.existing(this.moneyText);
 
+        this.noMoneyText = new Phaser.GameObjects.Text(this, 120, 150,'NOT ENOUGH CREWELS', {fill: '#d4b2d8'});
+        this.noMoneyText.setFontSize(30);
+        this.add.existing(this.noMoneyText);
+        this.noMoneyText.setVisible(false);
+
+        // *** item 1 ****
         this.doubleJumpText = new Phaser.GameObjects.Text(this, 120, 250,'DOUBLE JUMP', {fill: '#799ced'});
         this.doubleJumpText.setFontSize(48);
         this.add.existing(this.doubleJumpText);
 
-        this.buyButton = new TextButton(this, 120, 300,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},48, ()=>this.buy());
-        this.add.existing(this.buyButton);
+        this.doubleJumpBuyButton = new TextButton(this, 120, 300,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},48, ()=>this.doubleJump());
+        this.add.existing(this.doubleJumpBuyButton);
 
-        // Figure out how to make this work for all transition levels
+        //Add in the text and buy buttons for other 2 items
+
         this.backButton = new TextButton(this, 25, 550, 'BACK', {fill: '#d4b2d8'}, {fill: '#888888'}, 48, () => this.resumeGame());
         this.add.existing(this.backButton);
 
@@ -56,26 +59,22 @@ export class shop extends Phaser.Scene {
         this.keyE.on('up', ()=>this.resumeGame());
     }
     resumeGame(){
-        
-        // this.scene.resume(this.lvl1_2.key);
-        // this.scene.resume(this.lvl2_3.key);
-        // this.scene.resume(this.lvl3_4.key);
         this.scene.stop();
     }
-    buy(crewels){
-        if (crewels <= 0){
-            console.log("Not enough crewels");
+    buy(cost){
+        if (this.data.crewels <= cost){
+            this.noMoneyText.setVisible(true);
         }
-        // Figure out how to print to screen the above
-        // And how to deduct crewels when item is "bought"
+        // deduct crewels when item is "bought"
     }
     // Have functions for each item and all call buy, Input could be the amount required to buy it
     doubleJump(){
-        this.scene.buy(this.crewels);
+        this.scene.buy(this.items.doubleJump);
     }
-    fastForward(){
-        this.scene.buy(this.crewels);
+    dash(){
+        this.scene.buy(this.items.dash);
     }
-
-    // Player walks up to shop and then clicks 'E' to access shop window
+    wallJump(){
+        this.scene.buy(this.items.wallJump);
+    }
 }
