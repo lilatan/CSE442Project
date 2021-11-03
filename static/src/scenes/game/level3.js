@@ -13,6 +13,7 @@ export class level3 extends Phaser.Scene {
     door1;
     door2;
     platforms;
+    pillar;
     cursors;
     crewels = 0;
     coinCount;
@@ -38,7 +39,7 @@ export class level3 extends Phaser.Scene {
         this.load.image('background3', '/static/src/assets/cyber_city_lvl2.png');
         this.load.image('ground3', '/static/src/assets/cyberpunk_platform.png');
         this.load.image('coin3', '/static/src/assets/single_coin.png');
-        //this.load.image('player_one', '/static/src/assets/spear_player.png');
+        this.load.image('pillar3', '/static/src/assets/pillar.png');
         this.load.image('spike3', '/static/src/assets/spikes.png');
          //----PLAYER SPRITE SHEET ---------
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
@@ -95,10 +96,14 @@ export class level3 extends Phaser.Scene {
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
+        this.pillar = this.physics.add.staticGroup();
 
         this.platforms.create(200, 600, 'ground3').setScale(1).refreshBody();
         this.platforms.create(400, 600, 'ground3').setScale(1).refreshBody();
         this.platforms.create(600, 600, 'ground3').setScale(1).refreshBody();
+
+        this.pillar.create(200, 400, 'pillar3').setScale(1).refreshBody();
+        this.pillar.create(50, 400, 'pillar3').setScale(1).refreshBody();
 
         this.spikes.create(300, 300, 'spike3');
 
@@ -106,6 +111,8 @@ export class level3 extends Phaser.Scene {
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         this.player.body.offset.x=15;
         this.player.body.offset.y=32;
+        //this.canWalljump = true;
+        //this.onWall = false;
         this.anims.create({
             key: 'idle',
             frames: this.anims.generateFrameNumbers('player_one_idle_sheet', { frames: [0,1,2,3,4,5] }),
@@ -232,12 +239,14 @@ export class level3 extends Phaser.Scene {
 
         this.crewels = 0;
         //----COLLIDER CODE----
-        this.physics.add.collider(this.bigboy_enemy, this.platforms);
+
         this.physics.add.collider(this.player, this.platforms);
-       // this.physics.add.collider(this.player, this.watcher_enemy);
         this.physics.add.collider(this.player, this.flying_enemy);
-        this.physics.add.collider(this.bigboy_enemy, this.player);
+        this.physics.add.collider(this.player, this.bigboy_enemy);
+        this.physics.add.collider(this.player, this.pillar);
+        this.physics.add.collider(this.bigboy_enemy, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
+
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
@@ -253,7 +262,9 @@ export class level3 extends Phaser.Scene {
     
 
     update(){
-
+        var idle = false;
+        var left_wall = false;
+        var right_wall = false;
     //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
@@ -270,18 +281,56 @@ export class level3 extends Phaser.Scene {
         }
         else //else
         {
+            idle = true;
             this.player.setVelocityX(0); 
             this.player.anims.play('idle',true);
         }
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
-            this.player.setVelocityY(-400);
-            this.player.anims.play('jump',true);
+           idle = false;
+           this.player.setVelocityY(-400);
+           this.player.anims.play('jump',true);
         }
+
+
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170); 
         }  
+        //Wall Jump Mechanics
+       // if((!this.player.body.blocked.left && !this.player.body.blockedright)){
+        //    this.player.setGravity(0,-700);
+      //  }
+        
+        if(this.cursors.up.isDown && (this.player.body.touching.right && this.player.body.touching.down) || this.keyW.isDown && (this.player.body.touching.right && this.player.body.touching.down))
+        {       
+            idle = false;
+            this.player.setGravity(0,-300);
+            this.player.setVelocityY(-200);
+            this.player.anims.play('jump',true);
+        }
+        if(this.cursors.up.isDown && (this.player.body.blocked.right && !this.player.body.blocked.down) || this.keyW.isDown && (this.player.body.blocked.right && !this.player.body.blocked.down))
+        {
+            idle = false;
+           this.player.setGravity(0,-300);
+            this.player.setVelocityY(-200);
+            this.player.anims.play('jump',true);
+        }
+        if(this.cursors.up.isDown && (this.player.body.blockedleft && this.hero.body.blocked.down) || this.keyW.isDown && (this.player.body.blockedleft && this.hero.body.blocked.down))
+        {
+            idle = false;
+            this.player.setGravity(0,-300);
+            this.player.setVelocityY(-200);
+            this.player.anims.play('jump',true);
+        }
+        if(this.cursors.up.isDown && (this.player.body.blocked.left && !this.player.body.blocked.down) || this.keyW.isDown && (this.player.body.blocked.left && !this.player.body.blocked.down))
+        {
+            idle = false;
+            this.player.setGravity(0,-300);
+            this.player.setVelocityY(-200);
+            this.player.anims.play('jump',true);
+        }
+
     //-----------------PLAYER ANIMATION ABOVE------------------------------------------------------------
 
     //-----------------BIG BOY ANIMATION BELOW-----------------------------------------------------------
@@ -333,13 +382,6 @@ export class level3 extends Phaser.Scene {
         this.flying_enemy.flipX = true;
     }
     //-------FLYING ALIEN ANIMATION ABOVE
-
-
-
-
-
-
-
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         // if(this.keyESC.isDown){
         //     this.scene.pause();

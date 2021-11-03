@@ -79,7 +79,6 @@ export class level1 extends Phaser.Scene {
         this.add.image(400, 300, 'background1');
 
         this.platforms = this.physics.add.staticGroup();
-        this.pillar = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
 
         this.platforms.create(400, 568, 'ground1').setScale(2).refreshBody();
