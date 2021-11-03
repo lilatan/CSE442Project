@@ -12,7 +12,6 @@ export class mainMenu extends Phaser.Scene {
 
     }
     preload(){
-<<<<<<< HEAD
         // music bgm
         this.load.audio('Prologue', '/static/src/assets/audio/bgm/Prologue.mp3');
         this.load.audio('Battle-Rosemoon', '/static/src/assets/audio/bgm/Battle-Rosemoon.mp3');
@@ -29,19 +28,13 @@ export class mainMenu extends Phaser.Scene {
         this.load.audio('collect-coin', 'static/src/assets/audio/sfx/kettei-01.wav');
         this.load.audio('take-damage', 'static/src/assets/audio/sfx/14_nekketsu_damage.wav');
         this.load.audio('jump', 'static/src/assets/audio/sfx/07_priest_attack.wav');
+
+
         this.load.audio('land-ground', 'static/src/assets/audio/sfx/damage01.wav');
-=======
         this.load.video('background_main', '/static/src/assets/high_way_view.mp4', 'loadeddata', false, true);
         this.load.video('background_main', '/static/src/assets/main_menu_foot.mp4', 'loadeddata', false, true);
         this.load.video('background_main', '/static/src/assets/main_menu_background.mp4', 'loadeddata', false, true);
 
-        this.load.audio('Prologue', '/static/src/assets/bgm/Prologue.mp3');
-        this.load.audio('Battle-Rosemoon', '/static/src/assets/bgm/Battle-Rosemoon.mp3');
-        this.load.audio('Battle-Sanctuary', '/static/src/assets/bgm/Battle-Sanctuary.mp3');
-        this.load.audio('Nostalgia', '/static/src/assets/bgm/Nostalgia.mp3');
-        this.load.audio('Remotest-Liblary', '/static/src/assets/bgm/Remotest-Liblary.mp3');
-        this.load.audio('Wanderers-City', '/static/src/assets/bgm/Wanderers-City.mp3');
->>>>>>> level_transitions
     }
 
     create(){
@@ -64,13 +57,7 @@ export class mainMenu extends Phaser.Scene {
        
         // console.log(this.sound.key);
 
-<<<<<<< HEAD
-        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72,
-            ()=> {this.scene.start(Constants.Scenes.lvl1); this.sound.play(Constants.SFX.start)});
-=======
-
-        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
->>>>>>> level_transitions
+        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=> {this.scene.start(Constants.Scenes.lvl1); this.sound.play(Constants.SFX.start)});
         this.add.existing(this.startButton);
         this.optionsButton = new TextButton(this, 25, 450,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48,
             ()=> {this.scene.start(Constants.Scenes.options, this.scene); this.sound.play(Constants.SFX.menu)});

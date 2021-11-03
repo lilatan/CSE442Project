@@ -60,10 +60,8 @@ export class level1 extends Phaser.Scene {
         
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-<<<<<<< HEAD
         this.keyESC.on('up',()=>{this.pause();this.sound.play(Constants.SFX.back);});
-=======
-        this.keyESC.on('up',()=>this.pause());
+        
 
         this.door1 = this.physics.add.staticGroup();
        this.door2 = this.physics.add.staticGroup();
@@ -76,7 +74,6 @@ export class level1 extends Phaser.Scene {
        this.door2.create(862, 300, null).setScale(4).refreshBody();
        this.door2.create(862, 400, null).setScale(4).refreshBody();
        this.door2.create(862, 500, null).setScale(4).refreshBody();
->>>>>>> level_transitions
         
         
         this.add.image(400, 300, 'background1');
@@ -200,31 +197,25 @@ export class level1 extends Phaser.Scene {
             this.player.anims.play('idle',true);
          
         }
-<<<<<<< HEAD
 
         // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down)
-=======
-        if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
->>>>>>> level_transitions
         {
             //Phaser.Input.Keyboard.JustDown(this.cursors.up)
             //this.player.body.onFloor()
             //this.player.body.touching.down
             this.player.setVelocityY(-400);
-<<<<<<< HEAD
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
         }
         // landing sound
         if (this.inAir && this.player.body.touching.down) {
             this.inAir = false;
             this.sound.play(Constants.SFX.land);
-=======
-            this.player.anims.play('jump',true);
+            
          
           // this.player.anims.play('jump', this.player)
->>>>>>> level_transitions
         }
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
@@ -245,15 +236,10 @@ export class level1 extends Phaser.Scene {
         }
     }
 
-<<<<<<< HEAD
     playerHitSpike(){
         // play take damage sound
         this.sound.play(Constants.SFX.damage);
 
-=======
-    playerHitSpike()
-    {
->>>>>>> level_transitions
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
     }
     playerHitdoor1()
