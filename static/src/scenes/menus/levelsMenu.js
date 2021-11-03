@@ -1,6 +1,6 @@
 import { Constants } from "/static/src/Constants.js";
 import { TextButton } from "/static/src/game_objects/TextButton.js";
-import { dataFile } from "/static/src/data";
+import { dataFile } from "/static/src/data.js";
 
 export class levelsMenu extends Phaser.Scene {
     constructor() {
@@ -14,7 +14,7 @@ export class levelsMenu extends Phaser.Scene {
             ()=> {this.scene.start(Constants.Scenes.mainMenu); this.sound.play(Constants.SFX.back)});
         this.add.existing(this.menuButton);
 
-        data = new dataFile();
+        var data = new dataFile();
         this.level1Button = new TextButton(this, 25, 100, "LEVEL 1", {fill: '#d4b2d8'}, {fill: '#888888'}, 48,
             ()=> {this.scene.start(Constants.Scenes.lvl1); this.sound.play(Constants.SFX.start)});
         this.add.existing(this.level1Button);

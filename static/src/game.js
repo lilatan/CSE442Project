@@ -18,6 +18,7 @@ import { shop } from "./scenes/game/shop.js";
 
 
 import { Constants } from "./Constants.js";
+import {dataFile} from "./data.js";
 
 var config = {
     // width:800,
