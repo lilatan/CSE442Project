@@ -22,8 +22,15 @@ export class level1_2 extends Phaser.Scene {
     keyD;
     keyS;
     keyESC;
-
     keyE;
+
+    data;
+
+
+    inti(data){
+        this.data = data;
+        this.data.level = this.scene;
+    }
 
     preload() {
 
@@ -252,6 +259,10 @@ export class level1_2 extends Phaser.Scene {
             if (this.cursors.down.isDown || this.keyS.isDown) {
                 this.player.setVelocityY(170);
             }
+        }else{
+            this.player.setVelocityX(0);
+            this.player.setVelocityY(0);
+            this.player.anims.play('idle');
         }
 
 
@@ -273,7 +284,7 @@ export class level1_2 extends Phaser.Scene {
         this.scene.pause();
     }
     shop() {
-        this.scene.launch(Constants.Scenes.shop, this.scene);
+        this.scene.launch(Constants.Scenes.shop, this.data);
         // this.scene.shop();
         // this.scene.pause();
     }

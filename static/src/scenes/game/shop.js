@@ -7,12 +7,18 @@ export class shop extends Phaser.Scene {
         super(Constants.Scenes.shop);
     }
     // These are the transition scenes
-    lvl1_2;
+    data;
     // Keyboard key to access the shop
     keyE;
     // FIGURE OUT HOW TO IMPORT CREWELS CURRENCY INTO THIS FILE SOMEHOW TO USE
-    init(lvl1_2){
-        this.lvl1_2 = lvl1_2;
+
+    static items = {
+        doubleJump : 1000,
+        dash : 500,
+        wallJump : 250,
+    }
+    init(data){
+        this.data = data;
         
     }
 
