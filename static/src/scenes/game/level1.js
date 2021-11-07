@@ -232,7 +232,7 @@ export class level1 extends Phaser.Scene {
             // this.scene.pause();
             // this.scene.launch(Constants.Scenes.nameInput, this.scene);
             console.log(this.scene.key)
-            this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+            this.scene.start(Constants.Scenes.endgame, [this.crewels, this.scene]);
         }
     }
 
