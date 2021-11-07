@@ -7,7 +7,6 @@ export class nameInput extends Phaser.Scene{
     }
     score;
     level;
-    userInput;
     init(data){//[Score, Game Scene]
         this.score = data[0];
         this.level = data[1];
@@ -34,24 +33,76 @@ export class nameInput extends Phaser.Scene{
             { fontSize: '80px', fill: '#730000' }
         ).setOrigin(0.5);
 
-        // prompt user to enter name
-        this.promptText = this.add.text(this.screenCenterX, 150,
-            'ENTER YOUR NAME',
-            { fontSize: '32px', fill: '#ffffff' }
+        // display player's level and final score
+        this.scoreTitle = this.add.text(this.screenCenterX, 130,
+            'YOUR SCORE',
+            { fontSize: '40px', fill: '#730000' }
+        ).setOrigin(0.5);
+        // this.displayLevel = this.add.text(this.screenCenterX, 180,
+        //     this.level.key,
+        //     { fontSize: '32px', fill: '#730000' }
+        // ).setOrigin(0.5);
+        this.displayScore = this.add.text(this.screenCenterX, 170,
+            this.score.toString(),
+            { fontSize: '32px', fill: '#730000' }
         ).setOrigin(0.5);
 
-        // player input for name
-        this.nameDisplay = this.add.text(this.screenCenterX, 200,
-            'NAME',
+
+        // prompt user to enter name
+        this.promptText = this.add.text(this.screenCenterX, 410,
+            'ENTER YOUR NAME',
             { fontSize: '40px', fill: '#000000' }
         ).setOrigin(0.5);
 
+        // player input for name
+        var nameDisplay = this.add.text(this.screenCenterX, 450,
+            'type to enter',
+            { fontSize: '32px', fill: '#000000' }
+        ).setOrigin(0.5);
+
         // update display with user's input
-        // this.nameDisplay.setText("this is my name");
+        // https://phaser.io/examples/v3/view/input/keyboard/text-entry
+        var userInputted = false;
+        this.input.keyboard.on('keydown', function (event) {
+            // handle backspace
+            if (event.keyCode === 8 && nameDisplay.text.length > 0)
+            {
+                nameDisplay.text = nameDisplay.text.substr(0, nameDisplay.text.length - 1);
+            }
+            else if (event.keyCode === 32 || (event.keyCode >= 48 && event.keyCode < 90))
+            {
+                // remove prompt if not done so already
+                if (!userInputted) {
+                    userInputted = true;
+                    nameDisplay.text = "";
+                }
+
+                // handle keypress
+                if (nameDisplay.text.length < 10) {
+                    nameDisplay.text += event.key;
+                }
+            }
+        });
+
+        // submit to leaderboard button
+        this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#ffffff'}, {fill: '#999999'}, 32,
+            ()=> {
+            if (userInputted) {
+                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level.key)
+                this.scene.stop(this.level.key);
+                this.sound.play(Constants.SFX.back);
+                this.scene.start(Constants.Scenes.leaderboard);
+            }
+        });
+        this.add.existing(this.submitButton);
 
         // back to menu button
-        this.menuButton = new TextButton(this, 25, 550, 'BACK TO MAIN MENU', {fill: '#ffffff'}, {fill: '#999999'}, 32,
-            ()=> {this.scene.start(this.data.key); this.sound.play(Constants.SFX.back)});
+        this.menuButton = new TextButton(this, 25, 550, 'SKIP LEADERBOARD', {fill: '#ffffff'}, {fill: '#999999'}, 32,
+            ()=> {
+            this.scene.stop(this.level.key);
+            this.scene.start(Constants.Scenes.mainMenu);
+            this.sound.play(Constants.SFX.back)
+        });
         this.add.existing(this.menuButton);
 
     }
