@@ -192,13 +192,13 @@ export class level4 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
+        this.scene.launch(Constants.Scenes.lvl3_4,this.scene);
         this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3_4,this.scene)
     }
     playerHitdoor2()
     {
+        this.scene.launch(Constants.Scenes.lvl1,this.scene);
         this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.scene)
     }
     playerHitSpike(){
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
@@ -215,7 +215,7 @@ export class level4 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.launch(Constants.Scenes.lvl1,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1,this.scene);
         this.scene.stop(Constants.Scenes.lvl4,this.scene);
     }
 }
