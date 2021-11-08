@@ -80,9 +80,9 @@ export class level1 extends Phaser.Scene {
 
             child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
 
-        });
+    });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text( 16,16, 'crewels: 0', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -94,10 +94,12 @@ export class level1 extends Phaser.Scene {
         this.cameras.main.setZoom(1.5);
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null,this)
         this.increasing = false 
+        this.coinCount.setPosition(150, 100);
         
     }
 
     update(){
+      //  this.coinCount.setPosition(300, 300);
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -121,7 +123,7 @@ export class level1 extends Phaser.Scene {
         {
             this.player.setVelocityY(170);
         }
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+    
         // if(this.keyESC.isDown){
         //     this.scene.pause();
         //     this.scene.launch(Constants.Scenes.pause);
