@@ -1,5 +1,7 @@
 import { Constants } from "/static/src/Constants.js"
 // import { pause } from "../menus/pausemenu.js";
+import { dataFile } from "../../data.js";
+
 export class level1 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl1);
@@ -25,10 +27,10 @@ export class level1 extends Phaser.Scene {
     keyESC;
     //testing level transition
     keyP;
+    data;
 
-
-    init(){
-
+    init(data){
+        this.data = data;
     }
 
     preload(){
@@ -154,8 +156,6 @@ export class level1 extends Phaser.Scene {
 
         this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
 
-        this.crewels = 0;
-
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
 
@@ -257,7 +257,7 @@ export class level1 extends Phaser.Scene {
 
         this.crewels += 1;
         this.coinCount.setText('crewels: ' + this.crewels);
-
+        this.data.crewels += 1;
         // play coin collection sound
         this.sound.play(Constants.SFX.coin);
     }

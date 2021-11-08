@@ -1,6 +1,6 @@
 export class dataFile {
 
-    crewels;
+    crewels = 0;
     doubleJump;
     dash;
     currentLevel;

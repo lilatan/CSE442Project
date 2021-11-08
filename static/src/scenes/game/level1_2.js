@@ -1,5 +1,7 @@
 import { Constants } from "/static/src/Constants.js"
 // import { pause } from "../menus/pausemenu.js";
+import { dataFile } from "../../data.js";
+
 export class level1_2 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl1_2);
@@ -322,7 +324,7 @@ export class level1_2 extends Phaser.Scene {
         this.scene.pause();
     }
     shop() {
-        this.scene.launch(Constants.Scenes.shop, this.data);
+        this.scene.launch(Constants.Scenes.shop, this.data.crewels);
         // this.scene.shop();
         // this.scene.pause();
     }

@@ -1,5 +1,6 @@
 import { Constants } from "/static/src/Constants.js";
 import { TextButton } from "/static/src/game_objects/TextButton.js";
+import {dataFile} from "../../data.js";
 
 // To allow players to purchase special abilities/power ups in game
 export class shop extends Phaser.Scene {
@@ -16,7 +17,7 @@ export class shop extends Phaser.Scene {
     }
     init(data){
         this.data = data;
-        
+
     }
 
     create(){
@@ -56,12 +57,13 @@ export class shop extends Phaser.Scene {
         this.add.existing(this.dashBuyButton);
 
         // *** item 3 ****
+        /*
         this.wallJumpText = new Phaser.GameObjects.Text(this, 400, 250,'WALL JUMP', {fill: '#799ced'});
         this.wallJumpText.setFontSize(40);
         this.add.existing(this.wallJumpText);
         this.wallJumpBuyButton = new TextButton(this, 400, 300,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.wallJump());
         this.add.existing(this.wallJumpBuyButton);
-
+        */
         this.backButton = new TextButton(this, 25, 550, 'BACK', {fill: '#d4b2d8'}, {fill: '#888888'}, 48, () => this.resumeGame());
         this.add.existing(this.backButton);
 

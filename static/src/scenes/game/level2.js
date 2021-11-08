@@ -1,4 +1,5 @@
 import { Constants } from "/static/src/Constants.js"
+import {dataFile} from "../../data.js";
 // import { pause } from "../menus/pausemenu.js";
 export class level2 extends Phaser.Scene {
     constructor(){
@@ -15,7 +16,7 @@ export class level2 extends Phaser.Scene {
     door2;
     platforms;
     cursors;
-    crewels = 0;
+    crewels;
     coinCount;
     totalCoin = 12;
     spikes;
@@ -31,8 +32,9 @@ export class level2 extends Phaser.Scene {
     keyP;
 
 
-    init(){
-
+    init(data){
+        this.data = data;
+        this.crewels = this.data.crewels;
     }
 
     preload(){
@@ -219,9 +221,8 @@ export class level2 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' });
 
-        this.crewels = 0;
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
@@ -354,7 +355,8 @@ export class level2 extends Phaser.Scene {
     collectcoin (player, coin){
         coin.disableBody(true, true);
         this.crewels += 1;
-        this.coinCount.setText('crewels: ' + this.crewels);
+        this.coinCount.setText('crewels: ' + this.data.crewels);
+        this.data.crewels += 1;
     }
 
     pause(){

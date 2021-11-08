@@ -1,5 +1,6 @@
 import { Constants } from "/static/src/Constants.js";
 import { TextButton } from "/static/src/game_objects/TextButton.js";
+import {dataFile} from "../../data.js";
 
 export class mainMenu extends Phaser.Scene {
     constructor(){
@@ -8,6 +9,7 @@ export class mainMenu extends Phaser.Scene {
     }
     video;
     vid;
+    coin_data = new dataFile();
     init(){
 
     }
