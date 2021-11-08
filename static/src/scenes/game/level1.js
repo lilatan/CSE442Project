@@ -152,9 +152,9 @@ export class level1 extends Phaser.Scene {
 
             child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
 
-        });
+    });
 
-        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text( 16,16, 'crewels:'+this.this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -163,12 +163,14 @@ export class level1 extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(2);
-       
+        this.cameras.main.setZoom(1.5);
+        this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null,this)
+        this.increasing = false 
+        this.coinCount.setPosition(150, 100);
+
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
-
     }
  //  delayDone(){
        // this.player.body.setSize(this.player.width/2,this.player.height/1,true);
@@ -176,6 +178,7 @@ export class level1 extends Phaser.Scene {
    // }
 
     update(){
+      //  this.coinCount.setPosition(300, 300);
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -220,10 +223,8 @@ export class level1 extends Phaser.Scene {
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
-           // this.player.anims.play('jump',true);
-         
-        }  
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        }
+    
         // if(this.keyESC.isDown){
         //     this.scene.pause();
         //     this.scene.launch(Constants.Scenes.pause);
