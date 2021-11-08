@@ -132,6 +132,8 @@ export class level2_3 extends Phaser.Scene {
         this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
         this.shopText.setFontSize(24);
         this.add.existing(this.shopText);
+        this.shopFront.depth = 1;
+        this.shopText.depth = 1;
 
         
 
@@ -144,7 +146,7 @@ export class level2_3 extends Phaser.Scene {
         this.vid.setPaused(false);
         this.vid.displayWidth = this.sys.canvas.width;
         this.vid.displayHeight = this.sys.canvas.height;
-        this.vid.depth = -1;
+        // this.vid.depth = -1;
 
         
         this.player = this.physics.add.sprite(100, 300, 'player_one_idle');
