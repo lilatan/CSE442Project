@@ -154,7 +154,7 @@ export class level1 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -245,19 +245,21 @@ export class level1 extends Phaser.Scene {
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl1,this.scene);
-        this.scene.launch(Constants.Scenes.lvl4,this.scene)
+        this.scene.launch(Constants.Scenes.lvl4,this.data);
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl1,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1_2,this.data);
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
 
-        this.crewels += 1;
-        this.coinCount.setText('crewels: ' + this.crewels);
+        // this.crewels += 1;
+        
         this.data.crewels += 1;
+        this.coinCount.setText('crewels: ' + this.data.crewels);
+        console.log(this.data.crewels);
         // play coin collection sound
         this.sound.play(Constants.SFX.coin);
     }

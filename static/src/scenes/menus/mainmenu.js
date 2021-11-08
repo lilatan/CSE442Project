@@ -9,7 +9,6 @@ export class mainMenu extends Phaser.Scene {
     }
     video;
     vid;
-    coin_data = new dataFile();
     init(){
 
     }
@@ -59,7 +58,7 @@ export class mainMenu extends Phaser.Scene {
        
         // console.log(this.sound.key);
 
-        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=> {this.scene.start(Constants.Scenes.lvl1); this.sound.play(Constants.SFX.start)});
+        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=> {this.scene.start(Constants.Scenes.lvl1, new dataFile()); this.sound.play(Constants.SFX.start)});
         this.add.existing(this.startButton);
         this.optionsButton = new TextButton(this, 25, 450,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48,
             ()=> {this.scene.start(Constants.Scenes.options, this.scene); this.sound.play(Constants.SFX.menu)});

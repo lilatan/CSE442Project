@@ -29,9 +29,11 @@ export class level3 extends Phaser.Scene {
     //testing level transition
     keyP;
 
+    data;
 
-    init(){
 
+    init(data){
+        this.data = data;
     }
 
     preload(){
@@ -228,7 +230,7 @@ export class level3 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
 
         this.crewels = 0;
         //----COLLIDER CODE----
@@ -345,33 +347,32 @@ export class level3 extends Phaser.Scene {
         //     this.scene.pause();
         //     this.scene.launch(Constants.Scenes.pause);
         // }
-        if(this.crewels==this.totalCoin){
-            // this.scene.pause();
-            // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-            console.log(this.scene.key)
-            this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
-        }
+        // if(this.crewels==this.totalCoin){
+        //     // this.scene.pause();
+        //     // this.scene.launch(Constants.Scenes.nameInput, this.scene);
+        //     console.log(this.scene.key)
+        //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+        // }
     }
 
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl3,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2_3,this.scene)
+        this.scene.launch(Constants.Scenes.lvl2_3,this.data)
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl3, this.scene);
-        this.scene.launch(Constants.Scenes.lv3_4,this.scene)
+        this.scene.launch(Constants.Scenes.lv3_4,this.data)
     }
     playerHitSpike(){
-        this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
     }
 
     collectcoin (player, coin){
         coin.disableBody(true, true);
-
-        this.crewels += 1;
-        this.coinCount.setText('crewels: ' + this.crewels);
+        this.data.crewels += 1;
+        this.coinCount.setText('crewels: ' + this.data.crewels);
     }
 
     pause(){
@@ -380,7 +381,7 @@ export class level3 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.launch(Constants.Scenes.lvl3_4,this.scene)
+        this.scene.launch(Constants.Scenes.lvl3_4,this.data)
         this.scene.stop(Constants.Scenes.lvl3,this.scene);
     }
 }

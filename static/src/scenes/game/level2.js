@@ -34,7 +34,7 @@ export class level2 extends Phaser.Scene {
 
     init(data){
         this.data = data;
-        this.crewels = this.data.crewels;
+        this.data.currentLevel = this.scene;
     }
 
     preload(){
@@ -341,22 +341,22 @@ export class level2 extends Phaser.Scene {
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1_2,this.data);
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2_3,this.scene)
+        this.scene.launch(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
-        this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
     }
 
     collectcoin (player, coin){
         coin.disableBody(true, true);
-        this.crewels += 1;
-        this.coinCount.setText('crewels: ' + this.data.crewels);
         this.data.crewels += 1;
+        this.coinCount.setText('crewels: ' + this.data.crewels);
+        
     }
 
     pause(){
@@ -366,7 +366,7 @@ export class level2 extends Phaser.Scene {
     }
     transition(){
         this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2_3,this.scene)
+        this.scene.launch(Constants.Scenes.lvl2_3,this.data);
       
     }
     // bigboy_ATTACK()

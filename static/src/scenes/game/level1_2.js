@@ -152,10 +152,10 @@ export class level1_2 extends Phaser.Scene {
 
 
         //add shop
-        this.shopFront = this.physics.add.image(400, 525, 'shop');
+        this.shopFront = this.physics.add.image(400, 450, 'shop');
         this.shopFront.body.moves = false;
         this.shopFront.body.setAllowGravity(false);
-        this.shopText = new Phaser.GameObjects.Text(this, 350, 475, 'Press E', { fill: '#ffffff' });
+        this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
         this.shopText.setFontSize(24);
         this.add.existing(this.shopText);
 
@@ -311,12 +311,12 @@ export class level1_2 extends Phaser.Scene {
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1,this.data);
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2,this.scene)
+        this.scene.launch(Constants.Scenes.lvl2,this.data);
     }
     pause() {
         this.scene.launch(Constants.Scenes.pause, this.scene);
@@ -324,7 +324,7 @@ export class level1_2 extends Phaser.Scene {
         this.scene.pause();
     }
     shop() {
-        this.scene.launch(Constants.Scenes.shop, this.data.crewels);
+        this.scene.launch(Constants.Scenes.shop, this.data);
         // this.scene.shop();
         // this.scene.pause();
     }

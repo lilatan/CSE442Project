@@ -20,6 +20,13 @@ export class level3_4 extends Phaser.Scene {
     keyD;
     keyS;
     keyESC;
+    keyE;
+
+    data;
+
+    init(data){
+        this.data = data;
+    }
 
 
     preload ()
@@ -87,6 +94,10 @@ export class level3_4 extends Phaser.Scene {
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
+
+        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        this.keyE.on('up', () => this.shop());
+        this.keyE.enabled = false;
         
         this.platforms = this.physics.add.staticGroup();
         //spikes = this.physics.add.staticGroup();
@@ -112,7 +123,13 @@ export class level3_4 extends Phaser.Scene {
        this.platforms.create(900, 580, null).setScale(4).refreshBody();
         //platforms to climb higher
 
-
+        //add shop
+        this.shopFront = this.physics.add.image(400, 450, 'shop');
+        this.shopFront.body.moves = false;
+        this.shopFront.body.setAllowGravity(false);
+        this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.shopText.setFontSize(24);
+        this.add.existing(this.shopText);
 
 
 
@@ -121,6 +138,8 @@ export class level3_4 extends Phaser.Scene {
         this.vid.setPaused(false);
         this.vid.displayWidth = this.sys.canvas.width;
         this.vid.displayHeight = this.sys.canvas.height;
+        this.vid.depth = -1;
+        
 
         
         this.player = this.physics.add.sprite(100, 300, 'player_one_idle');
@@ -172,6 +191,8 @@ export class level3_4 extends Phaser.Scene {
         this.player.setScale(2, 2);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+        //allows player and shop to interact
+        this.physics.add.overlap(this.player, this.shopFront);
     }
      gofull() {
 
@@ -226,6 +247,16 @@ export class level3_4 extends Phaser.Scene {
 
         }
 
+        if (!this.shopFront.body.touching.none) {
+            this.shopText.setVisible(true);
+            this.keyE.enabled = true;
+            console.log("touching\n");
+        } else {
+            this.shopText.setVisible(false);
+            this.keyE.enabled = false;
+            // console.log("touching\n");
+        }
+
     }
     playerHitdoor1()
     {
@@ -241,5 +272,11 @@ export class level3_4 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
+    }
+
+    shop() {
+        this.scene.launch(Constants.Scenes.shop, this.data);
+        // this.scene.shop();
+        // this.scene.pause();
     }
 }
