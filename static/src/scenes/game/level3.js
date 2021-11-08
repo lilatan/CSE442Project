@@ -31,6 +31,7 @@ export class level3 extends Phaser.Scene {
 
     data;
 
+    inAir;
 
     init(data){
         this.data = data;
@@ -275,11 +276,21 @@ export class level3 extends Phaser.Scene {
             this.player.setVelocityX(0); 
             this.player.anims.play('idle',true);
         }
+
+        // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
             this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
         }
+        // landing sound
+        if (this.inAir && this.player.body.touching.down) {
+            this.inAir = false;
+            this.sound.play(Constants.SFX.land);
+        }
+
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170); 
@@ -366,13 +377,20 @@ export class level3 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.lvl3_4,this.data)
     }
     playerHitSpike(){
+        // play take damage sound
+        this.sound.play(Constants.SFX.damage);
+
         this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
     }
 
     collectcoin (player, coin){
         coin.disableBody(true, true);
+
         this.data.crewels += 1;
         this.coinCount.setText('crewels: ' + this.data.crewels);
+
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
     }
 
     pause(){

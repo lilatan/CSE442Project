@@ -231,8 +231,8 @@ export class level1 extends Phaser.Scene {
         if(this.crewels==this.totalCoin){
             // this.scene.pause();
             // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-            console.log(this.scene.key)
-            this.scene.start(Constants.Scenes.endgame, [this.crewels, this.scene]);
+            // console.log(this.scene.key)
+            // this.scene.start(Constants.Scenes.endgame, [this.crewels, this.scene]);
         }
     }
 
