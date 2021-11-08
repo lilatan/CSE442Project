@@ -125,11 +125,11 @@ export class level1 extends Phaser.Scene {
             this.movingPlatform.setVelocityY(-10);
         }
 
-        if (this.movingPlatformHorizontal.x >= 100) { 
-            this.movingPlatformHorizontal.setVelocityX(-10) 
+        if (this.movingPlatformHorizontal.x <= 100) { 
+            this.movingPlatformHorizontal.setVelocityX(10) 
         }  
-        if (this.movingPlatformHorizontal.x <= 375) { 
-            this.movingPlatformHorizontal.setVelocityX(10);
+        if (this.movingPlatformHorizontal.x >= 200) { 
+            this.movingPlatformHorizontal.setVelocityX(-10);
         }
 
         if (this.spike1.y <= 200) { 
