@@ -463,13 +463,11 @@ export class level3 extends Phaser.Scene {
 
     playerHitdoor1()
     {
-        this.scene.launch(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.stop(Constants.Scenes.lvl3,this.scene);
+        this.scene.start(Constants.Scenes.lvl2_3);
     }
     playerHitdoor2()
     {
-        this.scene.launch(Constants.Scenes.lvl3_4,this.scene);
-        this.scene.stop(Constants.Scenes.lvl3,this.scene);
+        this.scene.start(Constants.Scenes.lvl3_4);
     }
     playerHitSpike(){
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);

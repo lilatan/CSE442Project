@@ -255,9 +255,9 @@ export class level2 extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
-       // this.cameras.main.setBounds(0, 0, 800, 600);
-       // this.cameras.main.startFollow(this.player);
-       // this.cameras.main.setZoom(2);
+        this.cameras.main.setBounds(0, 0, 800, 600);
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setZoom(2);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
@@ -371,13 +371,11 @@ export class level2 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.stop(Constants.Scenes.lvl2,this.scene);
+        this.scene.start(Constants.Scenes.lvl1_2);
     }
     playerHitdoor2()
     {
-        this.scene.launch(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.stop(Constants.Scenes.lvl2,this.scene);
+        this.scene.start(Constants.Scenes.lvl2_3);
     }
     playerHitSpike(){
         this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);

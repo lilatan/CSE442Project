@@ -243,13 +243,15 @@ export class level1 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.launch(Constants.Scenes.lvl4,this.scene);
-        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        this.scene.start(Constants.Scenes.lvl4);
+        //this.scene.launch(Constants.Scenes.lvl4,this.scene);
+        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
     }
     playerHitdoor2()
     {
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        this.scene.start(Constants.Scenes.lvl1_2);
+        //this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
+        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
@@ -267,8 +269,8 @@ export class level1 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        //this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
+        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
         
     }
 }
