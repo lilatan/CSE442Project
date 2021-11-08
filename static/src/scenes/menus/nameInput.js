@@ -1,4 +1,5 @@
-import { Constants } from "../../Constants.js";
+import { Constants } from "/static/src/Constants.js";
+import { TextButton } from "/static/src/game_objects/TextButton.js";
 
 export class nameInput extends Phaser.Scene{
     constructor(){
@@ -6,48 +7,106 @@ export class nameInput extends Phaser.Scene{
     }
     score;
     level;
-    username;
-    element;
     init(data){//[Score, Game Scene]
         this.score = data[0];
         this.level = data[1];
     }
     preload(){
-        this.load.html('nameform', '/static/src/assets/html/nameform.html');
+        this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 
-        var name = prompt("Please enter your name", "user");
-        if (name != null) {
-            this.send_leaderboard_entry(name, this.score, this.level.key);
-        }
-        this.scene.stop(this.level.key);
-        this.scene.start(Constants.Scenes.mainMenu);
+        this.load.image('graveyard', '/static/src/assets/images/graveyard2.jpg');
+        // <a href="https://www.freepik.com/vectors/tree">Tree vector created by upklyak - www.freepik.com</a>
+
+        // this.load.html('nameform', '/static/src/assets/html/nameform.html');
     }
     create(){
-        // this.scene.bringToTop();
-        // var prompt = this.add.text(300,100, "Enter your name", {fill: '#ffffff', fontSize: 48});
-        // this.element = this.add.dom(200, 200).createFromCache('nameform');
-        // this.element.addListener('click');
-        // this.element.on('click', ()=>this.getUsername());
+        // add image to background and scale it
+        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'graveyard')
+        let scaleX = this.cameras.main.width / image.width
+        let scaleY = this.cameras.main.height / image.height
+        let scale = Math.max(scaleX, scaleY)
+        image.setScale(scale).setScrollFactor(0)
 
-        // this.tweens.add({
-        //     targets: this.element,
-        //     y: 300,
-        //     duration: 3000,
-        //     ease: 'Power3'
-        // });
+        // "game over" text at the top of the scene
+        this.gameoverText = this.add.text(this.screenCenterX, 70,
+            'GAME OVER',
+            { fontSize: '80px', fill: '#730000' }
+        ).setOrigin(0.5);
+
+        // display player's level and final score
+        this.scoreTitle = this.add.text(this.screenCenterX, 130,
+            'YOUR SCORE',
+            { fontSize: '40px', fill: '#730000' }
+        ).setOrigin(0.5);
+        // this.displayLevel = this.add.text(this.screenCenterX, 180,
+        //     this.level.key,
+        //     { fontSize: '32px', fill: '#730000' }
+        // ).setOrigin(0.5);
+        this.displayScore = this.add.text(this.screenCenterX, 170,
+            this.score.toString(),
+            { fontSize: '32px', fill: '#730000' }
+        ).setOrigin(0.5);
+
+
+        // prompt user to enter name
+        this.promptText = this.add.text(this.screenCenterX, 410,
+            'ENTER YOUR NAME',
+            { fontSize: '40px', fill: '#000000' }
+        ).setOrigin(0.5);
+
+        // player input for name
+        var nameDisplay = this.add.text(this.screenCenterX, 450,
+            'type to enter',
+            { fontSize: '32px', fill: '#000000' }
+        ).setOrigin(0.5);
+
+        // update display with user's input
+        // https://phaser.io/examples/v3/view/input/keyboard/text-entry
+        var userInputted = false;
+        this.input.keyboard.on('keydown', function (event) {
+            // handle backspace
+            if (event.keyCode === 8 && nameDisplay.text.length > 0)
+            {
+                nameDisplay.text = nameDisplay.text.substr(0, nameDisplay.text.length - 1);
+            }
+            else if (event.keyCode === 32 || (event.keyCode >= 48 && event.keyCode < 90))
+            {
+                // remove prompt if not done so already
+                if (!userInputted) {
+                    userInputted = true;
+                    nameDisplay.text = "";
+                }
+
+                // handle keypress
+                if (nameDisplay.text.length < 10) {
+                    nameDisplay.text += event.key;
+                }
+            }
+        });
+
+        // submit to leaderboard button
+        this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#ffffff'}, {fill: '#999999'}, 32,
+            ()=> {
+            if (userInputted) {
+                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level.key)
+                this.scene.stop(this.level.key);
+                this.sound.play(Constants.SFX.back);
+                this.scene.start(Constants.Scenes.leaderboard);
+            }
+        });
+        this.add.existing(this.submitButton);
+
+        // back to menu button
+        this.menuButton = new TextButton(this, 25, 550, 'SKIP LEADERBOARD', {fill: '#ffffff'}, {fill: '#999999'}, 32,
+            ()=> {
+            this.scene.stop(this.level.key);
+            this.scene.start(Constants.Scenes.mainMenu);
+            this.sound.play(Constants.SFX.back)
+        });
+        this.add.existing(this.menuButton);
+
     }
 
-    // getUsername(event){
-    //     if(event.target.name ==='enterButton'){
-    //         this.username = this.element.getChildByName('nameField');
-    //         if(this.username !==''){
-    //             this.element.removeListener('click');
-    //             this.send_leaderboard_entry(this.username, this.score, this.level.key);
-    //             this.scene.stop(this.level.key);
-    //             this.scene.start(Constants.Scenes.leaderboard);
-    //         }
-    //     }
-    // }
     send_leaderboard_entry(name, score, level){
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/update-leaderboard', true);

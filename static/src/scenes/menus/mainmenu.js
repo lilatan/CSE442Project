@@ -1,43 +1,78 @@
 import { Constants } from "/static/src/Constants.js";
 import { TextButton } from "/static/src/game_objects/TextButton.js";
+import {dataFile} from "../../data.js";
 
 export class mainMenu extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.mainMenu);
         
     }
+    video;
+    vid;
     init(){
 
     }
     preload(){
-        this.load.audio('bgm', '/static/src/assets/bgm/Prologue.mp3');
+        // music bgm
+        this.load.audio('Prologue', '/static/src/assets/audio/bgm/Prologue.mp3');
+        this.load.audio('Battle-Rosemoon', '/static/src/assets/audio/bgm/Battle-Rosemoon.mp3');
+        this.load.audio('Battle-Sanctuary', '/static/src/assets/audio/bgm/Battle-Sanctuary.mp3');
+        this.load.audio('Nostalgia', '/static/src/assets/audio/bgm/Nostalgia.mp3');
+        this.load.audio('Remotest-Liblary', '/static/src/assets/audio/bgm/Remotest-Liblary.mp3');
+        this.load.audio('Wanderers-City', '/static/src/assets/audio/bgm/Wanderers-City.mp3');
+
+        // sound effects
+        // this.load.audio('', 'static/src/assets/audio/sfx/cursor-01.wav');
+        this.load.audio('menu-click', 'static/src/assets/audio/sfx/cursor-02.wav');
+        this.load.audio('start-click', 'static/src/assets/audio/sfx/item-02.wav');
+        this.load.audio('back-click', 'static/src/assets/audio/sfx/cancel-01.wav');
+        this.load.audio('collect-coin', 'static/src/assets/audio/sfx/kettei-01.wav');
+        this.load.audio('take-damage', 'static/src/assets/audio/sfx/14_nekketsu_damage.wav');
+        this.load.audio('jump', 'static/src/assets/audio/sfx/07_priest_attack.wav');
+
+
+        this.load.audio('land-ground', 'static/src/assets/audio/sfx/damage01.wav');
+        this.load.video('background_main', '/static/src/assets/high_way_view.mp4', 'loadeddata', false, true);
+        this.load.video('background_main', '/static/src/assets/main_menu_foot.mp4', 'loadeddata', false, true);
+        this.load.video('background_main', '/static/src/assets/main_menu_background.mp4', 'loadeddata', false, true);
+
     }
 
     create(){
-        this.music = this.sound.add(Constants.BGM.mainMusic);
-        this.sound.setVolume(0.1);
+        
+        this.music = this.sound.add(this.game.config.audio.music);
+        this.sound.setVolume(this.game.config.audio.volume / 100);
         this.sound.pauseOnBlur = false;
         // console.log(this.sound.key + " - " + music.key);
-        console.log(this.sound.get(Constants.BGM.mainMusic).key +" "+ this.sound.get(Constants.BGM.mainMusic).isPlaying);
-        if (!this.sound.get(Constants.BGM.mainMusic).isPlaying){
+        console.log(this.sound.get(this.game.config.audio.music).key +" "+ this.sound.get(this.game.config.audio.music).isPlaying);
+        if (!this.sound.get(this.game.config.audio.music).isPlaying){
             this.music.loop=true;
             this.music.play();
         }
+        //video code below
+        this.vid = this.add.video(390, 325, 'background_main'); //400, 300
+        this.vid.play(true);
+        this.vid.setPaused(false);
+        this.vid.displayWidth = this.sys.canvas.width;
+        this.vid.displayHeight = this.sys.canvas.height;
+       
         // console.log(this.sound.key);
 
-        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=>this.scene.start(Constants.Scenes.lvl1));
+        this.startButton = new TextButton(this, 25, 375,'START',{fill: '#ffffff'}, {fill: '#888888'},72, ()=> {this.scene.start(Constants.Scenes.lvl1, new dataFile()); this.sound.play(Constants.SFX.start)});
         this.add.existing(this.startButton);
-        this.loadButton = new TextButton(this, 25, 450,'LOAD',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.load));
-        this.add.existing(this.loadButton);
-        this.optionsButton = new TextButton(this, 25, 500,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.options, this.scene));
+        this.optionsButton = new TextButton(this, 25, 450,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48,
+            ()=> {this.scene.start(Constants.Scenes.options, this.scene); this.sound.play(Constants.SFX.menu)});
         this.add.existing(this.optionsButton);
-        this.leaderButton = new TextButton(this, 25, 550, 'LEADERBOARD', {fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.scene.start(Constants.Scenes.leaderboard));
+        this.leaderButton = new TextButton(this, 25, 500, 'LEADERBOARD', {fill: '#ffffff'}, {fill: '#888888'},48,
+            ()=> {this.scene.start(Constants.Scenes.leaderboard); this.sound.play(Constants.SFX.menu)});
         this.add.existing(this.leaderButton);
+        this.levelsMenuButton = new TextButton(this, 25, 550, 'LEVELS', {fill: '#ffffff'}, {fill: '#888888'},48,
+            ()=> {this.scene.start(Constants.Scenes.levelsMenu); this.sound.play(Constants.SFX.menu)});
+        this.add.existing(this.levelsMenuButton);
         // this.button = new Phaser.GameObjects.Text(this, 10, 10,'hello', '#ffffff');
 
         // console.log('testing');
+        
     }
-
-    // startButtonFunction
 
 }

@@ -42,7 +42,6 @@ export class leaderboard extends Phaser.Scene {
                     parent.add.existing(parent.leaderboardText);
                     y += 30
                 }
-                // PUT UPDATE LEADERBOARD PAGE CODE HERE
             }
         };
         xhr.open('GET', '/get-leaderboard', true);
@@ -58,7 +57,9 @@ export class leaderboard extends Phaser.Scene {
         this.nameText.setFontSize(32);
         this.add.existing(this.nameText);
 
-        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48, () => this.scene.start(Constants.Scenes.mainMenu));
+        this.menuButton = new TextButton(this, 25, 550, 'BACK', {fill: '#ffffff'}, {fill: '#888888'}, 48,
+            () => {this.scene.start(Constants.Scenes.mainMenu); this.sound.play(Constants.SFX.back)});
         this.add.existing(this.menuButton);
     }
+
 }
