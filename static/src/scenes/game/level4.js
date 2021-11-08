@@ -205,13 +205,11 @@ export class level4 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3_4,this.data);
+        this.scene.start(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.data);
+        this.scene.start(Constants.Scenes.lvl1,this.data);
     }
     playerHitSpike(){
         // play take damage sound
@@ -234,7 +232,7 @@ export class level4 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.launch(Constants.Scenes.lvl1,this.data);
-        this.scene.stop(Constants.Scenes.lvl4,this.scene);
+        // this.scene.start(Constants.Scenes.lvl1,this.data);
+        
     }
 }

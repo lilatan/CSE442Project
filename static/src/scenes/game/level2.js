@@ -11,6 +11,9 @@ export class level2 extends Phaser.Scene {
     bigboy_speed = 100;
     watcher_enemy;
     rotation_watcher;
+    question_block;
+    wall;
+    block;
     coin;
     door1;
     door2;
@@ -42,8 +45,11 @@ export class level2 extends Phaser.Scene {
         this.load.image('background2', '/static/src/assets/cyber_city_lvl2.png');
         this.load.image('ground2', '/static/src/assets/cyberpunk_platform.png');
         this.load.image('coin2', '/static/src/assets/single_coin.png');
-        this.load.image('laser_beam_2', '/static/src/assets_2/laser_bullet.png');
         this.load.image('spike2', '/static/src/assets/spikes.png');
+        this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
+        this.load.image('block2', '/static/src/assets/cyberpunk_block.png');
+        this.load.image('wall2', '/static/src/assets/stone_wall1.png');
+        
          //----PLAYER SPRITE SHEET ---------
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
@@ -84,15 +90,18 @@ export class level2 extends Phaser.Scene {
        this.door1.create(-63, 290, null).setScale(4).refreshBody();
        this.door1.create(-63, 420, null).setScale(4).refreshBody();
        this.door1.create(-63, 550, null).setScale(4).refreshBody();
-       this.door2.create(862, 300, null).setScale(4).refreshBody();
-       this.door2.create(862, 400, null).setScale(4).refreshBody();
-       this.door2.create(862, 500, null).setScale(4).refreshBody();
+      // this.door2.create(862, 300, null).setScale(4).refreshBody();
+      // this.door2.create(862, 400, null).setScale(4).refreshBody();
+       this.door2.create(862, 600, null).setScale(4).refreshBody();
         
 
         this.add.image(400, 300, 'background2');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
+        //this.question_block = this.physics.add.staticGroup();
+        this.block = this.physics.add.staticGroup();
+       // this.wall = this.physics.add.staticGroup();
 
         this.platforms.create(200, 600, 'ground2').setScale(1).refreshBody();
         this.platforms.create(400, 600, 'ground2').setScale(1).refreshBody();
@@ -107,12 +116,26 @@ export class level2 extends Phaser.Scene {
         
         this.platforms.create(100, 350, 'ground2').setScale(1).refreshBody();
         this.platforms.create(300, 500, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(700, 500, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(700, 500, 'ground2')
 
         this.spikes.create(300, 100, 'spike2');
 
+       // this.wall.create(200, 550, 'wall2').setScale(0.75).refreshBody();
+
+       // this.question_block.create(75, 110, 'question_block2');
+
+        this.block.create(350, 400, 'block2').setScale(0.5).refreshBody();
+
+        this.question_block = this.physics.add.image(75, 110, 'question_block2');
+        this.question_block.setImmovable(true);
+        this.question_block.body.allowGravity = false;
+
+        this.wall = this.physics.add.image(200, 550, 'wall2').setScale(.75).refreshBody();
+        this.wall.setImmovable(true);
+        this.wall.body.allowGravity = false;
+
         //--- PLAYER CODE BELOW----------
-        this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
+        this.player = this.physics.add.sprite(50, 450, 'player_one_idle');
         this.player.body.offset.x=15;
         this.player.body.offset.y=32;
         this.anims.create({
@@ -153,9 +176,9 @@ export class level2 extends Phaser.Scene {
         //----PLAYER CODE ABOVE-----
         //----BIG BOY CODE BELOW-----
         this.bigboy_enemy = this.physics.add.sprite(500, 400, 'big_boy_idle');
-        this.bigboy_enemy.setSize(37,50,false);
+        this.bigboy_enemy.setSize(33,42,false);
         this.bigboy_enemy.body.offset.x=15;
-        this.bigboy_enemy.body.offset.y=15;
+        this.bigboy_enemy.body.offset.y=22;
         this.bigboy_enemy.setVelocityX(100);
         //this.time.addEvent({delay: 100, callback: this.bigboy_ATTACK, callbackScope: this, loop: true});
         this.anims.create({
@@ -185,7 +208,7 @@ export class level2 extends Phaser.Scene {
         });
         this.bigboy_enemy.setBounce(0.1);
         this.bigboy_enemy.setCollideWorldBounds(true);
-        this.bigboy_enemy.setScale(1.5,1.5);
+        this.bigboy_enemy.setScale(1.2,1.2);
         //this.bigboy_enemy.velocity.x = 100; //doesn't work
         //--------------------------BIG BOY CODE ABOVE-----------------------------------
 
@@ -193,9 +216,7 @@ export class level2 extends Phaser.Scene {
         //-----------------WATCH CODE BELOW-----------------------------------------------
         this.watcher_enemy = this.physics.add.sprite(500, 300, 'watcher_idle');
         this.watcher_enemy.setGravity(0,-700);
-        this.watcher_enemy.setSize(19,19,false);
-        this.watcher_enemy.body.offset.x=15;
-        this.watcher_enemy.body.offset.y=22;
+        this.watcher_enemy.setSize(16,16,false);
         this.rotation_watcher = Phaser.Math.Angle.Between(0,0, this.player.x, this.player.y);
         this.anims.create({
             key: 'attack_watcher',
@@ -212,7 +233,7 @@ export class level2 extends Phaser.Scene {
 
         this.coin = this.physics.add.group({
             key: 'coin2',
-            repeat: 1,//this.totalCoin-1,
+            repeat: 0,//this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
 
@@ -227,19 +248,26 @@ export class level2 extends Phaser.Scene {
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
-        this.physics.add.collider(this.player, this.watcher_enemy);
-        this.physics.add.collider(this.bigboy_enemy, this.player);
+        this.physics.add.collider(this.player, this.block);
+        this.physics.add.collider(this.player, this.wall);
+      //  this.physics.add.collider(this.player, this.watcher_enemy);
+       // this.physics.add.collider(this.bigboy_enemy, this.player);
         this.physics.add.collider(this.coin, this.platforms);
+        this.physics.add.collider(this.wall, this.platforms);
+        this.physics.add.collider(this.question_block, this.platforms);
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
-       // this.cameras.main.setBounds(0, 0, 800, 600);
-       // this.cameras.main.startFollow(this.player);
-       // this.cameras.main.setZoom(2);
+        this.cameras.main.setBounds(0, 0, 800, 600);
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setZoom(2);
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
+        this.physics.add.overlap(this.player, this.question_block, this.playerHitQuestionBlock,null, this);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
-        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);``
 
     }
 
@@ -319,14 +347,18 @@ export class level2 extends Phaser.Scene {
     //-------------------BIG BOY ANIMATION ABOVE ------------------------------------------------------------
 
     //-------WATCHER ANIMATION BELOW-------
-        this.physics.accelerateToObject(this.watcher_enemy, this.player);
+        this.physics.accelerateToObject(this.watcher_enemy, this.player, 80);
         if(this.watcher_enemy.x > this.player.x){
             this.watcher_enemy.anims.play('attack_watcher', true);
             this.watcher_enemy.flipX = true;
+            this.watcher_enemy.body.offset.x=30;
+            this.watcher_enemy.body.offset.y=22;    
         }
         if(this.watcher_enemy.x < this.player.x){
             this.watcher_enemy.anims.play('attack_watcher', true);
             this.watcher_enemy.flipX = false;
+            this.watcher_enemy.body.offset.x=15;
+            this.watcher_enemy.body.offset.y=22;
         }
     //---------WATCHER ANIMATION ABOVE------
 
@@ -348,16 +380,15 @@ export class level2 extends Phaser.Scene {
             console.log(this.scene.key)
             this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         }
+       
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1_2,this.data);
+        this.scene.start(Constants.Scenes.lvl1_2,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2_3,this.data);
+        this.scene.start(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
         // play take damage sound
@@ -375,15 +406,20 @@ export class level2 extends Phaser.Scene {
         // play coin collection sound
         this.sound.play(Constants.SFX.coin);
     }
-
+    playerHitQuestionBlock(player, question_block, wall){
+         // wall.disableBody(true,true);
+        //  question_block.disableBody(true,true);
+          this.wall.destroy();
+          this.question_block.destroy();
+     }
+    
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
     }
     transition(){
-        this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2_3,this.data);
+        // this.scene.start(Constants.Scenes.lvl2_3,this.data);
       
     }
     // bigboy_ATTACK()

@@ -272,14 +272,11 @@ export class level3_4 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl3_4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3,this.data)
+        this.scene.start(Constants.Scenes.lvl3,this.data);
     }
     playerHitdoor2()
     {
-        // this.scene.stop(Constants.Scenes.lvl3_4,this.scene);
-        // this.scene.launch(Constants.Scenes.lvl4,this.data);
-        this.scene.start(Constants.Scenes.endgame, [this.data.crewels, this.scene]);
+        this.scene.start(Constants.Scenes.lvl4,this.data);
     }
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
@@ -291,5 +288,8 @@ export class level3_4 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.shop, this.data);
         // this.scene.shop();
         // this.scene.pause();
+    }
+    transition(){
+        // this.scene.start(Constants.Scenes.lvl4,this.data);
     }
 }

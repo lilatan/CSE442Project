@@ -38,20 +38,9 @@ export class level1_2 extends Phaser.Scene {
     preload() {
 
         this.load.video('background1_2', '/static/src/assets/background_1_2.mp4', 'loadeddata', false, true);
-       // this.load.video('background', 'assets2/zelda-background1.mp4', 'loadeddata', false, false);
-
-        //this.load.image('background', 'assets1/sand_gw2.png');
-      // this.load.image('door_1', 'assets2/door1.png');
-      //  this.load.image('door_2', 'assets2/door2.png');
         this.load.image('ground1_2', '/static/src/assets/sand_platform.png');
-      //  this.load.image('player_one', 'assets2/spear_player.png');
-     // this.load.spritesheet('dude', 'assets2/dude.png', { frameWidth: 32, frameHeight: 48 });
-        //this.load.image('spike', 'assets2/spikes.png');
 
         //----------------------------------------------------------------------------------------------------------------------------------
-      //  this.load.spritesheet('player_one', '/static/src/assets/brawler.png', { frameWidth: 48, frameHeight: 48 });
-
-        //this.load.image('player_one_idle', '/static/src/assets/assets_2/idle1.png');
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
@@ -65,7 +54,6 @@ export class level1_2 extends Phaser.Scene {
     create ()
     {
 
-//--------------------
         this.scene.bringToTop();
         console.log("im at level 1-2");
         //for fullscreen
@@ -321,13 +309,11 @@ export class level1_2 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.data);
+        this.scene.start(Constants.Scenes.lvl1,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2,this.data);
+        this.scene.start(Constants.Scenes.lvl2,this.data);
     }
     pause() {
         this.scene.launch(Constants.Scenes.pause, this.scene);
@@ -338,5 +324,9 @@ export class level1_2 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.shop, this.data);
         // this.scene.shop();
         // this.scene.pause();
+    }
+    transition(){
+        // this.scene.launch(Constants.Scenes.lvl2,this.data);
+        // this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
     }
 }

@@ -273,13 +273,11 @@ export class level2_3 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2,this.data);
+        this.scene.start(Constants.Scenes.lvl2,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3,this.data);
+        this.scene.start(Constants.Scenes.lvl3,this.data);
     }
     pause()
     {
@@ -289,8 +287,7 @@ export class level2_3 extends Phaser.Scene {
     }
     transition()
     {
-        this.scene.stop(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3,this.data);
+        // this.scene.start(Constants.Scenes.lvl3,this.data);
 
     }
 
