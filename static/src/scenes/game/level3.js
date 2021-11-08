@@ -194,7 +194,7 @@ export class level3 extends Phaser.Scene {
         //----PLAYER CODE ABOVE-----
         //----BIG BOY CODE BELOW-----
         this.bigboy_enemy = this.physics.add.sprite(500, 400, 'big_boy_idle');
-        this.bigboy_enemy.setSize(37,50,false);
+        this.bigboy_enemy.setSize(33,42,false);
         this.bigboy_enemy.body.offset.x=15;
         this.bigboy_enemy.body.offset.y=15;
         this.bigboy_enemy.setVelocityX(100);
@@ -234,7 +234,7 @@ export class level3 extends Phaser.Scene {
         //-----------------WATCHER CODE BELOW-----------------------------------------------
         this.watcher_enemy = this.physics.add.sprite(200, 300, 'watcher_idle');
         this.watcher_enemy.setGravity(0,-700);
-        this.watcher_enemy.setSize(19,19,false);
+        this.watcher_enemy.setSize(16,16,false);
         this.rotation_watcher = Phaser.Math.Angle.Between(0,0, this.player.x, this.player.y);
         this.anims.create({
             key: 'attack_watcher',
@@ -249,7 +249,7 @@ export class level3 extends Phaser.Scene {
         //---------------------------FLYING ALIEN CODE BELOW------------------------
         this.flying_enemy = this.physics.add.sprite(500, 300, 'flying_walk');
         this.flying_enemy.setGravity(0,-700);
-        this.flying_enemy.setSize(33,33,false);
+        this.flying_enemy.setSize(30,30,false);
         this.flying_enemy.body.offset.x=15;
         this.flying_enemy.body.offset.y=22;
         this.anims.create({
@@ -353,11 +353,11 @@ export class level3 extends Phaser.Scene {
             this.player.setGravity(0,700);
         }
         if(this.player.body.touching.right && !this.player.body.touching.down){
-            this.player.setGravity(-8000,-400);
+            this.player.setGravity(0,-400);
             this.player.flipX = true;
         }
         if(this.player.body.touching.left && !this.player.body.touching.down){
-            this.player.setGravity(8000,-400);
+            this.player.setGravity(0,-400);
             this.player.flipX = false;
         }
       //right wall

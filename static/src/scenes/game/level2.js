@@ -173,9 +173,9 @@ export class level2 extends Phaser.Scene {
         //----PLAYER CODE ABOVE-----
         //----BIG BOY CODE BELOW-----
         this.bigboy_enemy = this.physics.add.sprite(500, 400, 'big_boy_idle');
-        this.bigboy_enemy.setSize(37,50,false);
+        this.bigboy_enemy.setSize(33,42,false);
         this.bigboy_enemy.body.offset.x=15;
-        this.bigboy_enemy.body.offset.y=15;
+        this.bigboy_enemy.body.offset.y=22;
         this.bigboy_enemy.setVelocityX(100);
         //this.time.addEvent({delay: 100, callback: this.bigboy_ATTACK, callbackScope: this, loop: true});
         this.anims.create({
@@ -213,7 +213,7 @@ export class level2 extends Phaser.Scene {
         //-----------------WATCH CODE BELOW-----------------------------------------------
         this.watcher_enemy = this.physics.add.sprite(500, 300, 'watcher_idle');
         this.watcher_enemy.setGravity(0,-700);
-        this.watcher_enemy.setSize(19,19,false);
+        this.watcher_enemy.setSize(16,16,false);
         this.rotation_watcher = Phaser.Math.Angle.Between(0,0, this.player.x, this.player.y);
         this.anims.create({
             key: 'attack_watcher',
