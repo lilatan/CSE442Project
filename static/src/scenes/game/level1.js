@@ -18,6 +18,9 @@ export class level1 extends Phaser.Scene {
     spikes;
     zoom;
     inAir;
+    spike1; 
+    increasingspike1; 
+    movingPlatform; 
 
     keyW;
     keyA;
@@ -28,6 +31,7 @@ export class level1 extends Phaser.Scene {
     //testing level transition
     keyP;
     data;
+    movingup; 
 
     init(data){
         this.data = data;
@@ -82,18 +86,29 @@ export class level1 extends Phaser.Scene {
 
         this.platforms = this.physics.add.staticGroup();
         this.pillar = this.physics.add.staticGroup();
-        this.spikes = this.physics.add.staticGroup();
+        // this.spikes = this.physics.add.staticGroup();
+        this.spikes = this.physics.add.group();
 
         this.platforms.create(400, 568, 'ground1').setScale(2).refreshBody();
 
         this.platforms.create(150, 300, 'ground1').setScale(0.5).refreshBody();
         this.platforms.create(400, 230, 'ground1').setScale(0.5).refreshBody();
-        this.platforms.create(100, 400, 'ground1');
+        // this.platforms.create(100, 400, 'ground1');
         this.platforms.create(700, 450, 'ground1');
-        this.platforms.create(550, 150, 'ground1');
+        // this.platforms.create(550, 150, 'ground1');
         this.platforms.create(25, 125, 'ground1');
 
-        this.spikes.create(400, 500, 'spike1');
+        this.movingPlatform = this.physics.add.image(550, 150, 'ground1'); 
+        this.movingPlatformHorizontal = this.physics.add.image(100, 400, 'ground1'); 
+
+
+        this.movingPlatform.setImmovable(true); 
+        this.movingPlatform.body.allowGravity = false; 
+        this.movingPlatformHorizontal.setImmovable(true); 
+        this.movingPlatformHorizontal.body.allowGravity = false; 
+
+        // this.spikes.create(400, 500, 'spike1');
+        this.spike1 = this.spikes.create(450, 500, 'spike1').body.setAllowGravity(false);
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         //TRYING TO CHANGE PLAYER HITBOX WITH CODE BELOW
@@ -154,10 +169,15 @@ export class level1 extends Phaser.Scene {
 
     });
 
-        this.coinCount = this.add.text( 16,16, 'crewels:'+this.this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.coinCount = this.add.text( 16,16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
+        this.physics.add.collider(this.player, this.movingPlatform);
+        this.physics.add.collider(this.player, this.movingPlatformHorizontal);
+
+
+        //this.physics.add.collider(this.spikes,this.platforms);
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
@@ -165,7 +185,7 @@ export class level1 extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(1.5);
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null,this)
-        this.increasing = false 
+        this.increasingspike1 = false; 
         this.coinCount.setPosition(150, 100);
 
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
@@ -179,6 +199,34 @@ export class level1 extends Phaser.Scene {
 
     update(){
       //  this.coinCount.setPosition(300, 300);
+        if (this.movingPlatform.y <= 150) { 
+            this.movingPlatform.setVelocityY(10) 
+        }  
+        if (this.movingPlatform.y >= 200) { 
+            this.movingPlatform.setVelocityY(-10);
+        }
+
+        if (this.movingPlatformHorizontal.x <= 100) { 
+            this.movingPlatformHorizontal.setVelocityX(10) 
+        }  
+        if (this.movingPlatformHorizontal.x >= 200) { 
+            this.movingPlatformHorizontal.setVelocityX(-10);
+        }
+
+        if (this.spike1.y <= 200) { 
+            this.increasingspike1 = true ;
+
+        } 
+        if (this.spike1.y >= 500) { 
+            this.increasingspike1 = false ;
+            console.log("test");
+        }
+        if (this.increasingspike1 == true) { 
+            this.spike1.y += 2;
+        } else { 
+            this.spike1.y -= 2;
+        }
+
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
