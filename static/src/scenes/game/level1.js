@@ -271,7 +271,7 @@ export class level1 extends Phaser.Scene {
     }
     transition(){
         this.scene.stop(Constants.Scenes.lvl1,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1_2,this.data)
         
     }
 }
