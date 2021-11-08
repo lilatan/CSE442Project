@@ -25,9 +25,10 @@ export class level4 extends Phaser.Scene {
     //testing level transition
     keyP;
 
+    data;
 
-    init(){
-
+    init(data){
+        this.data = data;
     }
 
     preload(){
@@ -133,7 +134,7 @@ export class level4 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
 
         this.crewels = 0;
 
@@ -193,21 +194,21 @@ export class level4 extends Phaser.Scene {
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3_4,this.scene)
+        this.scene.launch(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1,this.data);
     }
     playerHitSpike(){
-        this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
 
-        this.crewels += 1;
-        this.coinCount.setText('crewels: ' + this.crewels);
+        this.data.crewels += 1;
+        this.coinCount.setText('crewels: ' + this.data.crewels);
     }
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
@@ -215,7 +216,7 @@ export class level4 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.launch(Constants.Scenes.lvl1,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1,this.data);
         this.scene.stop(Constants.Scenes.lvl4,this.scene);
     }
 }

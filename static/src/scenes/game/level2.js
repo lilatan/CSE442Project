@@ -1,4 +1,5 @@
 import { Constants } from "/static/src/Constants.js"
+import {dataFile} from "../../data.js";
 // import { pause } from "../menus/pausemenu.js";
 export class level2 extends Phaser.Scene {
     constructor(){
@@ -15,7 +16,7 @@ export class level2 extends Phaser.Scene {
     door2;
     platforms;
     cursors;
-    crewels = 0;
+    crewels;
     coinCount;
     totalCoin = 12;
     spikes;
@@ -31,8 +32,9 @@ export class level2 extends Phaser.Scene {
     keyP;
 
 
-    init(){
-
+    init(data){
+        this.data = data;
+        this.data.currentLevel = this.scene;
     }
 
     preload(){
@@ -219,9 +221,8 @@ export class level2 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: 0', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' });
 
-        this.crewels = 0;
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
@@ -340,21 +341,22 @@ export class level2 extends Phaser.Scene {
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1_2,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1_2,this.data);
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2_3,this.scene)
+        this.scene.launch(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
-        this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
     }
 
     collectcoin (player, coin){
         coin.disableBody(true, true);
-        this.crewels += 1;
-        this.coinCount.setText('crewels: ' + this.crewels);
+        this.data.crewels += 1;
+        this.coinCount.setText('crewels: ' + this.data.crewels);
+        
     }
 
     pause(){
@@ -364,7 +366,7 @@ export class level2 extends Phaser.Scene {
     }
     transition(){
         this.scene.stop(Constants.Scenes.lvl2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2_3,this.scene)
+        this.scene.launch(Constants.Scenes.lvl2_3,this.data);
       
     }
     // bigboy_ATTACK()

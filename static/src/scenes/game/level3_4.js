@@ -20,8 +20,13 @@ export class level3_4 extends Phaser.Scene {
     keyD;
     keyS;
     keyESC;
-    //testing level transition
-    keyP;
+    keyE;
+
+    data;
+
+    init(data){
+        this.data = data;
+    }
 
 
     preload ()
@@ -46,7 +51,7 @@ export class level3_4 extends Phaser.Scene {
     {
         console.log("im at level 3-4");
         //for fullscreen
-        this.button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+        this.button = this.add.image(800 - 16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
 
         this.button.on('pointerup', function () {
 
@@ -90,8 +95,9 @@ export class level3_4 extends Phaser.Scene {
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
 
-        this.keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
-        this.keyP.on('up',()=>this.transition());
+        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        this.keyE.on('up', () => this.shop());
+        this.keyE.enabled = false;
         
         this.platforms = this.physics.add.staticGroup();
         //spikes = this.physics.add.staticGroup();
@@ -117,7 +123,13 @@ export class level3_4 extends Phaser.Scene {
        this.platforms.create(900, 580, null).setScale(4).refreshBody();
         //platforms to climb higher
 
-      
+        //add shop
+        this.shopFront = this.physics.add.image(400, 450, 'shop');
+        this.shopFront.body.moves = false;
+        this.shopFront.body.setAllowGravity(false);
+        this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.shopText.setFontSize(24);
+        this.add.existing(this.shopText);
 
 
 
@@ -126,6 +138,8 @@ export class level3_4 extends Phaser.Scene {
         this.vid.setPaused(false);
         this.vid.displayWidth = this.sys.canvas.width;
         this.vid.displayHeight = this.sys.canvas.height;
+        this.vid.depth = -1;
+        
 
         
         this.player = this.physics.add.sprite(100, 300, 'player_one_idle');
@@ -136,7 +150,7 @@ export class level3_4 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('player_one_idle_sheet', { frames: [0,1,2,3,4,5] }),
             frameRate: 6,
             repeat: -1,
-            
+
         });
         this.anims.create({
             key: 'left',
@@ -177,6 +191,8 @@ export class level3_4 extends Phaser.Scene {
         this.player.setScale(2, 2);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+        //allows player and shop to interact
+        this.physics.add.overlap(this.player, this.shopFront);
     }
      gofull() {
 
@@ -204,14 +220,14 @@ export class level3_4 extends Phaser.Scene {
             this.player.setVelocityX(200);
             this.player.anims.play('right', true);
             this.player.flipX = false;
-         
+
           //  player.scale.setTo(-1,1);
         }
         else //else
         {
-            this.player.setVelocityX(0); 
+            this.player.setVelocityX(0);
             this.player.anims.play('idle',true);
-         
+
         }
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
@@ -220,35 +236,47 @@ export class level3_4 extends Phaser.Scene {
             //this.player.body.touching.down
             this.player.setVelocityY(-400);
             this.player.anims.play('jump',true);
-            
-         
+
+
           // this.player.anims.play('jump', this.player)
         }
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
            // this.player.anims.play('jump',true);
-         
-        }  
-         
+
+        }
+
+        if (!this.shopFront.body.touching.none) {
+            this.shopText.setVisible(true);
+            this.keyE.enabled = true;
+            console.log("touching\n");
+        } else {
+            this.shopText.setVisible(false);
+            this.keyE.enabled = false;
+            // console.log("touching\n");
+        }
+
     }
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl3_4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3,this.scene)
+        this.scene.launch(Constants.Scenes.lvl3,this.data)
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl3_4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl4,this.scene)
+        this.scene.launch(Constants.Scenes.lvl4,this.data)
     }
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
     }
-    transition(){
-        this.scene.launch(Constants.Scenes.lvl4,this.scene)
-        this.scene.stop(Constants.Scenes.lvl3_4,this.scene);
+
+    shop() {
+        this.scene.launch(Constants.Scenes.shop, this.data);
+        // this.scene.shop();
+        // this.scene.pause();
     }
 }

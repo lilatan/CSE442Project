@@ -42,7 +42,6 @@ export class leaderboard extends Phaser.Scene {
                     parent.add.existing(parent.leaderboardText);
                     y += 30
                 }
-                // PUT UPDATE LEADERBOARD PAGE CODE HERE
             }
         };
         xhr.open('GET', '/get-leaderboard', true);

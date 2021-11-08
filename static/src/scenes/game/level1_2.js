@@ -1,11 +1,11 @@
 import { Constants } from "/static/src/Constants.js"
 // import { pause } from "../menus/pausemenu.js";
+import { dataFile } from "../../data.js";
+
 export class level1_2 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl1_2);
     }
-
-
     player;
     spikes;
     platforms;
@@ -13,7 +13,10 @@ export class level1_2 extends Phaser.Scene {
     door1;
     door2;
     button;
-    
+
+    shopFront;
+    shopText;
+
     vid;
     keyF;
     keyA;
@@ -21,12 +24,17 @@ export class level1_2 extends Phaser.Scene {
     keyD;
     keyS;
     keyESC;
-    //testing level transition
-    keyP;
+    keyE;
+
+    data;
 
 
-    preload ()
-    {
+    init(data){
+        this.data = data;
+        this.data.level = this.scene;
+    }
+
+    preload() {
 
         this.load.video('background1_2', '/static/src/assets/background_1_2.mp4', 'loadeddata', false, true);
        // this.load.video('background', 'assets2/zelda-background1.mp4', 'loadeddata', false, false);
@@ -48,28 +56,28 @@ export class level1_2 extends Phaser.Scene {
         this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
         //----------------------------------------------------------------------------------------------------------------------------------
-        
+
+        this.load.image('shop', '/static/src/assets/hotel-sign.png');
+
     }
 
     create ()
     {
-      
+
 //--------------------
         this.scene.bringToTop();
         console.log("im at level 1-2");
         //for fullscreen
-        this.button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+        this.button = this.add.image(800 - 16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
 
         this.button.on('pointerup', function () {
 
-            if (this.scale.isFullscreen)
-            {
+            if (this.scale.isFullscreen) {
                 this.button.setFrame(0);
 
                 this.scale.stopFullscreen();
             }
-            else
-            {
+            else {
                 this.button.setFrame(1);
 
                 this.scale.startFullscreen();
@@ -81,13 +89,11 @@ export class level1_2 extends Phaser.Scene {
 
         this.keyF.on('down', function () {
 
-            if (this.scale.isFullscreen)
-            {
+            if (this.scale.isFullscreen) {
                 this.button.setFrame(0);
                 this.scale.stopFullscreen();
             }
-            else
-            {
+            else {
                 this.button.setFrame(1);
                 this.scale.startFullscreen();
             }
@@ -100,11 +106,11 @@ export class level1_2 extends Phaser.Scene {
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        this.keyESC.on('up',()=>this.pause());
+        this.keyESC.on('up', () => this.pause());
+        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        this.keyE.on('up', () => this.shop());
+        this.keyE.enabled = false;
 
-        this.keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
-        this.keyP.on('up',()=>this.transition());
-        
         this.platforms = this.physics.add.staticGroup();
         //spikes = this.physics.add.staticGroup();
        // door1 = this.physics.add.staticGroup();
@@ -141,18 +147,30 @@ export class level1_2 extends Phaser.Scene {
        this.platforms.create(900, 520, null).setScale(4).refreshBody();
         //platforms to climb higher
 
-        
+
+
+
+
+        //add shop
+        this.shopFront = this.physics.add.image(400, 450, 'shop');
+        this.shopFront.body.moves = false;
+        this.shopFront.body.setAllowGravity(false);
+        this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.shopText.setFontSize(24);
+        this.add.existing(this.shopText);
+
 
 
 
         this.vid = this.add.video(400, 300, 'background1_2');
         this.vid.play(true);
         this.vid.setPaused(false);
+        this.vid.depth = -1;
 
         this.vid.displayWidth = this.sys.canvas.width;
         this.vid.displayHeight = this.sys.canvas.height;
 
-        
+
         
         //platforms.create(400, 650, 'ground').setScale(4).refreshBody();
 
@@ -172,7 +190,7 @@ export class level1_2 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('player_one_idle_sheet', { frames: [0,1,2,3,4,5] }),
             frameRate: 6,
             repeat: -1,
-            
+
         });
         this.anims.create({
             key: 'left',
@@ -198,17 +216,20 @@ export class level1_2 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('player_one_death', { frames: [0,1,2,3,4,5,6,7,8,9,10,11 ] }),
             frameRate: 15,
         });
-      //remove this if you want
+        //remove this if you want
 
-    //    enemy.setCollideWorldBounds(true);
-    this.player.setBounce(0.1);
-    this.player.setCollideWorldBounds(true);
+        //    enemy.setCollideWorldBounds(true);
+        this.player.setBounce(0.1);
+        this.player.setCollideWorldBounds(true);
 
-    this.cursors = this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
 
-     
-  //      this.physics.add.collider(enemy, platforms);
+
+        //      this.physics.add.collider(enemy, platforms);
         this.physics.add.collider(this.player, this.platforms);
+
+        //allows player and shop to interact
+        this.physics.add.overlap(this.player, this.shopFront);
 
         // make the camera follow the player
        
@@ -235,63 +256,76 @@ export class level1_2 extends Phaser.Scene {
     //    if (player.body.touching.down || enemy.body.blocked.up){
    //         player.anims.play('die', true);
     //    }
-        if (this.cursors.left.isDown || this.keyA.isDown)
-        {
-            this.player.setVelocityX(-200);
-            this.player.anims.play('left', true);
-            this.player.flipX = true;
-         
+        if (!this.scene.isActive(Constants.Scenes.shop)) {
+            if (this.cursors.left.isDown || this.keyA.isDown) {
+                this.player.setVelocityX(-200);
+                this.player.anims.play('left', true);
+                this.player.flipX = true;
+
+            } else if (this.cursors.right.isDown || this.keyD.isDown) {
+                this.player.setVelocityX(200);
+                this.player.anims.play('right', true);
+                this.player.flipX = false;
+
+                //  player.scale.setTo(-1,1);
+            } else //else
+            {
+                this.player.setVelocityX(0);
+                this.player.anims.play('idle', true);
+
+            }
+            if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
+            {
+                //Phaser.Input.Keyboard.JustDown(this.cursors.up)
+                //this.player.body.onFloor()
+                //this.player.body.touching.down
+                this.player.setVelocityY(-400);
+                this.player.anims.play('jump', true);
+
+                // this.player.anims.play('jump', this.player)
+            }
+            if (this.cursors.down.isDown || this.keyS.isDown) //if
+            {
+                this.player.setVelocityY(170);
+                // this.player.anims.play('jump',true);
+
+            }
         }
-        else if (this.cursors.right.isDown || this.keyD.isDown)
-        {
-            this.player.setVelocityX(200);
-            this.player.anims.play('right', true);
-            this.player.flipX = false;
-         
-          //  player.scale.setTo(-1,1);
+        else{
+            this.player.setVelocityX(0);
+            this.player.setVelocityY(0);
+            this.player.anims.play('idle');
         }
-        else //else
-        {
-            this.player.setVelocityX(0); 
-            this.player.anims.play('idle',true);
-         
+
+        //if the player is on the shop
+        if (!this.shopFront.body.touching.none) {
+            this.shopText.setVisible(true);
+            this.keyE.enabled = true;
+            console.log("touching\n");
+        } else {
+            this.shopText.setVisible(false);
+            this.keyE.enabled = false;
+            // console.log("touching\n");
         }
-        if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
-        {
-            //Phaser.Input.Keyboard.JustDown(this.cursors.up)
-            //this.player.body.onFloor()
-            //this.player.body.touching.down
-            this.player.setVelocityY(-400);
-            this.player.anims.play('jump',true);
-         
-          // this.player.anims.play('jump', this.player)
-        }
-        if (this.cursors.down.isDown || this.keyS.isDown) //if
-        {
-            this.player.setVelocityY(170);
-           // this.player.anims.play('jump',true);
-         
-        }  
     }
     playerHitdoor1()
     {
         this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.scene)
+        this.scene.launch(Constants.Scenes.lvl1,this.data);
     }
     playerHitdoor2()
     {
         this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2,this.scene)
+        this.scene.launch(Constants.Scenes.lvl2,this.data);
     }
-    pause(){
-        this.scene.launch(Constants.Scenes.pause,this.scene);
+    pause() {
+        this.scene.launch(Constants.Scenes.pause, this.scene);
         // console.log(this.scene);
         this.scene.pause();
     }
-    transition(){
-        this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2,this.scene)
-        
+    shop() {
+        this.scene.launch(Constants.Scenes.shop, this.data);
+        // this.scene.shop();
+        // this.scene.pause();
     }
 }
-
