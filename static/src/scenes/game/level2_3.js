@@ -24,6 +24,8 @@ export class level2_3 extends Phaser.Scene {
 
     data;
 
+    inAir;
+
     init(data){
         this.data = data;
         this.data.currentLevel = this.scene;
@@ -231,16 +233,26 @@ export class level2_3 extends Phaser.Scene {
             this.player.anims.play('idle',true);
 
         }
+
+        // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
             //Phaser.Input.Keyboard.JustDown(this.cursors.up)
             //this.player.body.onFloor()
             //this.player.body.touching.down
             this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
 
           // this.player.anims.play('jump', this.player)
         }
+        // landing sound
+        if (this.inAir && this.player.body.touching.down) {
+            this.inAir = false;
+            this.sound.play(Constants.SFX.land);
+        }
+
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
