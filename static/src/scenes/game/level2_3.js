@@ -198,6 +198,10 @@ export class level2_3 extends Phaser.Scene {
 
         //allows player and shop to interact
         this.physics.add.overlap(this.player, this.shopFront);
+
+        // Scene Label Text so user knows what level/scene they are on
+        this.level2_3Text = this.add.text( 16,24, 'Level 2_3 Transition Scene', { fontSize: '30px', fill: '#fff' }).setScrollFactor(0);
+        this.level2_3Text.setPosition(150, 100);
     }
     gofull() {
 

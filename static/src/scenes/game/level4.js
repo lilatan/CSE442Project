@@ -137,6 +137,7 @@ export class level4 extends Phaser.Scene {
         });
 
         this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
 
         this.crewels = 0;
 
@@ -201,7 +202,10 @@ export class level4 extends Phaser.Scene {
             this.player.setVelocityY(170);
            // this.player.anims.play('jump',true);
          
-        }  
+        }
+        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+
     }
     playerHitdoor1()
     {

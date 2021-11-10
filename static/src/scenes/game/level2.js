@@ -244,6 +244,7 @@ export class level2 extends Phaser.Scene {
         });
 
         this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#000' });
 
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
@@ -374,6 +375,7 @@ export class level2 extends Phaser.Scene {
         //     this.scene.pause();
         //     this.scene.launch(Constants.Scenes.pause);
         // }
+        this.level2Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
         if(this.crewels==this.totalCoin){
             // this.scene.pause();
             // this.scene.launch(Constants.Scenes.nameInput, this.scene);

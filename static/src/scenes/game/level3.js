@@ -281,6 +281,7 @@ export class level3 extends Phaser.Scene {
         });
 
         this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.level3Text = this.add.text( 16,24, 'Level 3', { fontSize: '12px', fill: '#000' });
 
         this.crewels = 0;
         //----COLLIDER CODE----
@@ -470,6 +471,8 @@ export class level3 extends Phaser.Scene {
         //     console.log(this.scene.key)
         //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         // }
+        this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+
     }
 
     playerHitdoor1()

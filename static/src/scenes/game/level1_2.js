@@ -228,6 +228,10 @@ export class level1_2 extends Phaser.Scene {
       this.player.setScale(2, 2);
       this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
       this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+
+      // Scene Label Text so user knows what level/scene they are on
+      this.level1_2Text = this.add.text( 16,24, 'Level 1_2 Transition Scene', { fontSize: '30px', fill: '#fff' }).setScrollFactor(0);
+      this.level1_2Text.setPosition(150, 100);
     }
 
     gofull() {
