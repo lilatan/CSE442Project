@@ -200,7 +200,7 @@ export class level3_4 extends Phaser.Scene {
 
         // Scene Label Text so user knows what level/scene they are on
         this.level3_4Text = this.add.text( 16,24, 'Level 3_4 Transition Scene', { fontSize: '30px', fill: '#fff' }).setScrollFactor(0);
-        this.level3_4Text.setPosition(150, 100);
+        this.level3_4Text.setPosition(150, 90);
     }
      gofull() {
 
