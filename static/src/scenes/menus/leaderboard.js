@@ -11,6 +11,9 @@ export class leaderboard extends Phaser.Scene {
     }
     leaderboardData = null;
     preload(){
+
+        this.load.image("leaderboard_background", 'static/src/assets/images/leaderboard_background.png')
+
         var parent = this;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
@@ -50,6 +53,14 @@ export class leaderboard extends Phaser.Scene {
 
     //make the leaderboard page (static content only)
     create(){
+
+        // add image to background and scale it
+        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'leaderboard_background')
+        let scaleX = this.cameras.main.width / image.width
+        let scaleY = this.cameras.main.height / image.height
+        let scale = Math.max(scaleX, scaleY)
+        image.setScale(scale).setScrollFactor(0)
+
         this.leaderboardText = new Phaser.GameObjects.Text(this, 100, 80, 'LEADERBOARD', {fill: '#d4b2d8', align: 'center'});
         this.leaderboardText.setFontSize(40);
         this.add.existing(this.leaderboardText);
