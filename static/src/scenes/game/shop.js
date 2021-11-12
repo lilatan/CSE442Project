@@ -28,7 +28,8 @@ export class shop extends Phaser.Scene {
         this.load.image('shield', 'static/src/assets/images/shield.png');
 
         //Image of item 3:
-        //this.image.load('', '');
+        //Taken from: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngaaa.com%2Fdetail%2F2113143&psig=AOvVaw0567MhNLfXzCi1dZ8DN_3r&ust=1636834986239000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJixwtvTk_QCFQAAAAAdAAAAABAE
+        this.load.image('double-jump', 'static/src/assets/images/double-jump.png');
     }
 
     create(){
@@ -85,7 +86,10 @@ export class shop extends Phaser.Scene {
         this.add.existing(this.dashBuyButton);
 
         //For image to come
-        //this.heartLife = this.physics.add.image(140, 225, 'heart_life');
+        this.doubleJump = this.physics.add.image(360, 415, 'double-jump');
+        this.doubleJump.body.moves = false;
+        this.doubleJump.body.setAllowGravity(false);
+        this.doubleJump.setScale(0.2);
         /*
         this.wallJumpText = new Phaser.GameObjects.Text(this, 400, 250,'WALL JUMP', {fill: '#799ced'});
         this.wallJumpText.setFontSize(40);
