@@ -1,27 +1,27 @@
 import { Constants } from "/static/src/Constants.js";
 import { TextButton } from "/static/src/game_objects/TextButton.js";
 
-export class nameInput extends Phaser.Scene{
+export class endgame extends Phaser.Scene{
     constructor(){
-        super(Constants.Scenes.nameInput);
+        super(Constants.Scenes.endgame);
     }
     score;
     level;
     init(data){//[Score, Game Scene]
-        this.score = data[0];
+        this.score = data[0] + 100;
         this.level = data[1];
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 
-        this.load.image('graveyard', '/static/src/assets/images/graveyard2.jpg');
+        this.load.image('endgame', '/static/src/assets/images/endgame.jpg');
         // <a href="https://www.freepik.com/vectors/tree">Tree vector created by upklyak - www.freepik.com</a>
 
         // this.load.html('nameform', '/static/src/assets/html/nameform.html');
     }
     create(){
         // add image to background and scale it
-        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'graveyard')
+        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'endgame')
         let scaleX = this.cameras.main.width / image.width
         let scaleY = this.cameras.main.height / image.height
         let scale = Math.max(scaleX, scaleY)
@@ -29,14 +29,14 @@ export class nameInput extends Phaser.Scene{
 
         // "game over" text at the top of the scene
         this.gameoverText = this.add.text(this.screenCenterX, 70,
-            'GAME OVER',
-            { fontSize: '80px', fill: '#730000' }
+            'VICTORY',
+            { fontSize: '80px', fill: '#ffffff' }
         ).setOrigin(0.5);
 
         // display player's level and final score
         this.scoreTitle = this.add.text(this.screenCenterX, 130,
             'YOUR SCORE',
-            { fontSize: '40px', fill: '#730000' }
+            { fontSize: '40px', fill: '#ffffff' }
         ).setOrigin(0.5);
         // this.displayLevel = this.add.text(this.screenCenterX, 180,
         //     this.level.key,
@@ -44,7 +44,7 @@ export class nameInput extends Phaser.Scene{
         // ).setOrigin(0.5);
         this.displayScore = this.add.text(this.screenCenterX, 170,
             this.score.toString(),
-            { fontSize: '32px', fill: '#730000' }
+            { fontSize: '32px', fill: '#ffffff' }
         ).setOrigin(0.5);
 
 
@@ -85,7 +85,7 @@ export class nameInput extends Phaser.Scene{
         });
 
         // submit to leaderboard button
-        this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#ffffff'}, {fill: '#999999'}, 32,
+        this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#474747'}, {fill: '#999999'}, 32,
             ()=> {
             if (userInputted) {
                 this.send_leaderboard_entry(nameDisplay.text, this.score, this.level.key)
@@ -97,7 +97,7 @@ export class nameInput extends Phaser.Scene{
         this.add.existing(this.submitButton);
 
         // back to menu button
-        this.menuButton = new TextButton(this, 25, 550, 'SKIP LEADERBOARD', {fill: '#ffffff'}, {fill: '#999999'}, 32,
+        this.menuButton = new TextButton(this, 25, 550, 'SKIP LEADERBOARD', {fill: '#474747'}, {fill: '#999999'}, 32,
             ()=> {
             this.scene.stop(this.level.key);
             this.scene.start(Constants.Scenes.mainMenu);

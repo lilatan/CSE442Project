@@ -28,6 +28,7 @@ export class level1_2 extends Phaser.Scene {
 
     data;
 
+    inAir;
 
     init(data){
         this.data = data;
@@ -37,20 +38,9 @@ export class level1_2 extends Phaser.Scene {
     preload() {
 
         this.load.video('background1_2', '/static/src/assets/background_1_2.mp4', 'loadeddata', false, true);
-       // this.load.video('background', 'assets2/zelda-background1.mp4', 'loadeddata', false, false);
-
-        //this.load.image('background', 'assets1/sand_gw2.png');
-      // this.load.image('door_1', 'assets2/door1.png');
-      //  this.load.image('door_2', 'assets2/door2.png');
         this.load.image('ground1_2', '/static/src/assets/sand_platform.png');
-      //  this.load.image('player_one', 'assets2/spear_player.png');
-     // this.load.spritesheet('dude', 'assets2/dude.png', { frameWidth: 32, frameHeight: 48 });
-        //this.load.image('spike', 'assets2/spikes.png');
 
         //----------------------------------------------------------------------------------------------------------------------------------
-      //  this.load.spritesheet('player_one', '/static/src/assets/brawler.png', { frameWidth: 48, frameHeight: 48 });
-
-        //this.load.image('player_one_idle', '/static/src/assets/assets_2/idle1.png');
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
@@ -64,7 +54,6 @@ export class level1_2 extends Phaser.Scene {
     create ()
     {
 
-//--------------------
         this.scene.bringToTop();
         console.log("im at level 1-2");
         //for fullscreen
@@ -158,6 +147,8 @@ export class level1_2 extends Phaser.Scene {
         this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
         this.shopText.setFontSize(24);
         this.add.existing(this.shopText);
+        this.shopFront.depth = 1;
+        this.shopText.depth = 1;
 
 
 
@@ -165,7 +156,7 @@ export class level1_2 extends Phaser.Scene {
         this.vid = this.add.video(400, 300, 'background1_2');
         this.vid.play(true);
         this.vid.setPaused(false);
-        this.vid.depth = -1;
+        // this.vid.depth = -1;
 
         this.vid.displayWidth = this.sys.canvas.width;
         this.vid.displayHeight = this.sys.canvas.height;
@@ -237,6 +228,10 @@ export class level1_2 extends Phaser.Scene {
       this.player.setScale(2, 2);
       this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
       this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+
+      // Scene Label Text so user knows what level/scene they are on
+      this.level1_2Text = this.add.text( 16,24, 'Level 1_2 Transition Scene', { fontSize: '30px', fill: '#fff' }).setScrollFactor(0);
+      this.level1_2Text.setPosition(150, 90);
     }
 
     gofull() {
@@ -274,16 +269,26 @@ export class level1_2 extends Phaser.Scene {
                 this.player.anims.play('idle', true);
 
             }
+
+            // jump
             if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
             {
                 //Phaser.Input.Keyboard.JustDown(this.cursors.up)
                 //this.player.body.onFloor()
                 //this.player.body.touching.down
                 this.player.setVelocityY(-400);
+                setTimeout(() => {  this.inAir = true; }, 100);
+                this.sound.play(Constants.SFX.jump);
                 this.player.anims.play('jump', true);
 
                 // this.player.anims.play('jump', this.player)
             }
+            // landing sound
+            if (this.inAir && this.player.body.touching.down) {
+                this.inAir = false;
+                this.sound.play(Constants.SFX.land);
+            }
+
             if (this.cursors.down.isDown || this.keyS.isDown) //if
             {
                 this.player.setVelocityY(170);
@@ -310,13 +315,11 @@ export class level1_2 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.data);
+        this.scene.start(Constants.Scenes.lvl1,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2,this.data);
+        this.scene.start(Constants.Scenes.lvl2,this.data);
     }
     pause() {
         this.scene.launch(Constants.Scenes.pause, this.scene);
@@ -327,5 +330,9 @@ export class level1_2 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.shop, this.data);
         // this.scene.shop();
         // this.scene.pause();
+    }
+    transition(){
+        // this.scene.launch(Constants.Scenes.lvl2,this.data);
+        // this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
     }
 }

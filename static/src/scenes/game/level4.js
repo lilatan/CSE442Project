@@ -27,6 +27,8 @@ export class level4 extends Phaser.Scene {
 
     data;
 
+    inAir;
+
     init(data){
         this.data = data;
     }
@@ -135,6 +137,7 @@ export class level4 extends Phaser.Scene {
         });
 
         this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
 
         this.crewels = 0;
 
@@ -174,34 +177,48 @@ export class level4 extends Phaser.Scene {
             this.player.anims.play('idle',true);
          
         }
+
+        // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
             //Phaser.Input.Keyboard.JustDown(this.cursors.up)
             //this.player.body.onFloor()
             //this.player.body.touching.down
             this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
          
           // this.player.anims.play('jump', this.player)
         }
+        // landing sound
+        if (this.inAir && this.player.body.touching.down) {
+            this.inAir = false;
+            this.sound.play(Constants.SFX.land);
+        }
+
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
            // this.player.anims.play('jump',true);
          
-        }  
+        }
+        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3_4,this.data);
+        this.scene.start(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1,this.data);
+        this.scene.start(Constants.Scenes.lvl1,this.data);
     }
     playerHitSpike(){
+        // play take damage sound
+        this.sound.play(Constants.SFX.damage);
+
         this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
     }
     collectcoin (player, coin){
@@ -209,6 +226,9 @@ export class level4 extends Phaser.Scene {
 
         this.data.crewels += 1;
         this.coinCount.setText('crewels: ' + this.data.crewels);
+
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
     }
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
@@ -216,7 +236,7 @@ export class level4 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.launch(Constants.Scenes.lvl1,this.data);
-        this.scene.stop(Constants.Scenes.lvl4,this.scene);
+        // this.scene.start(Constants.Scenes.lvl1,this.data);
+        
     }
 }

@@ -24,6 +24,8 @@ export class level2_3 extends Phaser.Scene {
 
     data;
 
+    inAir;
+
     init(data){
         this.data = data;
         this.data.currentLevel = this.scene;
@@ -130,6 +132,8 @@ export class level2_3 extends Phaser.Scene {
         this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
         this.shopText.setFontSize(24);
         this.add.existing(this.shopText);
+        this.shopFront.depth = 1;
+        this.shopText.depth = 1;
 
         
 
@@ -142,7 +146,7 @@ export class level2_3 extends Phaser.Scene {
         this.vid.setPaused(false);
         this.vid.displayWidth = this.sys.canvas.width;
         this.vid.displayHeight = this.sys.canvas.height;
-        this.vid.depth = -1;
+        // this.vid.depth = -1;
 
         
         this.player = this.physics.add.sprite(100, 300, 'player_one_idle');
@@ -194,6 +198,10 @@ export class level2_3 extends Phaser.Scene {
 
         //allows player and shop to interact
         this.physics.add.overlap(this.player, this.shopFront);
+
+        // Scene Label Text so user knows what level/scene they are on
+        this.level2_3Text = this.add.text( 16,24, 'Level 2_3 Transition Scene', { fontSize: '30px', fill: '#fff' }).setScrollFactor(0);
+        this.level2_3Text.setPosition(150, 90);
     }
     gofull() {
 
@@ -231,16 +239,26 @@ export class level2_3 extends Phaser.Scene {
             this.player.anims.play('idle',true);
 
         }
+
+        // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
             //Phaser.Input.Keyboard.JustDown(this.cursors.up)
             //this.player.body.onFloor()
             //this.player.body.touching.down
             this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
 
           // this.player.anims.play('jump', this.player)
         }
+        // landing sound
+        if (this.inAir && this.player.body.touching.down) {
+            this.inAir = false;
+            this.sound.play(Constants.SFX.land);
+        }
+
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
@@ -261,13 +279,11 @@ export class level2_3 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.launch(Constants.Scenes.lvl2,this.data);
+        this.scene.start(Constants.Scenes.lvl2,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3,this.data);
+        this.scene.start(Constants.Scenes.lvl3,this.data);
     }
     pause()
     {
@@ -277,8 +293,7 @@ export class level2_3 extends Phaser.Scene {
     }
     transition()
     {
-        this.scene.stop(Constants.Scenes.lvl2_3,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3,this.data);
+        // this.scene.start(Constants.Scenes.lvl3,this.data);
 
     }
 

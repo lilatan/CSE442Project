@@ -5,6 +5,7 @@ import { controlsScene } from "./scenes/menus/controls.js";
 import { pauseMenu } from "./scenes/menus/pausemenu.js";
 import { mainMenuLoad } from "./scenes/menus/mainLoadingScreen.js";
 import { nameInput } from "./scenes/menus/nameInput.js";
+import { endgame } from "./scenes/menus/endgame.js";
 import { level1 } from "./scenes/game/level1.js";
 import { level2 } from "./scenes/game/level2.js";
 import { level3 } from "./scenes/game/level3.js";
@@ -34,6 +35,7 @@ var config = {
         controlsScene,
         pauseMenu,
         nameInput,
+        endgame,
         level1,
         level2,
         level3,
@@ -49,7 +51,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 700},
-            debug: true
+            debug: false
         }
     },
     audio:{

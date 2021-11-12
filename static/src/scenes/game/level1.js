@@ -18,6 +18,9 @@ export class level1 extends Phaser.Scene {
     spikes;
     zoom;
     inAir;
+    spike1; 
+    increasingspike1; 
+    movingPlatform; 
 
     keyW;
     keyA;
@@ -28,6 +31,7 @@ export class level1 extends Phaser.Scene {
     //testing level transition
     keyP;
     data;
+    movingup; 
 
     init(data){
         this.data = data;
@@ -82,18 +86,29 @@ export class level1 extends Phaser.Scene {
 
         this.platforms = this.physics.add.staticGroup();
         this.pillar = this.physics.add.staticGroup();
-        this.spikes = this.physics.add.staticGroup();
+        // this.spikes = this.physics.add.staticGroup();
+        this.spikes = this.physics.add.group();
 
         this.platforms.create(400, 568, 'ground1').setScale(2).refreshBody();
 
         this.platforms.create(150, 300, 'ground1').setScale(0.5).refreshBody();
         this.platforms.create(400, 230, 'ground1').setScale(0.5).refreshBody();
-        this.platforms.create(100, 400, 'ground1');
+        // this.platforms.create(100, 400, 'ground1');
         this.platforms.create(700, 450, 'ground1');
-        this.platforms.create(550, 150, 'ground1');
+        // this.platforms.create(550, 150, 'ground1');
         this.platforms.create(25, 125, 'ground1');
 
-        this.spikes.create(400, 500, 'spike1');
+        this.movingPlatform = this.physics.add.image(550, 150, 'ground1'); 
+        this.movingPlatformHorizontal = this.physics.add.image(100, 400, 'ground1'); 
+
+
+        this.movingPlatform.setImmovable(true); 
+        this.movingPlatform.body.allowGravity = false; 
+        this.movingPlatformHorizontal.setImmovable(true); 
+        this.movingPlatformHorizontal.body.allowGravity = false; 
+
+        // this.spikes.create(400, 500, 'spike1');
+        this.spike1 = this.spikes.create(450, 500, 'spike1').body.setAllowGravity(false);
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         //TRYING TO CHANGE PLAYER HITBOX WITH CODE BELOW
@@ -152,23 +167,33 @@ export class level1 extends Phaser.Scene {
 
             child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
 
-        });
+    });
 
-        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text( 16,16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.level1Text = this.add.text( 16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
+        this.physics.add.collider(this.player, this.movingPlatform);
+        this.physics.add.collider(this.player, this.movingPlatformHorizontal);
+
+
+        //this.physics.add.collider(this.spikes,this.platforms);
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(2);
-       
+        this.cameras.main.setZoom(1.5);
+        this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null,this)
+        this.increasingspike1 = false; 
+        this.coinCount.setPosition(150, 100);
+        this.level1Text.setPosition(150, 120);
+
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
-
     }
  //  delayDone(){
        // this.player.body.setSize(this.player.width/2,this.player.height/1,true);
@@ -176,6 +201,35 @@ export class level1 extends Phaser.Scene {
    // }
 
     update(){
+      //  this.coinCount.setPosition(300, 300);
+        if (this.movingPlatform.y <= 150) { 
+            this.movingPlatform.setVelocityY(10) 
+        }  
+        if (this.movingPlatform.y >= 200) { 
+            this.movingPlatform.setVelocityY(-10);
+        }
+
+        if (this.movingPlatformHorizontal.x <= 100) { 
+            this.movingPlatformHorizontal.setVelocityX(10) 
+        }  
+        if (this.movingPlatformHorizontal.x >= 200) { 
+            this.movingPlatformHorizontal.setVelocityX(-10);
+        }
+
+        if (this.spike1.y <= 200) { 
+            this.increasingspike1 = true ;
+
+        } 
+        if (this.spike1.y >= 500) { 
+            this.increasingspike1 = false ;
+            console.log("test");
+        }
+        if (this.increasingspike1 == true) { 
+            this.spike1.y += 2;
+        } else { 
+            this.spike1.y -= 2;
+        }
+
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -220,10 +274,8 @@ export class level1 extends Phaser.Scene {
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
-           // this.player.anims.play('jump',true);
-         
-        }  
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        }
+    
         // if(this.keyESC.isDown){
         //     this.scene.pause();
         //     this.scene.launch(Constants.Scenes.pause);
@@ -231,8 +283,8 @@ export class level1 extends Phaser.Scene {
         if(this.crewels==this.totalCoin){
             // this.scene.pause();
             // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-            console.log(this.scene.key)
-            this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+            // console.log(this.scene.key)
+            // this.scene.start(Constants.Scenes.endgame, [this.crewels, this.scene]);
         }
     }
 
@@ -244,13 +296,15 @@ export class level1 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl1,this.scene);
-        this.scene.launch(Constants.Scenes.lvl4,this.data);
+        this.scene.start(Constants.Scenes.lvl4,this.data);
+        //this.scene.launch(Constants.Scenes.lvl4,this.scene);
+        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl1,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1_2,this.data);
+        this.scene.start(Constants.Scenes.lvl1_2,this.data);
+        //this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
+        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
@@ -270,8 +324,8 @@ export class level1 extends Phaser.Scene {
         this.scene.pause();
     }
     transition(){
-        this.scene.stop(Constants.Scenes.lvl1,this.scene);
-        this.scene.launch(Constants.Scenes.lvl1_2,this.data)
+        //this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
+        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
         
     }
 }

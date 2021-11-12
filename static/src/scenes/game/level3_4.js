@@ -24,6 +24,8 @@ export class level3_4 extends Phaser.Scene {
 
     data;
 
+    inAir;
+
     init(data){
         this.data = data;
     }
@@ -130,6 +132,8 @@ export class level3_4 extends Phaser.Scene {
         this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
         this.shopText.setFontSize(24);
         this.add.existing(this.shopText);
+        this.shopFront.depth = 1;
+        this.shopText.depth = 1;
 
 
 
@@ -138,7 +142,7 @@ export class level3_4 extends Phaser.Scene {
         this.vid.setPaused(false);
         this.vid.displayWidth = this.sys.canvas.width;
         this.vid.displayHeight = this.sys.canvas.height;
-        this.vid.depth = -1;
+        // this.vid.depth = -1;
         
 
         
@@ -193,6 +197,10 @@ export class level3_4 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
         //allows player and shop to interact
         this.physics.add.overlap(this.player, this.shopFront);
+
+        // Scene Label Text so user knows what level/scene they are on
+        this.level3_4Text = this.add.text( 16,24, 'Level 3_4 Transition Scene', { fontSize: '30px', fill: '#fff' }).setScrollFactor(0);
+        this.level3_4Text.setPosition(150, 90);
     }
      gofull() {
 
@@ -229,17 +237,27 @@ export class level3_4 extends Phaser.Scene {
             this.player.anims.play('idle',true);
 
         }
+
+        // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
             //Phaser.Input.Keyboard.JustDown(this.cursors.up)
             //this.player.body.onFloor()
             //this.player.body.touching.down
             this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
 
 
           // this.player.anims.play('jump', this.player)
         }
+        // landing sound
+        if (this.inAir && this.player.body.touching.down) {
+            this.inAir = false;
+            this.sound.play(Constants.SFX.land);
+        }
+
         if (this.cursors.down.isDown || this.keyS.isDown) //if
         {
             this.player.setVelocityY(170);
@@ -260,13 +278,11 @@ export class level3_4 extends Phaser.Scene {
     }
     playerHitdoor1()
     {
-        this.scene.stop(Constants.Scenes.lvl3_4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl3,this.data)
+        this.scene.start(Constants.Scenes.lvl3,this.data);
     }
     playerHitdoor2()
     {
-        this.scene.stop(Constants.Scenes.lvl3_4,this.scene);
-        this.scene.launch(Constants.Scenes.lvl4,this.data)
+        this.scene.start(Constants.Scenes.lvl4,this.data);
     }
     pause(){
         this.scene.launch(Constants.Scenes.pause,this.scene);
@@ -278,5 +294,8 @@ export class level3_4 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.shop, this.data);
         // this.scene.shop();
         // this.scene.pause();
+    }
+    transition(){
+        // this.scene.start(Constants.Scenes.lvl4,this.data);
     }
 }

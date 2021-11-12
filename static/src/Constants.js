@@ -8,6 +8,7 @@ export const Constants = {
         control: "controlsScene",
         pause: "pause",
         nameInput: "nameInput",
+        endgame: "endgame",
         lvl1: "level1",
         lvl2: "level2",
         lvl3: "level3",

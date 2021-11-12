@@ -19,6 +19,17 @@ export class shop extends Phaser.Scene {
         this.data = data;
 
     }
+    // For adding images later
+    preload(){
+        // Image of item 1: Heart/life
+        this.load.image('heart_life', 'static/src/assets/images/heartlife.png');
+
+        //Image of item 2: Shield
+        this.load.image('shield', 'static/src/assets/images/shield.png');
+
+        //Image of item 3:
+        //this.image.load('', '');
+    }
 
     create(){
         this.scene.bringToTop();
@@ -49,6 +60,11 @@ export class shop extends Phaser.Scene {
         this.doubleJumpBuyButton = new TextButton(this, 110, 265,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemA());
         this.add.existing(this.doubleJumpBuyButton);
 
+        this.heartLife = this.physics.add.image(310, 250, 'heart_life');
+        this.heartLife.body.moves = false;
+        this.heartLife.body.setAllowGravity(false);
+        this.heartLife.setScale(0.3);
+
         // *** item 2 ****
         this.dashText = new Phaser.GameObjects.Text(this, 110, 300,'ITEM B', {fill: '#799ced'});
         this.dashText.setFontSize(40);
@@ -56,12 +72,20 @@ export class shop extends Phaser.Scene {
         this.dashBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
         this.add.existing(this.dashBuyButton);
 
+        this.shield = this.physics.add.image(360, 340, 'shield');
+        this.shield.body.moves = false;
+        this.shield.body.setAllowGravity(false);
+        this.shield.setScale(0.2);
+
         // *** item 3 ****
         this.dashText = new Phaser.GameObjects.Text(this, 110, 375,'ITEM C', {fill: '#799ced'});
         this.dashText.setFontSize(40);
         this.add.existing(this.dashText);
         this.dashBuyButton = new TextButton(this, 110, 415,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemC());
         this.add.existing(this.dashBuyButton);
+
+        //For image to come
+        //this.heartLife = this.physics.add.image(140, 225, 'heart_life');
         /*
         this.wallJumpText = new Phaser.GameObjects.Text(this, 400, 250,'WALL JUMP', {fill: '#799ced'});
         this.wallJumpText.setFontSize(40);
