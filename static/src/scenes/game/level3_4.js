@@ -274,7 +274,7 @@ export class level3_4 extends Phaser.Scene {
         this.scene.start(Constants.Scenes.lvl3, this.data);
     }
     playerHitdoor2() {
-        this.scene.start(Constants.Scenes.lvl4, this.data);
+        this.scene.start(Constants.Scenes.endgame, this.data);
     }
     pause() {
         this.scene.launch(Constants.Scenes.pause, this.scene);

@@ -8,8 +8,7 @@ export class endgame extends Phaser.Scene{
     score;
     level;
     init(data){//[Score, Game Scene]
-        this.score = data[0] + 100;
-        this.level = data[1];
+        this.score = data.crewels;
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
@@ -99,7 +98,6 @@ export class endgame extends Phaser.Scene{
         // back to menu button
         this.menuButton = new TextButton(this, 25, 550, 'SKIP LEADERBOARD', {fill: '#474747'}, {fill: '#999999'}, 32,
             ()=> {
-            this.scene.stop(this.level.key);
             this.scene.start(Constants.Scenes.mainMenu);
             this.sound.play(Constants.SFX.back)
         });

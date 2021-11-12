@@ -8,8 +8,8 @@ export class nameInput extends Phaser.Scene{
     score;
     level;
     init(data){//[Score, Game Scene]
-        this.score = data[0];
-        this.level = data[1];
+        this.score = data.crewels;
+        // this.level = data.currentLevel;
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
