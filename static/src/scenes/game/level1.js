@@ -19,6 +19,7 @@ export class level1 extends Phaser.Scene {
     spikes;
     zoom;
     inAir;
+    invincible;
     spike1; 
     increasingspike1; 
     movingPlatform; 
@@ -36,6 +37,7 @@ export class level1 extends Phaser.Scene {
 
     init(data){
         this.data = data;
+        this.invincible = false;
     }
 
     preload(){
@@ -291,16 +293,22 @@ export class level1 extends Phaser.Scene {
     }
 
     playerHitSpike(){
-        // update player lives
-        this.data.lives -= 1;
-        this.lifeCount.setText('lives: ' + this.data.lives);
+        if (!this.invincible) {
+            // invincibility frame
+            this.invincible = true;
+            setTimeout(() => {  this.invincible = false; }, 500);
 
-        // play take damage sound
-        this.sound.play(Constants.SFX.damage);
+            // update player lives
+            this.data.lives -= 1;
+            this.lifeCount.setText('lives: ' + this.data.lives);
 
-        // go to graveyard scene if lives hit zero
-        if (this.data.lives === 0) {
-            this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            // play take damage sound
+            this.sound.play(Constants.SFX.damage);
+
+            // go to graveyard scene if lives hit zero
+            if (this.data.lives === 0) {
+                this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            }
         }
     }
     playerHitdoor1()
