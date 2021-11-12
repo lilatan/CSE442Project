@@ -207,16 +207,13 @@ export class level1_2 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('player_one_death', { frames: [0,1,2,3,4,5,6,7,8,9,10,11 ] }),
             frameRate: 15,
         });
-        //remove this if you want
 
-        //    enemy.setCollideWorldBounds(true);
         this.player.setBounce(0.1);
         this.player.setCollideWorldBounds(true);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
 
-        //      this.physics.add.collider(enemy, platforms);
         this.physics.add.collider(this.player, this.platforms);
 
         //allows player and shop to interact
@@ -224,7 +221,6 @@ export class level1_2 extends Phaser.Scene {
 
         // make the camera follow the player
        
-      // this.physics.add.overlap(player, door2,)
       this.player.setScale(2, 2);
       this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
       this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
@@ -248,10 +244,9 @@ export class level1_2 extends Phaser.Scene {
 
     update ()
     {
-    //    if (player.body.touching.down || enemy.body.blocked.up){
-   //         player.anims.play('die', true);
-    //    }
+        //NOTE: IF ELSE block to stop player movement while shop scene is active
         if (!this.scene.isActive(Constants.Scenes.shop)) {
+            this.keyESC.enabled = true;
             if (this.cursors.left.isDown || this.keyA.isDown) {
                 this.player.setVelocityX(-200);
                 this.player.anims.play('left', true);
@@ -261,27 +256,17 @@ export class level1_2 extends Phaser.Scene {
                 this.player.setVelocityX(200);
                 this.player.anims.play('right', true);
                 this.player.flipX = false;
-
-                //  player.scale.setTo(-1,1);
-            } else //else
-            {
+            } else{
                 this.player.setVelocityX(0);
                 this.player.anims.play('idle', true);
 
             }
-
             // jump
-            if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
-            {
-                //Phaser.Input.Keyboard.JustDown(this.cursors.up)
-                //this.player.body.onFloor()
-                //this.player.body.touching.down
+            if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) {
                 this.player.setVelocityY(-400);
                 setTimeout(() => {  this.inAir = true; }, 100);
                 this.sound.play(Constants.SFX.jump);
                 this.player.anims.play('jump', true);
-
-                // this.player.anims.play('jump', this.player)
             }
             // landing sound
             if (this.inAir && this.player.body.touching.down) {
@@ -289,17 +274,15 @@ export class level1_2 extends Phaser.Scene {
                 this.sound.play(Constants.SFX.land);
             }
 
-            if (this.cursors.down.isDown || this.keyS.isDown) //if
-            {
+            if (this.cursors.down.isDown || this.keyS.isDown) {
                 this.player.setVelocityY(170);
-                // this.player.anims.play('jump',true);
 
             }
         }
         else{
             this.player.setVelocityX(0);
-            this.player.setVelocityY(0);
             this.player.anims.play('idle');
+            this.keyESC.enabled = false;
         }
 
         //if the player is on the shop
@@ -310,28 +293,22 @@ export class level1_2 extends Phaser.Scene {
         } else {
             this.shopText.setVisible(false);
             this.keyE.enabled = false;
-            // console.log("touching\n");
         }
     }
-    playerHitdoor1()
-    {
+    playerHitdoor1() {
         this.scene.start(Constants.Scenes.lvl1,this.data);
     }
-    playerHitdoor2()
-    {
+    playerHitdoor2() {
         this.scene.start(Constants.Scenes.lvl2,this.data);
     }
     pause() {
         this.scene.launch(Constants.Scenes.pause, this.scene);
-        // console.log(this.scene);
         this.scene.pause();
     }
     shop() {
         this.scene.launch(Constants.Scenes.shop, this.data);
-        // this.scene.shop();
-        // this.scene.pause();
     }
-    transition(){
+    transition() {
         // this.scene.launch(Constants.Scenes.lvl2,this.data);
         // this.scene.stop(Constants.Scenes.lvl1_2,this.scene);
     }
