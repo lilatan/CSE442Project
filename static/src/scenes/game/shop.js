@@ -55,13 +55,17 @@ export class shop extends Phaser.Scene {
         this.noMoneyText.setVisible(false);
 
         // *** item 1 ****
-        this.doubleJumpText = new Phaser.GameObjects.Text(this, 110, 225,'ITEM A', {fill: '#799ced'});
-        this.doubleJumpText.setFontSize(40);
-        this.add.existing(this.doubleJumpText);
-        this.doubleJumpBuyButton = new TextButton(this, 110, 265,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemA());
-        this.add.existing(this.doubleJumpBuyButton);
+        this.itemAText = new Phaser.GameObjects.Text(this, 110, 225,'EXTRA LIFE', {fill: '#799ced'});
+        this.itemAText.setFontSize(40);
+        this.add.existing(this.itemAText);
+        this.itemACost = new Phaser.GameObjects.Text(this, 200, 265,'COST:' + this.items.itemA.toString(), {fill: '#799ced'});
+        this.itemACost.setFontSize(30);
+        this.add.existing(this.itemACost);
+        this.extraLifeBuyButton = new TextButton(this, 110, 265,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemA());
+        this.add.existing(this.extraLifeBuyButton);
 
-        this.heartLife = this.physics.add.image(310, 250, 'heart_life');
+
+        this.heartLife = this.physics.add.image(450, 250, 'heart_life');
         this.heartLife.body.moves = false;
         this.heartLife.body.setAllowGravity(false);
         this.heartLife.setScale(0.3);
@@ -70,10 +74,13 @@ export class shop extends Phaser.Scene {
         this.dashText = new Phaser.GameObjects.Text(this, 110, 300,'ITEM B', {fill: '#799ced'});
         this.dashText.setFontSize(40);
         this.add.existing(this.dashText);
+        this.itemBCost = new Phaser.GameObjects.Text(this, 200, 340,'COST:' + this.items.itemB.toString(), {fill: '#799ced'});
+        this.itemBCost.setFontSize(30);
+        this.add.existing(this.itemBCost);
         this.dashBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
         this.add.existing(this.dashBuyButton);
 
-        this.shield = this.physics.add.image(360, 340, 'shield');
+        this.shield = this.physics.add.image(450, 340, 'shield');
         this.shield.body.moves = false;
         this.shield.body.setAllowGravity(false);
         this.shield.setScale(0.2);
@@ -128,7 +135,7 @@ export class shop extends Phaser.Scene {
     // Item functions that call buy func with cost
     buyItemA(){
         if(this.buy(this.items.itemA)){
-            this.data.doubleJump = 1;
+            this.data.lives += 1;
         }
     }
 

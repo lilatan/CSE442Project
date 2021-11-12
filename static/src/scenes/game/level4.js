@@ -12,6 +12,7 @@ export class level4 extends Phaser.Scene {
     door2;
     crewels = 0;
     coinCount;
+    lifeCount;
     totalCoin = 12;
     spikes;
     zoom;
@@ -28,9 +29,11 @@ export class level4 extends Phaser.Scene {
     data;
 
     inAir;
+    invincible;
 
     init(data){
         this.data = data;
+        this.invincible = false;
     }
 
     preload(){
@@ -138,6 +141,7 @@ export class level4 extends Phaser.Scene {
 
         this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
         this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
 
         this.crewels = 0;
 
@@ -205,6 +209,8 @@ export class level4 extends Phaser.Scene {
         }
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+        this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+
 
     }
     playerHitdoor1()
@@ -216,10 +222,23 @@ export class level4 extends Phaser.Scene {
         this.scene.start(Constants.Scenes.lvl1,this.data);
     }
     playerHitSpike(){
-        // play take damage sound
-        this.sound.play(Constants.SFX.damage);
+        if (!this.invincible) {
+            // invincibility frame
+            this.invincible = true;
+            setTimeout(() => {  this.invincible = false; }, 500);
 
-        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            // update player lives
+            this.data.lives -= 1;
+            this.lifeCount.setText('lives: ' + this.data.lives);
+
+            // play take damage sound
+            this.sound.play(Constants.SFX.damage);
+
+            // go to graveyard scene if lives hit zero
+            if (this.data.lives === 0) {
+                this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            }
+        }
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);

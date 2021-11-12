@@ -14,10 +14,12 @@ export class level1 extends Phaser.Scene {
     cursors;
     crewels = 0;
     coinCount;
+    lifeCount;
     totalCoin = 12;
     spikes;
     zoom;
     inAir;
+    invincible;
     spike1; 
     increasingspike1; 
     movingPlatform; 
@@ -35,6 +37,7 @@ export class level1 extends Phaser.Scene {
 
     init(data){
         this.data = data;
+        this.invincible = false;
     }
 
     preload(){
@@ -171,7 +174,7 @@ export class level1 extends Phaser.Scene {
 
         this.coinCount = this.add.text( 16,16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
         this.level1Text = this.add.text( 16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -190,6 +193,7 @@ export class level1 extends Phaser.Scene {
         this.increasingspike1 = false; 
         this.coinCount.setPosition(150, 100);
         this.level1Text.setPosition(150, 120);
+        this.lifeCount.setPosition(150, 140);
 
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
@@ -289,10 +293,23 @@ export class level1 extends Phaser.Scene {
     }
 
     playerHitSpike(){
-        // play take damage sound
-        this.sound.play(Constants.SFX.damage);
+        if (!this.invincible) {
+            // invincibility frame
+            this.invincible = true;
+            setTimeout(() => {  this.invincible = false; }, 500);
 
-        this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+            // update player lives
+            this.data.lives -= 1;
+            this.lifeCount.setText('lives: ' + this.data.lives);
+
+            // play take damage sound
+            this.sound.play(Constants.SFX.damage);
+
+            // go to graveyard scene if lives hit zero
+            if (this.data.lives === 0) {
+                this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            }
+        }
     }
     playerHitdoor1()
     {
