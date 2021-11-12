@@ -18,6 +18,7 @@ export class level3 extends Phaser.Scene {
     cursors;
     crewels = 0;
     coinCount;
+    lifeCount;
     totalCoin = 12;
     spikes;
     zoom;
@@ -282,6 +283,8 @@ export class level3 extends Phaser.Scene {
 
         this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
         this.level3Text = this.add.text( 16,24, 'Level 3', { fontSize: '12px', fill: '#000' });
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
+
 
         this.crewels = 0;
         //----COLLIDER CODE----
@@ -472,6 +475,7 @@ export class level3 extends Phaser.Scene {
         //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         // }
         this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+        this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
 
     }
 
@@ -484,10 +488,17 @@ export class level3 extends Phaser.Scene {
         this.scene.start(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitSpike(){
+        // update player lives
+        this.data.lives -= 1;
+        this.lifeCount.setText('lives: ' + this.data.lives);
+
         // play take damage sound
         this.sound.play(Constants.SFX.damage);
 
-        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+        // go to graveyard scene if lives hit zero
+        if (this.data.lives === 0) {
+            this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+        }
     }
 
     collectcoin (player, coin){

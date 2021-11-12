@@ -21,6 +21,7 @@ export class level2 extends Phaser.Scene {
     cursors;
     crewels;
     coinCount;
+    lifeCount;
     totalCoin = 12;
     spikes;
     zoom;
@@ -245,6 +246,7 @@ export class level2 extends Phaser.Scene {
 
         this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' });
         this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#000' });
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
 
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
@@ -376,12 +378,13 @@ export class level2 extends Phaser.Scene {
         //     this.scene.launch(Constants.Scenes.pause);
         // }
         this.level2Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
-        if(this.crewels==this.totalCoin){
-            // this.scene.pause();
-            // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-            console.log(this.scene.key)
-            this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
-        }
+        this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+        // if(this.crewels==this.totalCoin){
+        //     // this.scene.pause();
+        //     // this.scene.launch(Constants.Scenes.nameInput, this.scene);
+        //     console.log(this.scene.key)
+        //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+        // }
        
     }
     playerHitdoor1()
@@ -393,10 +396,17 @@ export class level2 extends Phaser.Scene {
         this.scene.start(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
+        // update player lives
+        this.data.lives -= 1;
+        this.lifeCount.setText('lives: ' + this.data.lives);
+
         // play take damage sound
         this.sound.play(Constants.SFX.damage);
 
-        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+        // go to graveyard scene if lives hit zero
+        if (this.data.lives === 0) {
+            this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+        }
     }
 
     collectcoin (player, coin){
