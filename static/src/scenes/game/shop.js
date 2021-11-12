@@ -9,7 +9,7 @@ export class shop extends Phaser.Scene {
     }
     data;
     // Keyboard key to access the shop
-    keyE;
+    keyEsc;
     items = {
         itemA : 10,
         itemB : 5,
@@ -97,8 +97,8 @@ export class shop extends Phaser.Scene {
         this.add.existing(this.backButton);
 
         //Access to shop by pressing the E key
-        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-        this.keyE.on('up', ()=>this.resumeGame());
+        this.keyEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.keyEsc.on('up', ()=>this.resumeGame());
     }
 
     update(){
