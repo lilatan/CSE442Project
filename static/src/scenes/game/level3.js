@@ -22,6 +22,7 @@ export class level3 extends Phaser.Scene {
     totalCoin = 12;
     spikes;
     zoom;
+    jump_count = 0;
  
 
     keyW;
@@ -341,6 +342,8 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('idle',true);
         }
 
+        const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
@@ -349,6 +352,15 @@ export class level3 extends Phaser.Scene {
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
+            this.jump_count = 1;
+        }
+        //for double jump
+        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+            this.doublejump_enabled();
+        }
+        //reset jump counter
+        if(this.player.body.touching.down){
+            this.jump_count = 0;
         }
         // landing sound
         if (this.inAir && this.player.body.touching.down) {
@@ -506,6 +518,16 @@ export class level3 extends Phaser.Scene {
             if (this.data.lives === 0) {
                 this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
             }
+        }
+    }
+    doublejump_enabled(){
+        if(this.data.doubleJump > 0){
+            this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
+            this.jump_count = 2;
+            this.data.doubleJump -= 1;
         }
     }
 

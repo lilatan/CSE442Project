@@ -25,6 +25,7 @@ export class level2 extends Phaser.Scene {
     totalCoin = 12;
     spikes;
     zoom;
+    jump_count = 0;
 
     keyW;
     keyA;
@@ -272,14 +273,20 @@ export class level2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.question_block, this.playerHitQuestionBlock,null, this);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
-        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);``
+        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+
+        //this.time.addEvent({delay: 100, callback: this.hover_enabled, callbackScope: this, loop: false});
 
     }
 
     update(){
+        //Variables used in update function
+
+
 
     //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
         var idle = false;
+
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -299,7 +306,8 @@ export class level2 extends Phaser.Scene {
             // this.player.anims.play('idle',true);
             idle = true;
         }
-
+        const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
@@ -308,7 +316,16 @@ export class level2 extends Phaser.Scene {
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
             idle = false;
+            this.jump_count = 1;
         }
+        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+            this.doublejump_enabled();
+        }
+        if(this.player.body.touching.down){
+            this.jump_count = 0;
+        }
+
+
         // landing sound
         if (this.inAir && this.player.body.touching.down) {
             this.inAir = false;
@@ -366,14 +383,7 @@ export class level2 extends Phaser.Scene {
             this.watcher_enemy.body.offset.y=22;
         }
     //---------WATCHER ANIMATION ABOVE------
-
-
-
-
-
-
-
-
+        
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         // if(this.keyESC.isDown){
         //     this.scene.pause();
@@ -416,6 +426,16 @@ export class level2 extends Phaser.Scene {
             }
         }
     }
+    doublejump_enabled(){
+        if(this.data.doubleJump > 0){
+            this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
+            this.jump_count = 2;
+            this.data.doubleJump -= 1;
+        }
+    }
 
     collectcoin (player, coin){
         coin.disableBody(true, true);
@@ -442,11 +462,10 @@ export class level2 extends Phaser.Scene {
         // this.scene.start(Constants.Scenes.lvl2_3,this.data);
       
     }
-    // bigboy_ATTACK()
-    //{
-    //  this.bigboy_enemy.body.setSize(this.player.width/1,this.player.height/1,true);
-    //  this.bigboy_enemy.body.setSize(64,64,true);
-    //}
+    //========================================================================================================================================================
+
+    //========================================================================================================================================================
+   
 
     
 }

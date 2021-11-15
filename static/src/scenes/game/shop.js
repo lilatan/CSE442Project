@@ -27,6 +27,9 @@ export class shop extends Phaser.Scene {
         //Image of item 2: Shield
         this.load.image('shield', 'static/src/assets/images/shield.png');
 
+        //image of item 3: Winged_Shoes
+        this.load.image('talaria', 'static/src/assets/images/winged_shoes.png');
+
         //Image of item 3:
         //this.image.load('', '');
     }
@@ -64,7 +67,7 @@ export class shop extends Phaser.Scene {
         this.add.existing(this.extraLifeBuyButton);
 
 
-        this.heartLife = this.physics.add.image(450, 250, 'heart_life');
+        this.heartLife = this.physics.add.image(500, 250, 'heart_life');
         this.heartLife.body.moves = false;
         this.heartLife.body.setAllowGravity(false);
         this.heartLife.setScale(0.3);
@@ -79,17 +82,27 @@ export class shop extends Phaser.Scene {
         this.dashBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
         this.add.existing(this.dashBuyButton);
 
-        this.shield = this.physics.add.image(450, 340, 'shield');
+        this.shield = this.physics.add.image(500, 340, 'shield');
         this.shield.body.moves = false;
         this.shield.body.setAllowGravity(false);
         this.shield.setScale(0.2);
 
         // *** item 3 ****
-        this.dashText = new Phaser.GameObjects.Text(this, 110, 375,'ITEM C', {fill: '#799ced'});
+        this.dashText = new Phaser.GameObjects.Text(this, 110, 375,'Double Jump', {fill: '#799ced'});
         this.dashText.setFontSize(40);
         this.add.existing(this.dashText);
+        this.itemCCost = new Phaser.GameObjects.Text(this, 200, 415,'COST:' + this.items.itemC.toString(), {fill: '#799ced'});
+        this.itemCCost.setFontSize(30);
+        this.add.existing(this.itemCCost);
         this.dashBuyButton = new TextButton(this, 110, 415,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemC());
         this.add.existing(this.dashBuyButton);
+
+        this.talaria = this.physics.add.image(500, 430, 'talaria');
+        this.talaria.body.moves = false;
+        this.talaria.body.setAllowGravity(false);
+        this.talaria.setScale(0.2);
+
+
 
         //For image to come
         //this.heartLife = this.physics.add.image(140, 225, 'heart_life');
@@ -143,7 +156,7 @@ export class shop extends Phaser.Scene {
 
     buyItemC(){
         if(this.buy(this.items.itemC)){
-            this.data.wallJump = 1;
+            this.data.doubleJump += 1;
         }
     }
 }
