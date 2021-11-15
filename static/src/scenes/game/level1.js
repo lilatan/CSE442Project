@@ -38,8 +38,8 @@ export class level1 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background1', '/static/src/assets/sand_gw2.png');
-        this.load.image('ground1', '/static/src/assets/sand_platform.png');
+        this.load.image('background1', '/static/src/assets/cyber_city_lvl2.png');
+        this.load.image('ground1', '/static/src/assets/cyberpunk_platform.png');
         this.load.image('coin1', '/static/src/assets/single_coin.png');
         // this.load.image('player_one', '/static/src/assets/spear_player.png');
         //-----------
