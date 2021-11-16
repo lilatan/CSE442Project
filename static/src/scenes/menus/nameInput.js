@@ -8,7 +8,7 @@ export class nameInput extends Phaser.Scene{
     score;
     level;
     init(data){//[Score, Game Scene]
-        this.score = data.crewels;
+        this.score = data[0];
         // this.level = data.currentLevel;
     }
     preload(){
@@ -43,10 +43,9 @@ export class nameInput extends Phaser.Scene{
         //     { fontSize: '32px', fill: '#730000' }
         // ).setOrigin(0.5);
         this.displayScore = this.add.text(this.screenCenterX, 170,
-            this.score.toString(),
+            this.score,
             { fontSize: '32px', fill: '#730000' }
         ).setOrigin(0.5);
-
 
         // prompt user to enter name
         this.promptText = this.add.text(this.screenCenterX, 410,
@@ -99,7 +98,6 @@ export class nameInput extends Phaser.Scene{
         // back to menu button
         this.menuButton = new TextButton(this, 25, 550, 'SKIP LEADERBOARD', {fill: '#ffffff'}, {fill: '#999999'}, 32,
             ()=> {
-            this.scene.stop(this.level.key);
             this.scene.start(Constants.Scenes.mainMenu);
             this.sound.play(Constants.SFX.back)
         });
