@@ -27,6 +27,7 @@ export class level4 extends Phaser.Scene {
     keyP;
 
     data;
+    bossHealth = 100;
 
     inAir;
     invincible;
@@ -40,7 +41,7 @@ export class level4 extends Phaser.Scene {
         this.load.image('background4', '/static/src/assets/sand_gw2.png');
         this.load.image('ground4', '/static/src/assets/sand_platform.png');
         this.load.image('coin4', '/static/src/assets/single_coin.png');
-        this.load.image('bosshealth', 'static/src/assets/images/healthbar.png');
+        //this.load.image('bosshealth', 'static/src/assets/images/healthbar.png');
         this.load.image('spike4', '/static/src/assets/spikes.png');
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
@@ -142,7 +143,7 @@ export class level4 extends Phaser.Scene {
         this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
         this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
-        this.bossHealth = this.add.text(16, 40, 'Boss Health', { fontSize: '12px', fill: '#000' });
+        this.bossHealth = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' });
         this.crewels = 0;
 
         this.physics.add.collider(this.player, this.platforms);
