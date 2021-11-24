@@ -15,7 +15,7 @@ export class level2 extends Phaser.Scene {
     wall;
     block;
     coin;
-    door1;
+    //door1;
     door2;
     platforms;
     cursors;
@@ -88,11 +88,11 @@ export class level2 extends Phaser.Scene {
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
         
-       this.door1 = this.physics.add.staticGroup();
+       // this.door1 = this.physics.add.staticGroup();
        this.door2 = this.physics.add.staticGroup();
-       this.door1.create(-63, 290, null).setScale(4).refreshBody();
-       this.door1.create(-63, 420, null).setScale(4).refreshBody();
-       this.door1.create(-63, 550, null).setScale(4).refreshBody();
+       // this.door1.create(-63, 290, null).setScale(4).refreshBody();
+       // this.door1.create(-63, 420, null).setScale(4).refreshBody();
+       // this.door1.create(-63, 550, null).setScale(4).refreshBody();
       // this.door2.create(862, 300, null).setScale(4).refreshBody();
       // this.door2.create(862, 400, null).setScale(4).refreshBody();
        this.door2.create(862, 600, null).setScale(4).refreshBody();
@@ -271,7 +271,7 @@ export class level2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.question_block, this.playerHitQuestionBlock,null, this);
-        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        //this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);``
 
     }
@@ -367,13 +367,6 @@ export class level2 extends Phaser.Scene {
         }
     //---------WATCHER ANIMATION ABOVE------
 
-
-
-
-
-
-
-
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         // if(this.keyESC.isDown){
         //     this.scene.pause();
@@ -389,10 +382,10 @@ export class level2 extends Phaser.Scene {
         // }
        
     }
-    playerHitdoor1()
-    {
-        this.scene.start(Constants.Scenes.lvl1_2,this.data);
-    }
+    // playerHitdoor1()
+    // {
+    //     this.scene.start(Constants.Scenes.lvl1_2,this.data);
+    // }
     playerHitdoor2()
     {
         this.scene.start(Constants.Scenes.lvl2_3,this.data);
@@ -438,15 +431,9 @@ export class level2 extends Phaser.Scene {
         // console.log(this.scene);
         this.scene.pause();
     }
-    transition(){
-        // this.scene.start(Constants.Scenes.lvl2_3,this.data);
-      
-    }
     // bigboy_ATTACK()
     //{
     //  this.bigboy_enemy.body.setSize(this.player.width/1,this.player.height/1,true);
     //  this.bigboy_enemy.body.setSize(64,64,true);
     //}
-
-    
 }
