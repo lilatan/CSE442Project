@@ -6,6 +6,8 @@ export class level2 extends Phaser.Scene {
         super(Constants.Scenes.lvl2);
     }
 
+    xcord; 
+    ycord; 
     player;
     bigboy_enemy;
     bigboy_speed = 100;
@@ -15,6 +17,7 @@ export class level2 extends Phaser.Scene {
     wall;
     block;
     coin;
+    tempwallvar;
     //door1;
     door2;
     platforms;
@@ -112,48 +115,42 @@ export class level2 extends Phaser.Scene {
         this.platforms.create(400, 600, 'ground2').setScale(1).refreshBody();
         this.platforms.create(600, 600, 'ground2').setScale(1).refreshBody();
 
-        
-
-        this.platforms.create(300, 150, 'ground2').setScale(.25).refreshBody();
-        this.platforms.create(150, 150, 'ground2').setScale(.25).refreshBody();
-
-
-        // this.platforms.create(800, 250, 'ground2').setScale(.25).refreshBody();
-        // this.platforms.create(400, 250, 'ground2').setScale(1).refreshBody();
-        
-        // this.platforms.create(100, 350, 'ground2').setScale(.25).refreshBody();
-        
-
+    
+        //climb up sprites. 
         for (var x = 0; x < 5; x++) { 
-            this.platforms.create(500-(x*100), 200+(x*70), 'ground2').setScale(.25).refreshBody();
-            // this.platforms.create(500, 200, 'ground2').setScale(.25).refreshBody();
-            // this.platforms.create(400, 270, 'ground2').setScale(.25).refreshBody();
-            // this.platforms.create(300, 350, 'ground2').setScale(.25).refreshBody();
-            // this.platforms.create(200, 430, 'ground2').setScale(.25).refreshBody();
-            // this.platforms.create(100, 500, 'ground2').setScale(.25).refreshBody(); 
+            this.xcord = 500-(x*100);
+            this.ycord = 200+(x*70);
+            this.platforms.create(this.xcord, this.ycord, 'ground2').setScale(.25).refreshBody();
     
         }
+        
+        //top floor. 
+        for (var x = 0; x < 9; x++) { 
 
-        //jumping up platforms 
-        // this.platforms.create(500, 200, 'ground2').setScale(.25).refreshBody();
-        // this.platforms.create(400, 270, 'ground2').setScale(.25).refreshBody();
-        // this.platforms.create(300, 350, 'ground2').setScale(.25).refreshBody();
-        // this.platforms.create(200, 430, 'ground2').setScale(.25).refreshBody();
-        // this.platforms.create(100, 500, 'ground2').setScale(.25).refreshBody(); 
+            this.xcord = 450 - (x * 50);
+            this.platforms.create(this.xcord, 130, 'ground2').setScale(.25).refreshBody();
 
-        this.spikes.create(300, 100, 'spike2');
+        }
+        
 
-       // this.wall.create(200, 550, 'wall2').setScale(0.75).refreshBody();
+       // this.spikes.create(300, 100, 'spike2');
 
-       // this.question_block.create(75, 110, 'question_block2');
-
-        this.block.create(350, 400, 'block2').setScale(0.5).refreshBody();
-
+        //add question block that player has to get 
+        this.block.create(230,131, 'block2').setScale(0.5).refreshBody();
         this.question_block = this.physics.add.image(75, 110, 'question_block2');
         this.question_block.setImmovable(true);
         this.question_block.body.allowGravity = false;
 
-        this.wall = this.physics.add.image(200, 550, 'wall2').setScale(.75).refreshBody();
+        this.tempwallvar = this.physics.add.staticGroup();
+        for (var x = 1; x < 8; x++ ) { 
+            this.ycord = 550 - (x * 70);
+            this.tempwallvar.create(740,this.ycord,'wall2').setScale(1).refreshBody(); 
+        }
+     //this.physics.add.collider(this.player, this.tempwallvar);
+        
+
+        
+        this.wall = this.physics.add.image(740, 550, 'wall2').setScale(1).refreshBody();
         this.wall.setImmovable(true);
         this.wall.body.allowGravity = false;
 
@@ -275,6 +272,9 @@ export class level2 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.player, this.block);
         this.physics.add.collider(this.player, this.wall);
+
+        this.physics.add.collider(this.player, this.tempwallvar);
+
       //  this.physics.add.collider(this.player, this.watcher_enemy);
        // this.physics.add.collider(this.bigboy_enemy, this.player);
         this.physics.add.collider(this.coin, this.platforms);
