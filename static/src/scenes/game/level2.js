@@ -90,6 +90,8 @@ export class level2 extends Phaser.Scene {
         
        // this.door1 = this.physics.add.staticGroup();
        this.door2 = this.physics.add.staticGroup();
+
+       
        // this.door1.create(-63, 290, null).setScale(4).refreshBody();
        // this.door1.create(-63, 420, null).setScale(4).refreshBody();
        // this.door1.create(-63, 550, null).setScale(4).refreshBody();
@@ -110,16 +112,34 @@ export class level2 extends Phaser.Scene {
         this.platforms.create(400, 600, 'ground2').setScale(1).refreshBody();
         this.platforms.create(600, 600, 'ground2').setScale(1).refreshBody();
 
-        this.platforms.create(300, 150, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(150, 150, 'ground2').setScale(1).refreshBody();
-
-
-        this.platforms.create(800, 250, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(400, 250, 'ground2').setScale(1).refreshBody();
         
-        this.platforms.create(100, 350, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(300, 500, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(700, 500, 'ground2')
+
+        this.platforms.create(300, 150, 'ground2').setScale(.25).refreshBody();
+        this.platforms.create(150, 150, 'ground2').setScale(.25).refreshBody();
+
+
+        // this.platforms.create(800, 250, 'ground2').setScale(.25).refreshBody();
+        // this.platforms.create(400, 250, 'ground2').setScale(1).refreshBody();
+        
+        // this.platforms.create(100, 350, 'ground2').setScale(.25).refreshBody();
+        
+
+        for (var x = 0; x < 5; x++) { 
+            this.platforms.create(500-(x*100), 200+(x*70), 'ground2').setScale(.25).refreshBody();
+            // this.platforms.create(500, 200, 'ground2').setScale(.25).refreshBody();
+            // this.platforms.create(400, 270, 'ground2').setScale(.25).refreshBody();
+            // this.platforms.create(300, 350, 'ground2').setScale(.25).refreshBody();
+            // this.platforms.create(200, 430, 'ground2').setScale(.25).refreshBody();
+            // this.platforms.create(100, 500, 'ground2').setScale(.25).refreshBody(); 
+    
+        }
+
+        //jumping up platforms 
+        // this.platforms.create(500, 200, 'ground2').setScale(.25).refreshBody();
+        // this.platforms.create(400, 270, 'ground2').setScale(.25).refreshBody();
+        // this.platforms.create(300, 350, 'ground2').setScale(.25).refreshBody();
+        // this.platforms.create(200, 430, 'ground2').setScale(.25).refreshBody();
+        // this.platforms.create(100, 500, 'ground2').setScale(.25).refreshBody(); 
 
         this.spikes.create(300, 100, 'spike2');
 
@@ -331,7 +351,7 @@ export class level2 extends Phaser.Scene {
     //  if(this.bigboy_enemy.x = 500){
     // this.bigboy_enemy.setVelocityX(100);  
     //  }
-       if(this.bigboy_enemy.x < 350)
+       if(this.bigboy_enemy.x < 500)
         {
             this.bigboy_enemy.setVelocityX(100);
             this.bigboy_enemy.anims.play('left_boy', true);
