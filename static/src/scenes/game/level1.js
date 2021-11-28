@@ -76,9 +76,9 @@ export class level1 extends Phaser.Scene {
        this.door2 = this.physics.add.staticGroup();
         //delete this line if adding an actual door and not an invisible door
        // door2.create(860, 590, null).setScale(4).refreshBody();
-       this.door1.create(-63, 290, null).setScale(4).refreshBody();
-       this.door1.create(-63, 420, null).setScale(4).refreshBody();
-       this.door1.create(-63, 550, null).setScale(4).refreshBody();
+    //    this.door1.create(-63, 290, null).setScale(4).refreshBody();
+    //    this.door1.create(-63, 420, null).setScale(4).refreshBody();
+    //    this.door1.create(-63, 550, null).setScale(4).refreshBody();
 
        this.door2.create(862, 300, null).setScale(4).refreshBody();
        this.door2.create(862, 400, null).setScale(4).refreshBody();
@@ -91,24 +91,72 @@ export class level1 extends Phaser.Scene {
         this.pillar = this.physics.add.staticGroup();
         // this.spikes = this.physics.add.staticGroup();
         this.spikes = this.physics.add.group();
+        
+        //for (x = 0; x < 10; x++) { 
 
-        this.platforms.create(400, 568, 'ground1').setScale(2).refreshBody();
+        this.platforms.create(400, 630, 'ground1').setScale(2).refreshBody();
 
-        this.platforms.create(150, 300, 'ground1').setScale(0.5).refreshBody();
-        this.platforms.create(400, 230, 'ground1').setScale(0.5).refreshBody();
-        // this.platforms.create(100, 400, 'ground1');
-        this.platforms.create(700, 450, 'ground1');
-        // this.platforms.create(550, 150, 'ground1');
-        this.platforms.create(25, 125, 'ground1');
+        //}
 
-        this.movingPlatform = this.physics.add.image(550, 150, 'ground1'); 
-        this.movingPlatformHorizontal = this.physics.add.image(100, 400, 'ground1'); 
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //tutorial level part 1: jumping and basic movement 
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        this.platforms.create(25,500,'ground1').setScale(.25).refreshBody(); 
+        this.platforms.create(100, 400, 'ground1').setScale(.15, .25).refreshBody(); 
+        this.platforms.create(25, 300, 'ground1').setScale(.15, .25).refreshBody(); 
+        this.platforms.create(100, 200, 'ground1').setScale(.15, .25).refreshBody(); 
 
 
-        this.movingPlatform.setImmovable(true); 
-        this.movingPlatform.body.allowGravity = false; 
-        this.movingPlatformHorizontal.setImmovable(true); 
-        this.movingPlatformHorizontal.body.allowGravity = false; 
+         //possible future task: change color of the text 
+
+         this.add.text(16,530, 'Follow the Arrows!', { fontSize: '12px', fill: '#000' }).setScrollFactor(1); 
+         this.add.text(16,550, 'Use keys a or d to move left or right!' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
+ 
+         //want vertical text for jump as in press w to jump then an arrow upwards. 
+         //get an asset for upwards arrows
+         this.add.text(10,410, 'press w to jump ' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
+         this.add.text(10,426, 'w to jump and press' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
+         this.add.text(10,442, ' \'a\' or \'d\' to control the direction' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
+         this.add.text(10,458, 'of the jump' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
+
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //tutorial level part 1: end
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //tutorial level part 2:  introduce moving platforms 
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        this.tutmp1 = this.physics.add.image(168,200, 'ground1').setScale(.15,.25); //create moving platforms for tutorial part 2.
+        this.tutmp2 = this.physics.add.image(500,200, 'ground1').setScale(.15,.25); 
+        
+        this.tutmp1.setImmovable(true)
+        this.tutmp2.setImmovable(true)
+
+        this.tutmp1.body.allowGravity = false; //set them to not allow gravity. 
+        this.tutmp2.body.allowGravity = false;  
+
+
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //tutorial level part 2:  introduce moving platforms 
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+            // this.platforms.create(150, 300, 'ground1').setScale(0.5).refreshBody();
+            // this.platforms.create(400, 230, 'ground1').setScale(0.5).refreshBody();
+            // // this.platforms.create(100, 400, 'ground1');
+            // this.platforms.create(700, 450, 'ground1');
+            // // this.platforms.create(550, 150, 'ground1');
+            // this.platforms.create(25, 125, 'ground1');
+
+            // this.movingPlatform = this.physics.add.image(550, 150, 'ground1'); 
+            // this.movingPlatformHorizontal = this.physics.add.image(100, 400, 'ground1'); 
+
+
+            // this.movingPlatform.setImmovable(true); 
+            // this.movingPlatform.body.allowGravity = false; 
+            // this.movingPlatformHorizontal.setImmovable(true); 
+            // this.movingPlatformHorizontal.body.allowGravity = false; 
 
         // this.spikes.create(400, 500, 'spike1');
         this.spike1 = this.spikes.create(450, 500, 'spike1').body.setAllowGravity(false);
@@ -172,14 +220,20 @@ export class level1 extends Phaser.Scene {
 
     });
 
-        this.coinCount = this.add.text( 16,16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.level1Text = this.add.text( 16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.coinCount = this.add.text(16,16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.level1Text = this.add.text(16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+
+       
+
+
+
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
-        this.physics.add.collider(this.player, this.movingPlatform);
-        this.physics.add.collider(this.player, this.movingPlatformHorizontal);
+        this.physics.add.collider(this.player, this.tutmp1);
+        this.physics.add.collider(this.player, this.tutmp2);
+    
 
 
         //this.physics.add.collider(this.spikes,this.platforms);
@@ -198,6 +252,8 @@ export class level1 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+       
+
     }
  //  delayDone(){
        // this.player.body.setSize(this.player.width/2,this.player.height/1,true);
@@ -205,20 +261,23 @@ export class level1 extends Phaser.Scene {
    // }
 
     update(){
-      //  this.coinCount.setPosition(300, 300);
-        if (this.movingPlatform.y <= 150) { 
-            this.movingPlatform.setVelocityY(10) 
-        }  
-        if (this.movingPlatform.y >= 200) { 
-            this.movingPlatform.setVelocityY(-10);
-        }
 
-        if (this.movingPlatformHorizontal.x <= 100) { 
-            this.movingPlatformHorizontal.setVelocityX(10) 
-        }  
-        if (this.movingPlatformHorizontal.x >= 200) { 
-            this.movingPlatformHorizontal.setVelocityX(-10);
-        }
+       this.moveplatformhorizontal(this.tutmp1, 170, 300, 30)        
+      //  this.coinCount.setPosition(300, 300);
+ 
+            // if (this.movingPlatform.y <= 150) { 
+            //     this.movingPlatform.setVelocityY(10) 
+            // }  
+            // if (this.movingPlatform.y >= 200) { 
+            //     this.movingPlatform.setVelocityY(-10);
+            // }
+
+            // if (this.movingPlatformHorizontal.x <= 100) { 
+            //     this.movingPlatformHorizontal.setVelocityX(10) 
+            // }  
+            // if (this.movingPlatformHorizontal.x >= 200) { 
+            //     this.movingPlatformHorizontal.setVelocityX(-10);
+            // }
 
         if (this.spike1.y <= 200) { 
             this.increasingspike1 = true ;
@@ -290,6 +349,27 @@ export class level1 extends Phaser.Scene {
             // console.log(this.scene.key)
             // this.scene.start(Constants.Scenes.endgame, [this.crewels, this.scene]);
         }
+    }
+
+
+    //function to handle moving platforms horizontally. 
+    //takes a platform object and two bounds, where bound1 = min y val and bound2 = max y val. 
+    //it also takes a speed value which is the velocity to move by.
+    //would lke to move this method to constants when organizing. 
+    moveplatformhorizontal(obj, bound1, bound2,speed) { 
+
+        if(obj.x <= bound1) { 
+
+            console.log("this1")
+            obj.setVelocityX(speed);
+
+        } else if (obj.x >= bound2) {
+            console.log("this2")
+    
+            obj.setVelocityX(-1 * speed);
+
+        }
+        console.log(obj.x)
     }
 
     playerHitSpike(){
