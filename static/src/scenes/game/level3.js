@@ -10,7 +10,7 @@ export class level3 extends Phaser.Scene {
     watcher_enemy;
     flying_enemy;
     coin;
-    door1;
+    //door1;
     door2;
     platforms;
     block;
@@ -95,11 +95,11 @@ export class level3 extends Phaser.Scene {
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
         
-        this.door1 = this.physics.add.staticGroup();
+        //this.door1 = this.physics.add.staticGroup();
         this.door2 = this.physics.add.staticGroup();
         //this.door1.create(-63, 290, null).setScale(4).refreshBody();
-        this.door1.create(-63, 420, null).setScale(4).refreshBody();
-        this.door1.create(-63, 550, null).setScale(4).refreshBody();
+        // this.door1.create(-63, 420, null).setScale(4).refreshBody();
+        // this.door1.create(-63, 550, null).setScale(4).refreshBody();
         //this.door2.create(862, 300, null).setScale(4).refreshBody();
         //this.door2.create(862, 400, null).setScale(4).refreshBody();
         this.door2.create(862, 530, null).setScale(4).refreshBody();
@@ -311,7 +311,7 @@ export class level3 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.flying_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
-        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        //this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
@@ -482,10 +482,10 @@ export class level3 extends Phaser.Scene {
 
     }
 
-    playerHitdoor1()
-    {
-        this.scene.start(Constants.Scenes.lvl2_3,this.data);
-    }
+    // playerHitdoor1()
+    // {
+    //     this.scene.start(Constants.Scenes.lvl2_3,this.data);
+    // }
     playerHitdoor2()
     {
         this.scene.start(Constants.Scenes.lvl3_4,this.data);
@@ -524,9 +524,5 @@ export class level3 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
-    }
-    transition(){
-        // this.scene.start(Constants.Scenes.lvl3_4,this.data)
-        
     }
 }

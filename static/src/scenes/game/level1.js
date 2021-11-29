@@ -8,7 +8,7 @@ export class level1 extends Phaser.Scene {
     }
     player;
     coin;
-    door1;
+    //door1;
     door2;
     platforms;
     cursors;
@@ -73,15 +73,13 @@ export class level1 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>{this.pause();this.sound.play(Constants.SFX.back);});
-        
-
-        this.door1 = this.physics.add.staticGroup();
+        //this.door1 = this.physics.add.staticGroup();
        this.door2 = this.physics.add.staticGroup();
         //delete this line if adding an actual door and not an invisible door
        // door2.create(860, 590, null).setScale(4).refreshBody();
-    //    this.door1.create(-63, 290, null).setScale(4).refreshBody();
-    //    this.door1.create(-63, 420, null).setScale(4).refreshBody();
-    //    this.door1.create(-63, 550, null).setScale(4).refreshBody();
+       // this.door1.create(-63, 290, null).setScale(4).refreshBody();
+       // this.door1.create(-63, 420, null).setScale(4).refreshBody();
+       // this.door1.create(-63, 550, null).setScale(4).refreshBody();
 
        this.door2.create(862, 300, null).setScale(4).refreshBody();
        this.door2.create(862, 400, null).setScale(4).refreshBody();
@@ -198,8 +196,8 @@ export class level1 extends Phaser.Scene {
 
     });
 
-        this.coinCount = this.add.text(16,16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.level1Text = this.add.text(16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.coinCount = this.add.text( 16,16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.level1Text = this.add.text( 16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
@@ -219,7 +217,7 @@ export class level1 extends Phaser.Scene {
         this.lifeCount.setPosition(150, 140);
 
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
-        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        //this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
 
@@ -358,9 +356,6 @@ export class level1 extends Phaser.Scene {
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
-
-        // this.crewels += 1;
-        
         this.data.crewels += 1;
         this.coinCount.setText('crewels: ' + this.data.crewels);
         console.log(this.data.crewels);

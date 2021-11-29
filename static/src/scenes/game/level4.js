@@ -8,14 +8,23 @@ export class level4 extends Phaser.Scene {
     coin;
     platforms;
     cursors;
-    door1;
+    //door1;
     door2;
     crewels = 0;
     coinCount;
     lifeCount;
     totalCoin = 12;
     spikes;
+    spike4;
+    increasingspike4;
     zoom;
+    bigboy_enemy;
+    bigboy_speed = 100;
+    watcher_enemy;
+    rotation_watcher;
+    question_block;
+    wall;
+    block;
 
     keyW;
     keyA;
@@ -27,20 +36,22 @@ export class level4 extends Phaser.Scene {
     keyP;
 
     data;
+    bossHealth = 100;
 
     inAir;
     invincible;
 
     init(data){
         this.data = data;
+        this.data.currentLevel = this.scene;
         this.invincible = false;
     }
 
     preload(){
-        this.load.image('background4', '/static/src/assets/sand_gw2.png');
-        this.load.image('ground4', '/static/src/assets/sand_platform.png');
+        this.load.image('background4', '/static/src/assets/cyber_city_lvl2.png');
+        this.load.image('ground4', '/static/src/assets/cyberpunk_platform.png');
         this.load.image('coin4', '/static/src/assets/single_coin.png');
-     //   this.load.image('player_one', '/static/src/assets/spear_player.png');
+        //this.load.image('bosshealth', 'static/src/assets/images/healthbar.png');
         this.load.image('spike4', '/static/src/assets/spikes.png');
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
@@ -63,11 +74,11 @@ export class level4 extends Phaser.Scene {
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
         
-        this.door1 = this.physics.add.staticGroup();
+        // this.door1 = this.physics.add.staticGroup();
         this.door2 = this.physics.add.staticGroup();
-        this.door1.create(-63, 290, null).setScale(4).refreshBody();
-        this.door1.create(-63, 420, null).setScale(4).refreshBody();
-        this.door1.create(-63, 550, null).setScale(4).refreshBody();
+        // this.door1.create(-63, 290, null).setScale(4).refreshBody();
+        // this.door1.create(-63, 420, null).setScale(4).refreshBody();
+        // this.door1.create(-63, 550, null).setScale(4).refreshBody();
         this.door2.create(862, 300, null).setScale(4).refreshBody();
         this.door2.create(862, 400, null).setScale(4).refreshBody();
         this.door2.create(862, 500, null).setScale(4).refreshBody();
@@ -75,18 +86,27 @@ export class level4 extends Phaser.Scene {
         this.add.image(400, 300, 'background4');
 
         this.platforms = this.physics.add.staticGroup();
-        this.spikes = this.physics.add.staticGroup();
+        this.pillar = this.physics.add.staticGroup();
+        this.spikes = this.physics.add.group();
 
+        // This is the base bottom of where the player first stands on
         this.platforms.create(400, 568, 'ground4').setScale(2).refreshBody();
 
         this.platforms.create(150, 300, 'ground4').setScale(0.5).refreshBody();
-        this.platforms.create(400, 230, 'ground4').setScale(0.5).refreshBody();
-        this.platforms.create(100, 400, 'ground4');
+        this.platforms.create(600, 300, 'ground4').setScale(0.5).refreshBody();
+        //this.platforms.create(100, 400, 'ground4');
         this.platforms.create(700, 450, 'ground4');
-        this.platforms.create(550, 150, 'ground4');
+        // this.platforms.create(550, 150, 'ground4');
         this.platforms.create(25, 125, 'ground4');
 
-        this.spikes.create(400, 500, 'spike4');
+        this.spike4 = this.spikes.create(400, 500, 'spike4').body.setAllowGravity(false);
+
+        this.movingPlatform = this.physics.add.image(440, 50, 'ground4').setScale(0.8).refreshBody();
+        this.movingPlatformHorizontal = this.physics.add.image(100, 400, 'ground4').setScale(1).refreshBody();
+        this.movingPlatform.setImmovable(true);
+        this.movingPlatform.body.allowGravity = false;
+        this.movingPlatformHorizontal.setImmovable(true);
+        this.movingPlatformHorizontal.body.allowGravity = false;
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         this.player.body.offset.x=15;
@@ -142,24 +162,52 @@ export class level4 extends Phaser.Scene {
         this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
         this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
-
-        this.crewels = 0;
+        this.bossHealth = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' });
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
+        this.physics.add.collider(this.player, this.movingPlatform);
+        this.physics.add.collider(this.player, this.movingPlatformHorizontal);
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(2);
-       
+        this.cameras.main.setZoom(1.5);
+        this.increasingspike4 = false;
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
-        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
     update(){
+        if (this.movingPlatform.y <= 150) {
+            this.movingPlatform.setVelocityY(40)
+        }
+        if (this.movingPlatform.y >= 200) {
+            this.movingPlatform.setVelocityY(-40);
+        }
+
+        if (this.movingPlatformHorizontal.x <= 100) {
+            this.movingPlatformHorizontal.setVelocityX(40)
+        }
+        if (this.movingPlatformHorizontal.x >= 200) {
+            this.movingPlatformHorizontal.setVelocityX(-40);
+        }
+
+        if (this.spike4.y <= 200) {
+            this.increasingspike4 = true ;
+
+        }
+        if (this.spike4.y >= 500) {
+            this.increasingspike4 = false;
+        }
+        if (this.increasingspike4 === true) {
+            this.spike4.y += 2;
+        } else {
+            this.spike4.y -= 2;
+        }
+
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -210,16 +258,28 @@ export class level4 extends Phaser.Scene {
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+        this.bossHealth.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
 
+        //When player hits a lever, decrease bossHealth by a certain amt
+        // if (lever hit) { this.bossHealth -= 10; }
+        // If player defeats the boss, go to graveyard game-over scene
+        if (this.bossHealth === 0) {
+            this.data.crewels += 500;
+            this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+        }
 
     }
-    playerHitdoor1()
-    {
-        this.scene.start(Constants.Scenes.lvl3_4,this.data);
-    }
+    // playerHitdoor1()
+    // {
+    //     this.scene.start(Constants.Scenes.lvl3_4,this.data);
+    // }
+    /* Have some way of player's game is done after beating level 4 to replace playerHitdoor2():
+    * ex. enter game over scene after boss health level is zero [defeated boss]
+    * */
     playerHitdoor2()
     {
-        this.scene.start(Constants.Scenes.lvl1,this.data);
+        //this.scene.start(Constants.Scenes.lvl1,this.data);
+        this.scene.start(Constants.Scenes.endgame, this.data);
     }
     playerHitSpike(){
         if (!this.invincible) {
@@ -253,9 +313,5 @@ export class level4 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
-    }
-    transition(){
-        // this.scene.start(Constants.Scenes.lvl1,this.data);
-        
     }
 }
