@@ -142,19 +142,20 @@ export class level3 extends Phaser.Scene {
         this.block.create(800, 390, 'block3').setScale(.50).refreshBody();
 
         //blocks at bottom with spikes
-        this.block.create(270, 550, 'block3').setScale(.30).refreshBody();
-        this.block.create(300, 540, 'block3').setScale(.30).refreshBody();
-        this.block.create(350, 530, 'block3').setScale(.30).refreshBody();
-        this.block.create(390, 540, 'block3').setScale(.30).refreshBody();
-        this.block.create(500, 540, 'block3').setScale(.30).refreshBody();
+        //removed these because it's too hard. 
+        // this.block.create(270, 550, 'block3').setScale(.30).refreshBody();
+        // this.block.create(300, 540, 'block3').setScale(.30).refreshBody();
+        // this.block.create(350, 530, 'block3').setScale(.30).refreshBody();
+        // this.block.create(390, 540, 'block3').setScale(.30).refreshBody();
+        // this.block.create(500, 540, 'block3').setScale(.30).refreshBody();
 
-        //spikes in the level
-        this.spikes.create(300, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(350, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(400, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(500, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(580, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(670, 570, 'spike3').setScale(.50).refreshBody();
+        // //spikes in the level
+        // this.spikes.create(300, 570, 'spike3').setScale(.50).refreshBody();
+        // this.spikes.create(350, 570, 'spike3').setScale(.50).refreshBody();
+        // this.spikes.create(400, 570, 'spike3').setScale(.50).refreshBody();
+        // this.spikes.create(500, 570, 'spike3').setScale(.50).refreshBody();
+        // this.spikes.create(580, 570, 'spike3').setScale(.50).refreshBody();
+        // this.spikes.create(670, 570, 'spike3').setScale(.50).refreshBody();
 
         //--- PLAYER CODE BELOW----------
         this.player = this.physics.add.sprite(50, 500, 'player_one_idle');
@@ -282,10 +283,10 @@ export class level3 extends Phaser.Scene {
             child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
 
         });
-
-        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
-        this.level3Text = this.add.text( 16,24, 'Level 3', { fontSize: '12px', fill: '#000' });
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
+     
+        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.level3Text = this.add.text( 16,24, 'Level 3', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
 
         this.crewels = 0;
@@ -476,7 +477,7 @@ export class level3 extends Phaser.Scene {
         //     console.log(this.scene.key)
         //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         // }
-        this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+      //  this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
 
     }
