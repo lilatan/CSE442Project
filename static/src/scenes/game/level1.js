@@ -23,6 +23,7 @@ export class level1 extends Phaser.Scene {
     spike1; 
     increasingspike1; 
     movingPlatform; 
+    jump_count = 0;
 
     keyW;
     keyA;
@@ -33,11 +34,13 @@ export class level1 extends Phaser.Scene {
     //testing level transition
     keyP;
     data;
-    movingup; 
+    movingup;
+    shieldStatus;
 
     init(data){
         this.data = data;
         this.invincible = false;
+        this.shieldStatus = this.data.shield;
     }
 
     preload(){
@@ -57,6 +60,7 @@ export class level1 extends Phaser.Scene {
         this.load.image('wall2', '/static/src/assets/stone_wall1.png');
         this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
 
+        this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
 
     create(){
@@ -147,6 +151,19 @@ export class level1 extends Phaser.Scene {
         this.player.body.offset.x=15;
         this.player.body.offset.y=32;
 
+        // add shield to scene (if purchased)
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
+
+
+       // this.player.setSize(12,12, false);
+      //  this.time.addEvent({delay: 100, callback: this.delayDone, callbackScope: this, loop: false});
+       // this.player.setScale(1);
+       // this.player.body.setSize(this.player.width,this.player.height,true);
         this.anims.create({
             key: 'idle',
             frames: this.anims.generateFrameNumbers('player_one_idle_sheet', { frames: [0,1,2,3,4,5] }),
@@ -280,7 +297,8 @@ export class level1 extends Phaser.Scene {
             this.player.anims.play('idle',true);
          
         }
-
+        const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down)
         {
@@ -289,6 +307,15 @@ export class level1 extends Phaser.Scene {
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
+            this.jump_count = 1;
+        }
+        // for double jump
+        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+            this.doublejump_enabled();
+        }
+        // reset jump counter
+        if(this.player.body.touching.down){
+            this.jump_count = 0;
         }
         // landing sound
         if (this.inAir && this.player.body.touching.down) {
@@ -323,24 +350,43 @@ export class level1 extends Phaser.Scene {
 
         }
         console.log(obj.x)
+
+        // update shield position
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
     }
 
     playerHitSpike(){
         if (!this.invincible) {
-            // invincibility frame
+
+            // set invincibility frame
             this.invincible = true;
-            setTimeout(() => {  this.invincible = false; }, 500);
+            setTimeout(() => {  this.invincible = false; }, 750);
 
-            // update player lives
-            this.data.lives -= 1;
-            this.lifeCount.setText('lives: ' + this.data.lives);
+            // if shield is available
+            if (this.shieldStatus === 1) {
+                // disable shield
+                this.shieldStatus = 0;
+                this.shield.setAlpha(0);
 
-            // play take damage sound
-            this.sound.play(Constants.SFX.damage);
+                // shield recovers after 8 seconds
+                setTimeout(() => {  this.shieldStatus = 1; this.shield.setAlpha(0.5);}, 5000);
 
-            // go to graveyard scene if lives hit zero
-            if (this.data.lives === 0) {
-                this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            // otherwise, player takes damage
+            } else {
+                // update player lives
+                this.data.lives -= 1;
+                this.lifeCount.setText('lives: ' + this.data.lives);
+
+                // play take damage sound
+                this.sound.play(Constants.SFX.damage);
+
+                // go to graveyard scene if lives hit zero
+                if (this.data.lives === 0) {
+                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                }
             }
         }
     }
@@ -353,6 +399,16 @@ export class level1 extends Phaser.Scene {
     {
         this.scene.start(Constants.Scenes.lvl1_2,this.data);
         
+    }
+    doublejump_enabled(){
+        if(this.data.doubleJump > 0){
+            this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
+            this.jump_count = 2;
+            //this.data.doubleJump -= 1;
+        }
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
@@ -374,5 +430,3 @@ export class level1 extends Phaser.Scene {
          this.question_block.destroy();
     }
 }
-
-

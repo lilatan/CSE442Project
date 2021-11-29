@@ -22,6 +22,7 @@ export class level3 extends Phaser.Scene {
     totalCoin = 12;
     spikes;
     zoom;
+    jump_count = 0;
  
 
     keyW;
@@ -37,10 +38,12 @@ export class level3 extends Phaser.Scene {
 
     inAir;
     invincible;
+    shieldStatus;
 
     init(data){
         this.data = data;
         this.invincible = false;
+        this.shieldStatus = this.data.shield;
     }
 
     preload(){
@@ -77,6 +80,8 @@ export class level3 extends Phaser.Scene {
         this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
         //-----------WATCHER SPRITE SHEET---------
+
+        this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
 
     create(){
@@ -314,6 +319,13 @@ export class level3 extends Phaser.Scene {
         //this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
+        // add shield to scene (if purchased)
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
     }
     
 
@@ -342,6 +354,8 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('idle',true);
         }
 
+        const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
@@ -350,6 +364,15 @@ export class level3 extends Phaser.Scene {
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
+            this.jump_count = 1;
+        }
+        //for double jump
+        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+            this.doublejump_enabled();
+        }
+        //reset jump counter
+        if(this.player.body.touching.down){
+            this.jump_count = 0;
         }
         // landing sound
         if (this.inAir && this.player.body.touching.down) {
@@ -480,6 +503,11 @@ export class level3 extends Phaser.Scene {
       //  this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
 
+        // update shield position
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
     }
 
     // playerHitdoor1()
@@ -492,21 +520,44 @@ export class level3 extends Phaser.Scene {
     }
     playerHitSpike(){
         if (!this.invincible) {
-            // invincibility frame
+
+            // set invincibility frame
             this.invincible = true;
-            setTimeout(() => {  this.invincible = false; }, 500);
+            setTimeout(() => {  this.invincible = false; }, 750);
 
-            // update player lives
-            this.data.lives -= 1;
-            this.lifeCount.setText('lives: ' + this.data.lives);
+            // if shield is available
+            if (this.shieldStatus === 1) {
+                // disable shield
+                this.shieldStatus = 0;
+                this.shield.setAlpha(0);
 
-            // play take damage sound
-            this.sound.play(Constants.SFX.damage);
+                // shield recovers after 8 seconds
+                setTimeout(() => {  this.shieldStatus = 1; this.shield.setAlpha(0.5);}, 5000);
 
-            // go to graveyard scene if lives hit zero
-            if (this.data.lives === 0) {
-                this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                // otherwise, player takes damage
+            } else {
+                // update player lives
+                this.data.lives -= 1;
+                this.lifeCount.setText('lives: ' + this.data.lives);
+
+                // play take damage sound
+                this.sound.play(Constants.SFX.damage);
+
+                // go to graveyard scene if lives hit zero
+                if (this.data.lives === 0) {
+                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                }
             }
+        }
+    }
+    doublejump_enabled(){
+        if(this.data.doubleJump > 0){
+            this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
+            this.jump_count = 2;
+            this.data.doubleJump -= 1;
         }
     }
 
