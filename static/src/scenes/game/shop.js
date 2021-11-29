@@ -11,8 +11,8 @@ export class shop extends Phaser.Scene {
     // Keyboard key to access the shop
     keyEsc;
     items = {
-        itemA : 10,
-        itemB : 5,
+        itemA : 5,
+        itemB : 15,
         itemC : 2,
     }
     init(data){
@@ -25,7 +25,10 @@ export class shop extends Phaser.Scene {
         this.load.image('heart_life', 'static/src/assets/images/heartlife.png');
 
         //Image of item 2: Shield
-        this.load.image('shield', 'static/src/assets/images/shield.png');
+        this.load.image('shield_pic', 'static/src/assets/images/shield.png');
+
+        //image of item 3: Winged_Shoes
+        this.load.image('talaria', 'static/src/assets/images/winged_shoes.png');
 
         //Image of item 3:
         //Taken from: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngaaa.com%2Fdetail%2F2113143&psig=AOvVaw0567MhNLfXzCi1dZ8DN_3r&ust=1636834986239000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJixwtvTk_QCFQAAAAAdAAAAABAE
@@ -55,7 +58,7 @@ export class shop extends Phaser.Scene {
         this.noMoneyText.setVisible(false);
 
         // *** item 1 ****
-        this.itemAText = new Phaser.GameObjects.Text(this, 110, 225,'EXTRA LIFE', {fill: '#799ced'});
+        this.itemAText = new Phaser.GameObjects.Text(this, 110, 225,'Extra Life', {fill: '#799ced'});
         this.itemAText.setFontSize(40);
         this.add.existing(this.itemAText);
         this.itemACost = new Phaser.GameObjects.Text(this, 200, 265,'COST:' + this.items.itemA.toString(), {fill: '#799ced'});
@@ -65,32 +68,42 @@ export class shop extends Phaser.Scene {
         this.add.existing(this.extraLifeBuyButton);
 
 
-        this.heartLife = this.physics.add.image(450, 250, 'heart_life');
+        this.heartLife = this.physics.add.image(500, 250, 'heart_life');
         this.heartLife.body.moves = false;
         this.heartLife.body.setAllowGravity(false);
         this.heartLife.setScale(0.3);
 
         // *** item 2 ****
-        this.dashText = new Phaser.GameObjects.Text(this, 110, 300,'ITEM B', {fill: '#799ced'});
-        this.dashText.setFontSize(40);
-        this.add.existing(this.dashText);
+        this.itemBText = new Phaser.GameObjects.Text(this, 110, 300,'Power Shield', {fill: '#799ced'});
+        this.itemBText.setFontSize(40);
+        this.add.existing(this.itemBText);
         this.itemBCost = new Phaser.GameObjects.Text(this, 200, 340,'COST:' + this.items.itemB.toString(), {fill: '#799ced'});
         this.itemBCost.setFontSize(30);
         this.add.existing(this.itemBCost);
-        this.dashBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
-        this.add.existing(this.dashBuyButton);
+        this.shieldBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
+        this.add.existing(this.shieldBuyButton);
 
-        this.shield = this.physics.add.image(450, 340, 'shield');
+        this.shield = this.physics.add.image(500, 340, 'shield_pic');
         this.shield.body.moves = false;
         this.shield.body.setAllowGravity(false);
         this.shield.setScale(0.2);
 
         // *** item 3 ****
-        this.dashText = new Phaser.GameObjects.Text(this, 110, 375,'ITEM C', {fill: '#799ced'});
+        this.dashText = new Phaser.GameObjects.Text(this, 110, 375,'Double Jump', {fill: '#799ced'});
         this.dashText.setFontSize(40);
         this.add.existing(this.dashText);
+        this.itemCCost = new Phaser.GameObjects.Text(this, 200, 415,'COST:' + this.items.itemC.toString(), {fill: '#799ced'});
+        this.itemCCost.setFontSize(30);
+        this.add.existing(this.itemCCost);
         this.dashBuyButton = new TextButton(this, 110, 415,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemC());
         this.add.existing(this.dashBuyButton);
+
+        this.talaria = this.physics.add.image(500, 430, 'talaria');
+        this.talaria.body.moves = false;
+        this.talaria.body.setAllowGravity(false);
+        this.talaria.setScale(0.2);
+
+
 
         //For image to come
         this.doubleJump = this.physics.add.image(360, 415, 'double-jump');
@@ -140,14 +153,16 @@ export class shop extends Phaser.Scene {
     }
 
     buyItemB(){
-        if(this.buy(this.items.itemB)){
-            this.data.dash = 1;
+        if(this.data.shield !== 1){
+            if(this.buy(this.items.itemB)){
+                this.data.shield = 1;
+            }
         }
     }
 
     buyItemC(){
         if(this.buy(this.items.itemC)){
-            this.data.wallJump = 1;
+            this.data.doubleJump += 1;
         }
     }
 }

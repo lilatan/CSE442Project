@@ -18,13 +18,12 @@ export class level4 extends Phaser.Scene {
     spike4;
     increasingspike4;
     zoom;
-    bigboy_enemy;
-    bigboy_speed = 100;
-    watcher_enemy;
-    rotation_watcher;
-    question_block;
-    wall;
-    block;
+    jump_count = 0;
+    vid;
+    boss;
+    boss_claw1;
+    boss_claw2;
+    boss_claw3;
 
     keyW;
     keyA;
@@ -41,16 +40,18 @@ export class level4 extends Phaser.Scene {
 
     inAir;
     invincible;
+    shieldStatus;
 
     init(data){
         this.data = data;
         this.data.currentLevel = this.scene;
         this.invincible = false;
+        this.shieldStatus = this.data.shield;
     }
 
     preload(){
-        this.load.image('background4', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground4', '/static/src/assets/cyberpunk_platform.png');
+
+        this.load.image('ground4', '/static/src/assets/twirl_platform.png');
         this.load.image('coin4', '/static/src/assets/single_coin.png');
         //this.load.image('bosshealth', 'static/src/assets/images/healthbar.png');
         this.load.image('spike4', '/static/src/assets/spikes.png');
@@ -58,6 +59,15 @@ export class level4 extends Phaser.Scene {
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
+
+       // this.load.video('boss_background_4', '/static/src/assets/ssbm_background_4.mp4', 'loadeddata', false, true);
+       this.load.video('boss_background_4', '/static/src/assets/ssbb_background_4.mp4', 'loadeddata', false, true);
+
+        //--------------BOSS SPRITE SHEET-----------
+        this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
+        //--------BOSS SPRITE SHEET----------------
+
+        this.load.image('shield', '/static/src/assets/assets_2/shield.png');
         this.load.image('detonator', '/static/src/assets/detonator.png');
         this.load.image('dynamite', '/static/src/assets/dynamite.png');
         this.load.spritesheet('explosions', '/static/src/assets/explosions.png', { frameWidth: 64, frameHeight: 64 });
@@ -81,40 +91,41 @@ export class level4 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
-        
+
+        this.vid = this.add.video(400, 300, 'boss_background_4');
+        this.vid.play(true);
+        this.vid.setPaused(false);
+
         // this.door1 = this.physics.add.staticGroup();
-        this.door2 = this.physics.add.staticGroup();
+        // this.door2 = this.physics.add.staticGroup();
         // this.door1.create(-63, 290, null).setScale(4).refreshBody();
         // this.door1.create(-63, 420, null).setScale(4).refreshBody();
         // this.door1.create(-63, 550, null).setScale(4).refreshBody();
-        this.door2.create(862, 300, null).setScale(4).refreshBody();
-        this.door2.create(862, 400, null).setScale(4).refreshBody();
-        this.door2.create(862, 500, null).setScale(4).refreshBody();
+        // this.door2.create(862, 300, null).setScale(4).refreshBody();
+        // this.door2.create(862, 400, null).setScale(4).refreshBody();
+        // this.door2.create(862, 500, null).setScale(4).refreshBody();
 
-        this.add.image(400, 300, 'background4');
+        // this.add.image(400, 300, 'background4');
 
         this.platforms = this.physics.add.staticGroup();
-        this.pillar = this.physics.add.staticGroup();
-        this.spikes = this.physics.add.group();
+        //this.spikes = this.physics.add.staticGroup();
 
-        // This is the base bottom of where the player first stands on
-        this.platforms.create(400, 568, 'ground4').setScale(2).refreshBody();
+        this.platforms.create(90,  588, 'ground4').setScale(1.5).refreshBody();
+        this.platforms.create(280, 588, 'ground4').setScale(1.5).refreshBody();
+        this.platforms.create(470, 588, 'ground4').setScale(1.5).refreshBody();
+        this.platforms.create(660, 588, 'ground4').setScale(1.5).refreshBody();
+        this.platforms.create(850, 588, 'ground4').setScale(1.5).refreshBody();
 
-        this.platforms.create(150, 300, 'ground4').setScale(0.5).refreshBody();
-        this.platforms.create(600, 300, 'ground4').setScale(0.5).refreshBody();
-        //this.platforms.create(100, 400, 'ground4');
-        this.platforms.create(700, 450, 'ground4');
+        // this.platforms.create(150, 300, 'ground4').setScale(0.5).refreshBody();
+        // this.platforms.create(400, 230, 'ground4').setScale(0.5).refreshBody();
+        // this.platforms.create(100, 400, 'ground4');
+        // this.platforms.create(700, 450, 'ground4');
         // this.platforms.create(550, 150, 'ground4');
-        this.platforms.create(25, 125, 'ground4');
+        // this.platforms.create(25, 125, 'ground4');
 
-        this.spike4 = this.spikes.create(400, 500, 'spike4').body.setAllowGravity(false);
+        // this.spikes.create(400, 500, 'spike4');
 
-        this.movingPlatform = this.physics.add.image(440, 50, 'ground4').setScale(0.8).refreshBody();
-        this.movingPlatformHorizontal = this.physics.add.image(100, 400, 'ground4').setScale(1).refreshBody();
-        this.movingPlatform.setImmovable(true);
-        this.movingPlatform.body.allowGravity = false;
-        this.movingPlatformHorizontal.setImmovable(true);
-        this.movingPlatformHorizontal.body.allowGravity = false;
+
 
         this.detonator = this.physics.add.image(450, 500, 'detonator');
         this.detonator.body.moves = false;
@@ -163,11 +174,89 @@ export class level4 extends Phaser.Scene {
         this.player.setBounce(0.1);
         this.player.setCollideWorldBounds(true);
 
+        //BOSS CODE START
+        this.boss = this.physics.add.sprite(650,110, 'boss_sheet');
+        this.boss.setImmovable(true);
+        this.boss.body.allowGravity = false;
+
+        var rand_xx = Phaser.Math.Between(this.player.x - 100, this.player.x + 100);
+        var rand_yy = Phaser.Math.Between(this.player.y - 0, this.player.y - 25);
+        var rand_aaa = Phaser.Math.Between(100, 200);
+
+
+        // this.boss_claw = this.physics.add.group({
+        //     key: 'boss_sheet',
+        //     immovable: true,
+        //     allowGravity: false,
+        //     repeat: 2,
+        //     setXY: { x: rand_xx, y: rand_yy, stepX: rand_aaa }
+        // });
+
+        // this.boss_claw.children.iterate(function (child) {
+        //      this.boss_claw.anims.playAnimation('boss_spell', true);
+        //  });
+
+
+
+        // this.boss_claw = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
+        // this.boss_claw.setImmovable(true);
+        // this.boss_claw.body.allowGravity = false;
+        // this.boss_claw.setScale(1.5,1.5);
+
+        this.anims.create({
+            key: 'boss_idle',
+            frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [0,1,2,3,4,5,6,7] }),
+            frameRate: 8,
+            repeat: -1,
+
+        });
+        this.anims.create({
+            key: 'boss_attack',
+            frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [16,17,18,19,20,21,22,23,24,25] }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'boss_hurt',
+            frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [26,27,28] }),
+            frameRate: 3,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'boss_death',
+            frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [29,30,31,32,33,34,35,36,37,38] }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'boss_cast',
+            frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [39,40,41,42,43,44,45,46,47] }),
+            frameRate: 9,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'boss_spell',
+            frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63] }),
+            frameRate: 16,
+        });
+
+        this.boss.setScale(2.5,2.5);
+        //BOSS FIGHT EVENT TIMERS
+        this.time.addEvent({delay: 1500, callback: this.boss_fight1, callbackScope: this, loop: true});
+        this.time.addEvent({delay: 1500, callback: this.boss_fight2, callbackScope: this, loop: true});
+        this.time.addEvent({delay: 1500, callback: this.boss_fight3, callbackScope: this, loop: true});
+
+
+
+        //BOSS CODE END
+
+
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
             key: 'coin4',
-            repeat: this.totalCoin-1,
+            repeat: 0,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
 
@@ -193,40 +282,181 @@ export class level4 extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(1.5);
-        this.increasingspike4 = false;
+        this.cameras.main.setZoom(1.0);
+
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
+
+        //line below doesn't work for overlap for some reason
+       // this.physics.add.collider(this.boss_claw, this.platforms);
+       // this.physics.add.overlap(this.player, this.boss_claw, this.playerHitSpike,null, this);
+       // this.physics.add.collider(this.player, this.boss_claw, this.playerHitSpike,null, this);
         // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
-        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+
+       // this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+
+    }
+    //this.time.addEvent({delay: 100, callback: this.hover_enabled, callbackScope: this, loop: false});
+    boss_fight1(){
+        if(this.boss_claw1){
+            this.boss_claw1.destroy();
+        }
+        var rand_xx = Phaser.Math.Between(this.player.x - 200, this.player.x + 200);
+        var rand_yy = Phaser.Math.Between(this.player.y + 30, this.player.y + 100);
+        if(rand_xx < this.player.x){
+            rand_xx -= 50;
+        }
+        if(rand_xx > this.player.x){
+            rand_xx += 50;
+        }
+        if(rand_xx < this.player.y){
+            rand_yy -= 50;
+        }
+        if(rand_xx > this.player.y){
+            rand_yy += 50;
+        }
+
+        var rand_aaa = Phaser.Math.Between(0, 4);
+        this.boss_claw1 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
+       this.boss_claw1.setSize(33,52,false);
+       this.boss_claw1.body.offset.x=52;
+       this.boss_claw1.body.offset.y=30;
+        this.boss_claw1.setImmovable(true);
+        this.boss_claw1.body.allowGravity = false;
+        this.boss_claw1.anims.play('boss_spell', true);
+        if(this.boss_claw1.x < this.player.x && rand_aaa == 4){
+            this.boss_claw1.setAngle(-90);
+            this.boss_claw1.setSize(52,33,false);
+            this.boss_claw1.body.offset.x=60;
+            this.boss_claw1.body.offset.y=32;
+        }
+        if(this.boss_claw1.x > this.player.x && rand_aaa == 4){
+            this.boss_claw1.setAngle(90);
+            this.boss_claw1.setSize(52,33,false);
+            this.boss_claw1.body.offset.x=30;
+            this.boss_claw1.body.offset.y=25;
+        }
+        this.boss_claw1.setScale(1.5,1.5);
+        this.physics.add.overlap(this.player, this.boss_claw1, this.playerHitSpike,null, this);
+    }
+    boss_fight2(){
+        if(this.boss_claw2){
+            this.boss_claw2.destroy();
+        }
+        var rand_xx = Phaser.Math.Between(this.player.x - 300, this.player.x + 300);
+        var rand_yy = Phaser.Math.Between(this.player.y + 30, this.player.y + 60);
+        if(rand_xx < this.player.x){
+            rand_xx -= 50;
+        }
+        if(rand_xx > this.player.x){
+            rand_xx += 50;
+        }
+        if(rand_xx < this.player.y){
+            rand_yy -= 50;
+        }
+        if(rand_xx > this.player.y){
+            rand_yy += 50;
+        }
+
+        var rand_aaa = Phaser.Math.Between(0, 4);
+        this.boss_claw2 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
+        this.boss_claw2.setSize(33,52,false);
+        this.boss_claw2.body.offset.x=52;
+        this.boss_claw2.body.offset.y=30;
+        this.boss_claw2.setImmovable(true);
+        this.boss_claw2.body.allowGravity = false;
+        this.boss_claw2.anims.play('boss_spell', true);
+        if(this.boss_claw2.x < this.player.x && rand_aaa == 4){
+            this.boss_claw2.setAngle(-90);
+            this.boss_claw2.setSize(52,33,false);
+            this.boss_claw2.body.offset.x=60;
+            this.boss_claw2.body.offset.y=32;
+        }
+        if(this.boss_claw2.x > this.player.x && rand_aaa == 4){
+            this.boss_claw2.setAngle(90);
+            this.boss_claw2.setSize(52,33,false);
+            this.boss_claw2.body.offset.x=30;
+            this.boss_claw2.body.offset.y=25;
+        }
+        this.boss_claw2.setScale(1.5,1.5);
+        this.physics.add.overlap(this.player, this.boss_claw2, this.playerHitSpike,null, this);
+    }
+    boss_fight3(){
+        if(this.boss_claw3){
+            this.boss_claw3.destroy();
+        }
+        var rand_xx = Phaser.Math.Between(this.player.x - 400, this.player.x + 400);
+        var rand_yy = Phaser.Math.Between(this.player.y + 30, this.player.y + 60);
+        if(rand_xx < this.player.x){
+            rand_xx -= 50;
+        }
+        if(rand_xx > this.player.x){
+            rand_xx += 50;
+        }
+        if(rand_xx < this.player.y){
+            rand_yy -= 50;
+        }
+        if(rand_xx > this.player.y){
+            rand_yy += 50;
+        }
+
+        var rand_aaa = Phaser.Math.Between(0, 4);
+        this.boss_claw3 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
+        this.boss_claw3.setSize(33,52,false);
+        this.boss_claw3.body.offset.x=52;
+        this.boss_claw3.body.offset.y=30;
+        this.boss_claw3.setImmovable(true);
+        this.boss_claw3.body.allowGravity = false;
+        this.boss_claw3.anims.play('boss_spell', true);
+        if(this.boss_claw3.x < this.player.x && rand_aaa == 4){
+            this.boss_claw3.setAngle(-90);
+            this.boss_claw3.setSize(52,33,false);
+            this.boss_claw3.body.offset.x=60;
+            this.boss_claw3.body.offset.y=32;
+        }
+        if(this.boss_claw3.x > this.player.x && rand_aaa == 4){
+            this.boss_claw3.setAngle(90);
+            this.boss_claw3.setSize(52,33,false);
+            this.boss_claw3.body.offset.x=30;
+            this.boss_claw3.body.offset.y=25;
+        }
+        this.boss_claw3.setScale(1.5,1.5);
+        this.physics.add.overlap(this.player, this.boss_claw3, this.playerHitSpike,null, this);
+        // add shield to scene (if purchased)
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
 
     }
     update(){
-        if (this.movingPlatform.y <= 150) {
-            this.movingPlatform.setVelocityY(40)
-        }
-        if (this.movingPlatform.y >= 200) {
-            this.movingPlatform.setVelocityY(-40);
-        }
+        // if (this.movingPlatform.y <= 150) {
+        //     this.movingPlatform.setVelocityY(40)
+        // }
+        // if (this.movingPlatform.y >= 200) {
+        //     this.movingPlatform.setVelocityY(-40);
+        // }
 
-        if (this.movingPlatformHorizontal.x <= 100) {
-            this.movingPlatformHorizontal.setVelocityX(40)
-        }
-        if (this.movingPlatformHorizontal.x >= 200) {
-            this.movingPlatformHorizontal.setVelocityX(-40);
-        }
+        // if (this.movingPlatformHorizontal.x <= 100) {
+        //     this.movingPlatformHorizontal.setVelocityX(40)
+        // }
+        // if (this.movingPlatformHorizontal.x >= 200) {
+        //     this.movingPlatformHorizontal.setVelocityX(-40);
+        // }
 
-        if (this.spike4.y <= 200) {
-            this.increasingspike4 = true ;
+        // if (this.spike4.y <= 200) {
+        //     this.increasingspike4 = true ;
 
-        }
-        if (this.spike4.y >= 500) {
-            this.increasingspike4 = false;
-        }
-        if (this.increasingspike4 === true) {
-            this.spike4.y += 2;
-        } else {
-            this.spike4.y -= 2;
-        }
+        // }
+        // if (this.spike4.y >= 500) {
+        //     this.increasingspike4 = false;
+        // }
+        // if (this.increasingspike4 === true) {
+        //     this.spike4.y += 2;
+        // } else {
+        //     this.spike4.y -= 2;
+        // }
 
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
@@ -250,6 +480,8 @@ export class level4 extends Phaser.Scene {
          
         }
 
+        const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
         {
@@ -260,8 +492,16 @@ export class level4 extends Phaser.Scene {
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
-         
+            this.jump_count = 1;
           // this.player.anims.play('jump', this.player)
+        }
+        //for double jump
+        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+            this.doublejump_enabled();
+        }
+        //reset jump counter
+        if(this.player.body.touching.down){
+            this.jump_count = 0;
         }
         // landing sound
         if (this.inAir && this.player.body.touching.down) {
@@ -275,6 +515,20 @@ export class level4 extends Phaser.Scene {
            // this.player.anims.play('jump',true);
          
         }
+      //******************************************boss code start *******************************************
+        var boss_died = false;
+
+        if(boss_died != true)
+        {
+            //this.boss_claw = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
+           // this.boss_claw.children.iterate(function (child) {
+               // this.boss_claw.anims.play('boss_spell', true);
+          //  });
+         //   this.boss_claw.anims.play('boss_spell', true);
+            this.boss.anims.play('boss_cast', true);
+        }
+      //********************************************boss code end*************************************
+
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
@@ -286,6 +540,14 @@ export class level4 extends Phaser.Scene {
         if (this.bossHealth === 0) {
             this.data.crewels += 500;
             this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+        }
+
+    
+
+        // update shield position
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
         }
 
         if (!this.detonator.body.touching.none) {
@@ -300,35 +562,50 @@ export class level4 extends Phaser.Scene {
 
 
     }
-    // playerHitdoor1()
-    // {
-    //     this.scene.start(Constants.Scenes.lvl3_4,this.data);
-    // }
-    /* Have some way of player's game is done after beating level 4 to replace playerHitdoor2():
-    * ex. enter game over scene after boss health level is zero [defeated boss]
-    * */
-    playerHitdoor2()
-    {
-        //this.scene.start(Constants.Scenes.lvl1,this.data);
-        this.scene.start(Constants.Scenes.endgame, this.data);
-    }
+     playerHitdoor2()
+     {
+         this.scene.start(Constants.Scenes.lvl1,this.data);
+     }
     playerHitSpike(){
         if (!this.invincible) {
-            // invincibility frame
+
+            // set invincibility frame
             this.invincible = true;
-            setTimeout(() => {  this.invincible = false; }, 500);
+            setTimeout(() => {  this.invincible = false; }, 750);
 
-            // update player lives
-            this.data.lives -= 1;
-            this.lifeCount.setText('lives: ' + this.data.lives);
+            // if shield is available
+            if (this.shieldStatus === 1) {
+                // disable shield
+                this.shieldStatus = 0;
+                this.shield.setAlpha(0);
 
-            // play take damage sound
-            this.sound.play(Constants.SFX.damage);
+                // shield recovers after 8 seconds
+                setTimeout(() => {  this.shieldStatus = 1; this.shield.setAlpha(0.5);}, 5000);
 
-            // go to graveyard scene if lives hit zero
-            if (this.data.lives === 0) {
-                this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                // otherwise, player takes damage
+            } else {
+                // update player lives
+                this.data.lives -= 1;
+                this.lifeCount.setText('lives: ' + this.data.lives);
+
+                // play take damage sound
+                this.sound.play(Constants.SFX.damage);
+
+                // go to graveyard scene if lives hit zero
+                if (this.data.lives === 0) {
+                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                }
             }
+        }
+    }
+    doublejump_enabled(){
+        if(this.data.doubleJump > 0){
+            this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
+            this.jump_count = 2;
+            //this.data.doubleJump -= 1;
         }
     }
     collectcoin (player, coin){
