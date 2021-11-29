@@ -6,6 +6,7 @@ export class dataFile {
     wallJump;
     currentLevel;
     lives;
+    shield;
 
     constructor(){
         this.crewels = 0;
@@ -13,5 +14,6 @@ export class dataFile {
         this.dash = 0;
         this.wallJump = 0;
         this.lives = 2;
+        this.shield = 1;
     }
 }

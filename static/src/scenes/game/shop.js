@@ -11,8 +11,8 @@ export class shop extends Phaser.Scene {
     // Keyboard key to access the shop
     keyEsc;
     items = {
-        itemA : 10,
-        itemB : 5,
+        itemA : 5,
+        itemB : 15,
         itemC : 2,
     }
     init(data){
@@ -57,7 +57,7 @@ export class shop extends Phaser.Scene {
         this.noMoneyText.setVisible(false);
 
         // *** item 1 ****
-        this.itemAText = new Phaser.GameObjects.Text(this, 110, 225,'EXTRA LIFE', {fill: '#799ced'});
+        this.itemAText = new Phaser.GameObjects.Text(this, 110, 225,'Extra Life', {fill: '#799ced'});
         this.itemAText.setFontSize(40);
         this.add.existing(this.itemAText);
         this.itemACost = new Phaser.GameObjects.Text(this, 200, 265,'COST:' + this.items.itemA.toString(), {fill: '#799ced'});
@@ -73,14 +73,14 @@ export class shop extends Phaser.Scene {
         this.heartLife.setScale(0.3);
 
         // *** item 2 ****
-        this.dashText = new Phaser.GameObjects.Text(this, 110, 300,'ITEM B', {fill: '#799ced'});
-        this.dashText.setFontSize(40);
-        this.add.existing(this.dashText);
+        this.itemBText = new Phaser.GameObjects.Text(this, 110, 300,'Power Shield', {fill: '#799ced'});
+        this.itemBText.setFontSize(40);
+        this.add.existing(this.itemBText);
         this.itemBCost = new Phaser.GameObjects.Text(this, 200, 340,'COST:' + this.items.itemB.toString(), {fill: '#799ced'});
         this.itemBCost.setFontSize(30);
         this.add.existing(this.itemBCost);
-        this.dashBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
-        this.add.existing(this.dashBuyButton);
+        this.shieldBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
+        this.add.existing(this.shieldBuyButton);
 
         this.shield = this.physics.add.image(500, 340, 'shield');
         this.shield.body.moves = false;
@@ -149,8 +149,10 @@ export class shop extends Phaser.Scene {
     }
 
     buyItemB(){
-        if(this.buy(this.items.itemB)){
-            this.data.dash = 1;
+        if(this.data.shield !== 1){
+            if(this.buy(this.items.itemB)){
+                this.data.shield = 1;
+            }
         }
     }
 

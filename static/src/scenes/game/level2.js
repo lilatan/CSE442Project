@@ -38,11 +38,13 @@ export class level2 extends Phaser.Scene {
 
     inAir;
     invincible;
+    shieldStatus;
 
     init(data){
         this.data = data;
         this.data.currentLevel = this.scene;
         this.invincible = false;
+        this.shieldStatus = this.data.shield;
     }
 
     preload(){
@@ -72,6 +74,8 @@ export class level2 extends Phaser.Scene {
         //----WATCHER SPRITE SHEET-----
 
         //----WATCHER SPRITE SHEET
+
+        this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
 
     create(){
@@ -277,6 +281,11 @@ export class level2 extends Phaser.Scene {
 
         //this.time.addEvent({delay: 100, callback: this.hover_enabled, callbackScope: this, loop: false});
 
+        // add shield to scene (if purchased)
+        this.shield = this.physics.add.image(100, 460, 'shield');
+        this.shield.body.moves = false;
+        this.shield.body.setAllowGravity(false);
+        this.shield.setAlpha(0.5);
     }
 
     update(){
@@ -397,7 +406,11 @@ export class level2 extends Phaser.Scene {
         //     console.log(this.scene.key)
         //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         // }
-       
+
+        // update shield position
+        this.shield.x = this.player.x;
+        this.shield.y = this.player.y + 17;
+
     }
     playerHitdoor1()
     {
@@ -409,20 +422,33 @@ export class level2 extends Phaser.Scene {
     }
     playerHitSpike(){
         if (!this.invincible) {
-            // invincibility frame
+
+            // set invincibility frame
             this.invincible = true;
-            setTimeout(() => {  this.invincible = false; }, 500);
+            setTimeout(() => {  this.invincible = false; }, 750);
 
-            // update player lives
-            this.data.lives -= 1;
-            this.lifeCount.setText('lives: ' + this.data.lives);
+            // if shield is available
+            if (this.shieldStatus === 1) {
+                // disable shield
+                this.shieldStatus = 0;
+                this.shield.setAlpha(0);
 
-            // play take damage sound
-            this.sound.play(Constants.SFX.damage);
+                // shield recovers after 8 seconds
+                setTimeout(() => {  this.shieldStatus = 1; this.shield.setAlpha(0.5);}, 5000);
 
-            // go to graveyard scene if lives hit zero
-            if (this.data.lives === 0) {
-                this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                // otherwise, player takes damage
+            } else {
+                // update player lives
+                this.data.lives -= 1;
+                this.lifeCount.setText('lives: ' + this.data.lives);
+
+                // play take damage sound
+                this.sound.play(Constants.SFX.damage);
+
+                // go to graveyard scene if lives hit zero
+                if (this.data.lives === 0) {
+                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                }
             }
         }
     }
