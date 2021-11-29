@@ -79,6 +79,10 @@ export class level2 extends Phaser.Scene {
     }
 
     create(){
+        if (this.data.restarted_level_2 === false) {
+            this.data.restarted_level_2 = true;
+            this.scene.start(Constants.Scenes.lvl2,this.data);
+        }
         
         console.log("im at level 2");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);

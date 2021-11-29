@@ -7,6 +7,7 @@ export class dataFile {
     currentLevel;
     lives;
     shield;
+    restarted_level_2;
 
     constructor(){
         this.crewels = 0;
@@ -15,5 +16,6 @@ export class dataFile {
         this.wallJump = 0;
         this.lives = 2;
         this.shield = 0;
+        this.restarted_level_2 = false;
     }
 }
