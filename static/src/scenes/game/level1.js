@@ -296,8 +296,6 @@ export class level1 extends Phaser.Scene {
         if (this.inAir && this.player.body.touching.down) {
             this.inAir = false;
             this.sound.play(Constants.SFX.land);
-            
-         
           // this.player.anims.play('jump', this.player)
         }
         if (this.cursors.down.isDown || this.keyS.isDown) //if

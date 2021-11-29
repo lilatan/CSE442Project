@@ -48,7 +48,7 @@ export class level2 extends Phaser.Scene {
         this.load.image('background2', '/static/src/assets/cyber_city_lvl2.png');
         this.load.image('ground2', '/static/src/assets/cyberpunk_platform.png');
         this.load.image('coin2', '/static/src/assets/single_coin.png');
-        this.load.image('spike2', '/static/src/assets/spikes.png');
+        this.load.image('spike2', '/static/src/assatiets/spikes.png');
         this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
         this.load.image('block2', '/static/src/assets/cyberpunk_block.png');
         this.load.image('wall2', '/static/src/assets/stone_wall1.png');
