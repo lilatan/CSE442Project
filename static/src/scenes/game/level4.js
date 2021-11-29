@@ -45,7 +45,7 @@ export class level4 extends Phaser.Scene {
     }
 
     preload(){
-        
+
         this.load.image('ground4', '/static/src/assets/twirl_platform.png');
         this.load.image('coin4', '/static/src/assets/single_coin.png');
      //   this.load.image('player_one', '/static/src/assets/spear_player.png');
@@ -61,7 +61,7 @@ export class level4 extends Phaser.Scene {
         //--------------BOSS SPRITE SHEET-----------
         this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
         //--------BOSS SPRITE SHEET----------------
-       
+
         this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
 
@@ -83,7 +83,7 @@ export class level4 extends Phaser.Scene {
         this.vid = this.add.video(400, 300, 'boss_background_4');
         this.vid.play(true);
         this.vid.setPaused(false);
-        
+
         // this.door1 = this.physics.add.staticGroup();
         // this.door2 = this.physics.add.staticGroup();
         // this.door1.create(-63, 290, null).setScale(4).refreshBody();
@@ -113,7 +113,7 @@ export class level4 extends Phaser.Scene {
 
         // this.spikes.create(400, 500, 'spike4');
 
-        
+
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         this.player.body.offset.x=15;
@@ -174,7 +174,7 @@ export class level4 extends Phaser.Scene {
         //      this.boss_claw.anims.playAnimation('boss_spell', true);
         //  });
 
-        
+
 
         // this.boss_claw = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
         // this.boss_claw.setImmovable(true);
@@ -186,7 +186,7 @@ export class level4 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [0,1,2,3,4,5,6,7] }),
             frameRate: 8,
             repeat: -1,
-            
+
         });
         this.anims.create({
             key: 'boss_attack',
@@ -218,15 +218,15 @@ export class level4 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63] }),
             frameRate: 16,
         });
-        
+
         this.boss.setScale(2.5,2.5);
         //BOSS FIGHT EVENT TIMERS
         this.time.addEvent({delay: 1500, callback: this.boss_fight1, callbackScope: this, loop: true});
         this.time.addEvent({delay: 1500, callback: this.boss_fight2, callbackScope: this, loop: true});
         this.time.addEvent({delay: 1500, callback: this.boss_fight3, callbackScope: this, loop: true});
 
-        
-        
+
+
         //BOSS CODE END
 
 
@@ -258,7 +258,7 @@ export class level4 extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(1.0);
-    
+
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
 
         //line below doesn't work for overlap for some reason
@@ -266,7 +266,7 @@ export class level4 extends Phaser.Scene {
        // this.physics.add.overlap(this.player, this.boss_claw, this.playerHitSpike,null, this);
        // this.physics.add.collider(this.player, this.boss_claw, this.playerHitSpike,null, this);
         // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
-        
+
        // this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
@@ -291,10 +291,10 @@ export class level4 extends Phaser.Scene {
         }
 
         var rand_aaa = Phaser.Math.Between(0, 4);
-        this.boss_claw1 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet'); 
+        this.boss_claw1 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
        this.boss_claw1.setSize(33,52,false);
        this.boss_claw1.body.offset.x=52;
-       this.boss_claw1.body.offset.y=30;  
+       this.boss_claw1.body.offset.y=30;
         this.boss_claw1.setImmovable(true);
         this.boss_claw1.body.allowGravity = false;
         this.boss_claw1.anims.play('boss_spell', true);
@@ -302,13 +302,13 @@ export class level4 extends Phaser.Scene {
             this.boss_claw1.setAngle(-90);
             this.boss_claw1.setSize(52,33,false);
             this.boss_claw1.body.offset.x=60;
-            this.boss_claw1.body.offset.y=32; 
+            this.boss_claw1.body.offset.y=32;
         }
         if(this.boss_claw1.x > this.player.x && rand_aaa == 4){
             this.boss_claw1.setAngle(90);
             this.boss_claw1.setSize(52,33,false);
             this.boss_claw1.body.offset.x=30;
-            this.boss_claw1.body.offset.y=25; 
+            this.boss_claw1.body.offset.y=25;
         }
         this.boss_claw1.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw1, this.playerHitSpike,null, this);
@@ -333,10 +333,10 @@ export class level4 extends Phaser.Scene {
         }
 
         var rand_aaa = Phaser.Math.Between(0, 4);
-        this.boss_claw2 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet'); 
+        this.boss_claw2 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
         this.boss_claw2.setSize(33,52,false);
         this.boss_claw2.body.offset.x=52;
-        this.boss_claw2.body.offset.y=30;  
+        this.boss_claw2.body.offset.y=30;
         this.boss_claw2.setImmovable(true);
         this.boss_claw2.body.allowGravity = false;
         this.boss_claw2.anims.play('boss_spell', true);
@@ -344,13 +344,13 @@ export class level4 extends Phaser.Scene {
             this.boss_claw2.setAngle(-90);
             this.boss_claw2.setSize(52,33,false);
             this.boss_claw2.body.offset.x=60;
-            this.boss_claw2.body.offset.y=32; 
+            this.boss_claw2.body.offset.y=32;
         }
         if(this.boss_claw2.x > this.player.x && rand_aaa == 4){
             this.boss_claw2.setAngle(90);
             this.boss_claw2.setSize(52,33,false);
             this.boss_claw2.body.offset.x=30;
-            this.boss_claw2.body.offset.y=25; 
+            this.boss_claw2.body.offset.y=25;
         }
         this.boss_claw2.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw2, this.playerHitSpike,null, this);
@@ -375,10 +375,10 @@ export class level4 extends Phaser.Scene {
         }
 
         var rand_aaa = Phaser.Math.Between(0, 4);
-        this.boss_claw3 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet'); 
+        this.boss_claw3 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
         this.boss_claw3.setSize(33,52,false);
         this.boss_claw3.body.offset.x=52;
-        this.boss_claw3.body.offset.y=30;  
+        this.boss_claw3.body.offset.y=30;
         this.boss_claw3.setImmovable(true);
         this.boss_claw3.body.allowGravity = false;
         this.boss_claw3.anims.play('boss_spell', true);
@@ -386,21 +386,23 @@ export class level4 extends Phaser.Scene {
             this.boss_claw3.setAngle(-90);
             this.boss_claw3.setSize(52,33,false);
             this.boss_claw3.body.offset.x=60;
-            this.boss_claw3.body.offset.y=32; 
+            this.boss_claw3.body.offset.y=32;
         }
         if(this.boss_claw3.x > this.player.x && rand_aaa == 4){
             this.boss_claw3.setAngle(90);
             this.boss_claw3.setSize(52,33,false);
             this.boss_claw3.body.offset.x=30;
-            this.boss_claw3.body.offset.y=25; 
+            this.boss_claw3.body.offset.y=25;
         }
         this.boss_claw3.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw3, this.playerHitSpike,null, this);
         // add shield to scene (if purchased)
-        this.shield = this.physics.add.image(100, 460, 'shield');
-        this.shield.body.moves = false;
-        this.shield.body.setAllowGravity(false);
-        this.shield.setAlpha(0.5);
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
 
     }
     update(){
@@ -480,8 +482,10 @@ export class level4 extends Phaser.Scene {
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
 
         // update shield position
-       //  this.shield.x = this.player.x;
-       //  this.shield.y = this.player.y + 17;
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
 
     }
      playerHitdoor2()

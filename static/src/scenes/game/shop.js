@@ -25,7 +25,7 @@ export class shop extends Phaser.Scene {
         this.load.image('heart_life', 'static/src/assets/images/heartlife.png');
 
         //Image of item 2: Shield
-        this.load.image('shield', 'static/src/assets/images/shield.png');
+        this.load.image('shield_pic', 'static/src/assets/images/shield.png');
 
         //image of item 3: Winged_Shoes
         this.load.image('talaria', 'static/src/assets/images/winged_shoes.png');
@@ -82,7 +82,7 @@ export class shop extends Phaser.Scene {
         this.shieldBuyButton = new TextButton(this, 110, 340,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemB());
         this.add.existing(this.shieldBuyButton);
 
-        this.shield = this.physics.add.image(500, 340, 'shield');
+        this.shield = this.physics.add.image(500, 340, 'shield_pic');
         this.shield.body.moves = false;
         this.shield.body.setAllowGravity(false);
         this.shield.setScale(0.2);

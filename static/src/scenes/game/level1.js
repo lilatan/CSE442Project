@@ -123,10 +123,12 @@ export class level1 extends Phaser.Scene {
         this.player.body.offset.y=32;
 
         // add shield to scene (if purchased)
-        this.shield = this.physics.add.image(100, 460, 'shield');
-        this.shield.body.moves = false;
-        this.shield.body.setAllowGravity(false);
-        this.shield.setAlpha(0.5);
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
 
 
        // this.player.setSize(12,12, false);
@@ -279,11 +281,11 @@ export class level1 extends Phaser.Scene {
             this.player.anims.play('jump',true);
             this.jump_count = 1;
         }
-        //for double jump
+        // for double jump
         if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
             this.doublejump_enabled();
         }
-        //reset jump counter
+        // reset jump counter
         if(this.player.body.touching.down){
             this.jump_count = 0;
         }
@@ -312,8 +314,10 @@ export class level1 extends Phaser.Scene {
         }
 
         // update shield position
-        this.shield.x = this.player.x;
-        this.shield.y = this.player.y + 17;
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
     }
 
     playerHitSpike(){

@@ -14,6 +14,6 @@ export class dataFile {
         this.dash = 0;
         this.wallJump = 0;
         this.lives = 2;
-        this.shield = 1;
+        this.shield = 0;
     }
 }

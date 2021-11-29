@@ -319,10 +319,12 @@ export class level3 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
         // add shield to scene (if purchased)
-        this.shield = this.physics.add.image(100, 460, 'shield');
-        this.shield.body.moves = false;
-        this.shield.body.setAllowGravity(false);
-        this.shield.setAlpha(0.5);
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
     }
     
 
@@ -501,8 +503,10 @@ export class level3 extends Phaser.Scene {
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
 
         // update shield position
-        this.shield.x = this.player.x;
-        this.shield.y = this.player.y + 17;
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
     }
 
     playerHitdoor1()
