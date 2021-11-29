@@ -54,6 +54,9 @@ export class level1 extends Phaser.Scene {
 
        //--------------------
         this.load.image('spike1', '/static/src/assets/spikes.png');
+        this.load.image('wall2', '/static/src/assets/stone_wall1.png');
+        this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
+
     }
 
     create(){
@@ -88,15 +91,14 @@ export class level1 extends Phaser.Scene {
         this.add.image(400, 300, 'background1');
 
         this.platforms = this.physics.add.staticGroup();
-        this.pillar = this.physics.add.staticGroup();
-        // this.spikes = this.physics.add.staticGroup();
+       // this.pillar = this.physics.add.staticGroup();
         this.spikes = this.physics.add.group();
         
-        //for (x = 0; x < 10; x++) { 
+
 
         this.platforms.create(400, 630, 'ground1').setScale(2).refreshBody();
 
-        //}
+   
 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //tutorial level part 1: jumping and basic movement 
@@ -140,37 +142,13 @@ export class level1 extends Phaser.Scene {
         //tutorial level part 2:  introduce moving platforms 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-            // this.platforms.create(150, 300, 'ground1').setScale(0.5).refreshBody();
-            // this.platforms.create(400, 230, 'ground1').setScale(0.5).refreshBody();
-            // // this.platforms.create(100, 400, 'ground1');
-            // this.platforms.create(700, 450, 'ground1');
-            // // this.platforms.create(550, 150, 'ground1');
-            // this.platforms.create(25, 125, 'ground1');
-
-            // this.movingPlatform = this.physics.add.image(550, 150, 'ground1'); 
-            // this.movingPlatformHorizontal = this.physics.add.image(100, 400, 'ground1'); 
-
-
-            // this.movingPlatform.setImmovable(true); 
-            // this.movingPlatform.body.allowGravity = false; 
-            // this.movingPlatformHorizontal.setImmovable(true); 
-            // this.movingPlatformHorizontal.body.allowGravity = false; 
-
-        // this.spikes.create(400, 500, 'spike1');
+       
         this.spike1 = this.spikes.create(450, 500, 'spike1').body.setAllowGravity(false);
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
-        //TRYING TO CHANGE PLAYER HITBOX WITH CODE BELOW
         this.player.body.offset.x=15;
         this.player.body.offset.y=32;
 
-
-       // this.player.setSize(12,12, false);
-      //  this.time.addEvent({delay: 100, callback: this.delayDone, callbackScope: this, loop: false});
-       // this.player.setScale(1);
-       // this.player.body.setSize(this.player.width,this.player.height,true);
         this.anims.create({
             key: 'idle',
             frames: this.anims.generateFrameNumbers('player_one_idle_sheet', { frames: [0,1,2,3,4,5] }),
@@ -224,20 +202,11 @@ export class level1 extends Phaser.Scene {
         this.level1Text = this.add.text(16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
-       
-
-
-
-
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
         this.physics.add.collider(this.player, this.tutmp1);
         this.physics.add.collider(this.player, this.tutmp2);
     
-
-
-        //this.physics.add.collider(this.spikes,this.platforms);
-
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
         this.cameras.main.setBounds(0, 0, 800, 600);
@@ -252,38 +221,37 @@ export class level1 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
-       
+
+
+        this.question_block = this.physics.add.image(400, 100, 'question_block2');
+        this.question_block.setImmovable(true);
+        this.question_block.body.allowGravity = false;
+
+        this.wall = this.physics.add.image(740, 550, 'wall2').setScale(.75).refreshBody();
+        this.wall.setImmovable(true);
+        this.wall.body.allowGravity = false;
+
+        this.tempwallvar = this.physics.add.staticGroup();
+        for (var x = 1; x < 8; x++ ) { 
+            this.ycord = 550 - (x * 70);
+            this.tempwallvar.create(740,this.ycord,'wall2').setScale(1).refreshBody(); 
+        }
+        this.physics.add.overlap(this.player, this.question_block, this.playerHitQuestionBlock,null, this);
+        this.physics.add.collider(this.player, this.wall);
+        this.physics.add.collider(this.player, this.tempwallvar);
 
     }
- //  delayDone(){
-       // this.player.body.setSize(this.player.width/2,this.player.height/1,true);
-  //     this.player.body.setSize(64/2,32,true);
-   // }
+
 
     update(){
 
        this.moveplatformhorizontal(this.tutmp1, 170, 300, 30)        
-      //  this.coinCount.setPosition(300, 300);
- 
-            // if (this.movingPlatform.y <= 150) { 
-            //     this.movingPlatform.setVelocityY(10) 
-            // }  
-            // if (this.movingPlatform.y >= 200) { 
-            //     this.movingPlatform.setVelocityY(-10);
-            // }
 
-            // if (this.movingPlatformHorizontal.x <= 100) { 
-            //     this.movingPlatformHorizontal.setVelocityX(10) 
-            // }  
-            // if (this.movingPlatformHorizontal.x >= 200) { 
-            //     this.movingPlatformHorizontal.setVelocityX(-10);
-            // }
-
-        if (this.spike1.y <= 200) { 
+        if (this.spike1.y <= 100) { 
             this.increasingspike1 = true ;
 
         } 
-        if (this.spike1.y >= 500) { 
+        if (this.spike1.y >= 300) { 
             this.increasingspike1 = false ;
             console.log("test");
         }
@@ -318,9 +286,7 @@ export class level1 extends Phaser.Scene {
         // jump
         if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down)
         {
-            //Phaser.Input.Keyboard.JustDown(this.cursors.up)
-            //this.player.body.onFloor()
-            //this.player.body.touching.down
+           
             this.player.setVelocityY(-400);
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
@@ -339,16 +305,7 @@ export class level1 extends Phaser.Scene {
             this.player.setVelocityY(170);
         }
     
-        // if(this.keyESC.isDown){
-        //     this.scene.pause();
-        //     this.scene.launch(Constants.Scenes.pause);
-        // }
-        if(this.crewels==this.totalCoin){
-            // this.scene.pause();
-            // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-            // console.log(this.scene.key)
-            // this.scene.start(Constants.Scenes.endgame, [this.crewels, this.scene]);
-        }
+       
     }
 
 
@@ -394,14 +351,12 @@ export class level1 extends Phaser.Scene {
     playerHitdoor1()
     {
         this.scene.start(Constants.Scenes.lvl4,this.data);
-        //this.scene.launch(Constants.Scenes.lvl4,this.scene);
-        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        
     }
     playerHitdoor2()
     {
         this.scene.start(Constants.Scenes.lvl1_2,this.data);
-        //this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
-        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
+        
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
@@ -420,9 +375,11 @@ export class level1 extends Phaser.Scene {
         // console.log(this.scene);
         this.scene.pause();
     }
-    transition(){
-        //this.scene.launch(Constants.Scenes.lvl1_2,this.scene);
-        //this.scene.stop(Constants.Scenes.lvl1,this.scene);
-        
+
+    playerHitQuestionBlock(player, question_block, wall){
+         this.wall.destroy();
+         this.question_block.destroy();
     }
 }
+
+
