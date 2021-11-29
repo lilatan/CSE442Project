@@ -30,13 +30,14 @@ export class level4 extends Phaser.Scene {
     keyA;
     keyS;
     keyD;
+    keyE;
 
     keyESC;
     //testing level transition
     keyP;
 
     data;
-    bossHealth = 100;
+    bossHealth;
 
     inAir;
     invincible;
@@ -57,10 +58,13 @@ export class level4 extends Phaser.Scene {
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.image('detonator', '/static/src/assets/detonator.png');
+        this.load.image('dynamite', '/static/src/assets/dynamite.png');
+        this.load.spritesheet('explosions', '/static/src/assets/explosions.png', { frameWidth: 64, frameHeight: 64 });
     }
 
     create(){
-
+        this.bossHealth = 100;
         console.log("im at level 4");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -69,6 +73,10 @@ export class level4 extends Phaser.Scene {
         //testing level transition
         this.keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         this.keyP.on('up',()=>this.transition());
+
+        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        this.keyE.on('up', () => this.damage());
+        this.keyE.enabled = false;
         
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -107,6 +115,16 @@ export class level4 extends Phaser.Scene {
         this.movingPlatform.body.allowGravity = false;
         this.movingPlatformHorizontal.setImmovable(true);
         this.movingPlatformHorizontal.body.allowGravity = false;
+
+        this.detonator = this.physics.add.image(450, 500, 'detonator');
+        this.detonator.body.moves = false;
+        this.detonator.body.setAllowGravity(false);
+        this.bombText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.bombText.setFontSize(24);
+        this.add.existing(this.bombText);
+        this.detonator.depth = 1;
+        this.bombText.depth = 1;
+        this.detonator.setScale(0.1);
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         this.player.body.offset.x=15;
@@ -162,7 +180,7 @@ export class level4 extends Phaser.Scene {
         this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
         this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
-        this.bossHealth = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' });
+        this.bossHealthDisplay = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' });
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -170,6 +188,8 @@ export class level4 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.movingPlatformHorizontal);
 
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
+
+        this.physics.add.overlap(this.player, this.detonator);
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
@@ -258,7 +278,7 @@ export class level4 extends Phaser.Scene {
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
-        this.bossHealth.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
+        this.bossHealthDisplay.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
 
         //When player hits a lever, decrease bossHealth by a certain amt
         // if (lever hit) { this.bossHealth -= 10; }
@@ -267,6 +287,17 @@ export class level4 extends Phaser.Scene {
             this.data.crewels += 500;
             this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
         }
+
+        if (!this.detonator.body.touching.none) {
+            this.bombText.setVisible(true);
+            this.keyE.enabled = true;
+            console.log("touching\n");
+        } else {
+            this.bombText.setVisible(false);
+            this.keyE.enabled = false;
+            // console.log("touching\n");
+        }
+
 
     }
     // playerHitdoor1()
@@ -313,5 +344,9 @@ export class level4 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
+    }
+    damage(){
+        this.bossHealth-=25;
+        this.bossHealthDisplay.setText('Boss Health: ' + this.bossHealth + '%');
     }
 }
