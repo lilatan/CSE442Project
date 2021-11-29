@@ -367,7 +367,7 @@ export class level1 extends Phaser.Scene {
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
             this.jump_count = 2;
-            this.data.doubleJump -= 1;
+            //this.data.doubleJump -= 1;
         }
     }
     collectcoin (player, coin){
