@@ -286,6 +286,13 @@ export class level4 extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
 
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
+
         //line below doesn't work for overlap for some reason
        // this.physics.add.collider(this.boss_claw, this.platforms);
        // this.physics.add.overlap(this.player, this.boss_claw, this.playerHitSpike,null, this);
@@ -422,12 +429,7 @@ export class level4 extends Phaser.Scene {
         this.boss_claw3.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw3, this.playerHitSpike,null, this);
         // add shield to scene (if purchased)
-        if (this.shieldStatus === 1) {
-            this.shield = this.physics.add.image(100, 460, 'shield');
-            this.shield.body.moves = false;
-            this.shield.body.setAllowGravity(false);
-            this.shield.setAlpha(0.5);
-        }
+        
 
     }
     update(){
