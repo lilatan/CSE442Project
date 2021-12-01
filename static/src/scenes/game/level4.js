@@ -8,15 +8,12 @@ export class level4 extends Phaser.Scene {
     coin;
     platforms;
     cursors;
-    //door1;
     door2;
     crewels = 0;
     coinCount;
     lifeCount;
-    totalCoin = 12;
     spikes;
     spike4;
-    increasingspike4;
     zoom;
     jump_count = 0;
     vid;
@@ -53,7 +50,6 @@ export class level4 extends Phaser.Scene {
 
         this.load.image('ground4', '/static/src/assets/twirl_platform.png');
         this.load.image('coin4', '/static/src/assets/single_coin.png');
-        //this.load.image('bosshealth', 'static/src/assets/images/healthbar.png');
         this.load.image('spike4', '/static/src/assets/spikes.png');
         this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
@@ -96,19 +92,7 @@ export class level4 extends Phaser.Scene {
         this.vid.play(true);
         this.vid.setPaused(false);
 
-        // this.door1 = this.physics.add.staticGroup();
-        // this.door2 = this.physics.add.staticGroup();
-        // this.door1.create(-63, 290, null).setScale(4).refreshBody();
-        // this.door1.create(-63, 420, null).setScale(4).refreshBody();
-        // this.door1.create(-63, 550, null).setScale(4).refreshBody();
-        // this.door2.create(862, 300, null).setScale(4).refreshBody();
-        // this.door2.create(862, 400, null).setScale(4).refreshBody();
-        // this.door2.create(862, 500, null).setScale(4).refreshBody();
-
-        // this.add.image(400, 300, 'background4');
-
         this.platforms = this.physics.add.staticGroup();
-        //this.spikes = this.physics.add.staticGroup();
 
         this.platforms.create(90,  588, 'ground4').setScale(1.5).refreshBody();
         this.platforms.create(280, 588, 'ground4').setScale(1.5).refreshBody();
@@ -122,10 +106,7 @@ export class level4 extends Phaser.Scene {
         // this.platforms.create(700, 450, 'ground4');
         // this.platforms.create(550, 150, 'ground4');
         // this.platforms.create(25, 125, 'ground4');
-
         // this.spikes.create(400, 500, 'spike4');
-
-
 
         this.detonator = this.physics.add.image(450, 500, 'detonator');
         this.detonator.body.moves = false;
@@ -182,7 +163,6 @@ export class level4 extends Phaser.Scene {
         var rand_xx = Phaser.Math.Between(this.player.x - 100, this.player.x + 100);
         var rand_yy = Phaser.Math.Between(this.player.y - 0, this.player.y - 25);
         var rand_aaa = Phaser.Math.Between(100, 200);
-
 
         // this.boss_claw = this.physics.add.group({
         //     key: 'boss_sheet',
@@ -246,11 +226,7 @@ export class level4 extends Phaser.Scene {
         this.time.addEvent({delay: 1500, callback: this.boss_fight1, callbackScope: this, loop: true});
         this.time.addEvent({delay: 1500, callback: this.boss_fight2, callbackScope: this, loop: true});
         this.time.addEvent({delay: 1500, callback: this.boss_fight3, callbackScope: this, loop: true});
-
-
-
         //BOSS CODE END
-
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -290,9 +266,6 @@ export class level4 extends Phaser.Scene {
        // this.physics.add.collider(this.boss_claw, this.platforms);
        // this.physics.add.overlap(this.player, this.boss_claw, this.playerHitSpike,null, this);
        // this.physics.add.collider(this.player, this.boss_claw, this.playerHitSpike,null, this);
-        // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
-
-       // this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
     }
     //this.time.addEvent({delay: 100, callback: this.hover_enabled, callbackScope: this, loop: false});
@@ -428,56 +401,24 @@ export class level4 extends Phaser.Scene {
             this.shield.body.setAllowGravity(false);
             this.shield.setAlpha(0.5);
         }
-
     }
     update(){
-        // if (this.movingPlatform.y <= 150) {
-        //     this.movingPlatform.setVelocityY(40)
-        // }
-        // if (this.movingPlatform.y >= 200) {
-        //     this.movingPlatform.setVelocityY(-40);
-        // }
-
-        // if (this.movingPlatformHorizontal.x <= 100) {
-        //     this.movingPlatformHorizontal.setVelocityX(40)
-        // }
-        // if (this.movingPlatformHorizontal.x >= 200) {
-        //     this.movingPlatformHorizontal.setVelocityX(-40);
-        // }
-
-        // if (this.spike4.y <= 200) {
-        //     this.increasingspike4 = true ;
-
-        // }
-        // if (this.spike4.y >= 500) {
-        //     this.increasingspike4 = false;
-        // }
-        // if (this.increasingspike4 === true) {
-        //     this.spike4.y += 2;
-        // } else {
-        //     this.spike4.y -= 2;
-        // }
-
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
             this.player.anims.play('left', true);
             this.player.flipX = true;
-         
         }
         else if (this.cursors.right.isDown || this.keyD.isDown)
         {
             this.player.setVelocityX(200);
             this.player.anims.play('right', true);
             this.player.flipX = false;
-         
-          //  player.scale.setTo(-1,1);
         }
-        else //else
+        else
         {
             this.player.setVelocityX(0); 
             this.player.anims.play('idle',true);
-         
         }
 
         const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
@@ -534,22 +475,11 @@ export class level4 extends Phaser.Scene {
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
         this.bossHealthDisplay.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
 
-        //When player hits a lever, decrease bossHealth by a certain amt
-        // if (lever hit) { this.bossHealth -= 10; }
-        // If player defeats the boss, go to graveyard game-over scene
-        if (this.bossHealth === 0) {
-            this.data.crewels += 500;
-            this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
-        }
-
-    
-
         // update shield position
         if (this.shieldStatus === 1) {
             this.shield.x = this.player.x;
             this.shield.y = this.player.y + 17;
         }
-
         if (!this.detonator.body.touching.none) {
             this.bombText.setVisible(true);
             this.keyE.enabled = true;
@@ -559,16 +489,9 @@ export class level4 extends Phaser.Scene {
             this.keyE.enabled = false;
             // console.log("touching\n");
         }
-
-
     }
-     playerHitdoor2()
-     {
-         this.scene.start(Constants.Scenes.lvl1,this.data);
-     }
     playerHitSpike(){
         if (!this.invincible) {
-
             // set invincibility frame
             this.invincible = true;
             setTimeout(() => {  this.invincible = false; }, 750);
@@ -610,7 +533,6 @@ export class level4 extends Phaser.Scene {
     }
     collectcoin (player, coin){
         coin.disableBody(true, true);
-
         this.data.crewels += 1;
         this.coinCount.setText('crewels: ' + this.data.crewels);
 
@@ -625,5 +547,12 @@ export class level4 extends Phaser.Scene {
     damage(){
         this.bossHealth-=25;
         this.bossHealthDisplay.setText('Boss Health: ' + this.bossHealth + '%');
+
+        // If player defeats the boss, go to endgame scene
+        if (this.bossHealth === 0) {
+            // Coin Multiplier, finish boss => coins multiplied by 4
+            this.data.crewels = this.data.crewels * 4;
+            this.scene.start(Constants.Scenes.endgame, [this.data.crewels, this.scene]);
+        }
     }
 }

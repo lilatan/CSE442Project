@@ -1,6 +1,5 @@
 import { Constants } from "/static/src/Constants.js";
 import { TextButton } from "/static/src/game_objects/TextButton.js";
-import {dataFile} from "../../data.js";
 
 // To allow players to purchase special abilities/power ups in game
 export class shop extends Phaser.Scene {
@@ -11,9 +10,9 @@ export class shop extends Phaser.Scene {
     // Keyboard key to access the shop
     keyEsc;
     items = {
-        itemA : 5,
-        itemB : 15,
-        itemC : 2,
+        itemA : 20,
+        itemB : 40,
+        itemC : 10,
     }
     init(data){
         this.data = data;
@@ -29,10 +28,6 @@ export class shop extends Phaser.Scene {
 
         //image of item 3: Winged_Shoes
         this.load.image('talaria', 'static/src/assets/images/winged_shoes.png');
-
-        //Image of item 3:
-        //Taken from: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngaaa.com%2Fdetail%2F2113143&psig=AOvVaw0567MhNLfXzCi1dZ8DN_3r&ust=1636834986239000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJixwtvTk_QCFQAAAAAdAAAAABAE
-        this.load.image('double-jump', 'static/src/assets/images/double-jump.png');
     }
 
     create(){
@@ -67,7 +62,6 @@ export class shop extends Phaser.Scene {
         this.extraLifeBuyButton = new TextButton(this, 110, 265,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemA());
         this.add.existing(this.extraLifeBuyButton);
 
-
         this.heartLife = this.physics.add.image(500, 250, 'heart_life');
         this.heartLife.body.moves = false;
         this.heartLife.body.setAllowGravity(false);
@@ -89,34 +83,20 @@ export class shop extends Phaser.Scene {
         this.shield.setScale(0.2);
 
         // *** item 3 ****
-        this.dashText = new Phaser.GameObjects.Text(this, 110, 375,'Double Jump', {fill: '#799ced'});
-        this.dashText.setFontSize(40);
-        this.add.existing(this.dashText);
+        this.doubleJumpText = new Phaser.GameObjects.Text(this, 110, 375,'Double Jump', {fill: '#799ced'});
+        this.doubleJumpText.setFontSize(40);
+        this.add.existing(this.doubleJumpText);
         this.itemCCost = new Phaser.GameObjects.Text(this, 200, 415,'COST:' + this.items.itemC.toString(), {fill: '#799ced'});
         this.itemCCost.setFontSize(30);
         this.add.existing(this.itemCCost);
-        this.dashBuyButton = new TextButton(this, 110, 415,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemC());
-        this.add.existing(this.dashBuyButton);
+        this.doubleJumpBuyButton = new TextButton(this, 110, 415,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.buyItemC());
+        this.add.existing(this.doubleJumpBuyButton);
 
         this.talaria = this.physics.add.image(500, 430, 'talaria');
         this.talaria.body.moves = false;
         this.talaria.body.setAllowGravity(false);
         this.talaria.setScale(0.2);
 
-
-
-        //For image to come
-        this.doubleJump = this.physics.add.image(360, 415, 'double-jump');
-        this.doubleJump.body.moves = false;
-        this.doubleJump.body.setAllowGravity(false);
-        this.doubleJump.setScale(0.2);
-        /*
-        this.wallJumpText = new Phaser.GameObjects.Text(this, 400, 250,'WALL JUMP', {fill: '#799ced'});
-        this.wallJumpText.setFontSize(40);
-        this.add.existing(this.wallJumpText);
-        this.wallJumpBuyButton = new TextButton(this, 400, 300,'BUY',{fill: '#d4b2d8'}, {fill: '#888888'},30, ()=>this.wallJump());
-        this.add.existing(this.wallJumpBuyButton);
-        */
         this.backButton = new TextButton(this, 25, 550, 'BACK', {fill: '#d4b2d8'}, {fill: '#888888'}, 48, () => this.resumeGame());
         this.add.existing(this.backButton);
 
@@ -136,14 +116,13 @@ export class shop extends Phaser.Scene {
     buy(cost){
         if (this.data.crewels < cost){
             this.noMoneyText.setVisible(true);
-            return false
+            return false;
         }else{
             this.noMoneyText.setVisible(false);
+            // deduct crewels when item is "bought"
             this.data.crewels-=cost;
             return true;
         }
-
-        // deduct crewels when item is "bought"
     }
     // Item functions that call buy func with cost
     buyItemA(){

@@ -10,7 +10,6 @@ export class level3 extends Phaser.Scene {
     watcher_enemy;
     flying_enemy;
     coin;
-    //door1;
     door2;
     platforms;
     block;
@@ -19,11 +18,9 @@ export class level3 extends Phaser.Scene {
     crewels = 0;
     coinCount;
     lifeCount;
-    totalCoin = 12;
     spikes;
     zoom;
     jump_count = 0;
- 
 
     keyW;
     keyA;
@@ -42,6 +39,7 @@ export class level3 extends Phaser.Scene {
 
     init(data){
         this.data = data;
+        this.data.currentLevel = this.scene;
         this.invincible = false;
         this.shieldStatus = this.data.shield;
     }
@@ -83,10 +81,7 @@ export class level3 extends Phaser.Scene {
 
         this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
-
     create(){
-
-        
         console.log("im at level 3");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -99,12 +94,8 @@ export class level3 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
-        
-        //this.door1 = this.physics.add.staticGroup();
+
         this.door2 = this.physics.add.staticGroup();
-        //this.door1.create(-63, 290, null).setScale(4).refreshBody();
-        // this.door1.create(-63, 420, null).setScale(4).refreshBody();
-        // this.door1.create(-63, 550, null).setScale(4).refreshBody();
         //this.door2.create(862, 300, null).setScale(4).refreshBody();
         //this.door2.create(862, 400, null).setScale(4).refreshBody();
         this.door2.create(862, 530, null).setScale(4).refreshBody();
@@ -293,8 +284,6 @@ export class level3 extends Phaser.Scene {
         this.level3Text = this.add.text( 16,24, 'Level 3', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
-
-        this.crewels = 0;
         //----COLLIDER CODE----
 
         this.physics.add.collider(this.player, this.platforms);
@@ -316,7 +305,7 @@ export class level3 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.flying_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
-        //this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
         // add shield to scene (if purchased)
@@ -500,8 +489,8 @@ export class level3 extends Phaser.Scene {
         //     console.log(this.scene.key)
         //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         // }
-      //  this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
-        this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+      this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+      this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
 
         // update shield position
         if (this.shieldStatus === 1) {
@@ -509,13 +498,9 @@ export class level3 extends Phaser.Scene {
             this.shield.y = this.player.y + 17;
         }
     }
-
-    // playerHitdoor1()
-    // {
-    //     this.scene.start(Constants.Scenes.lvl2_3,this.data);
-    // }
     playerHitdoor2()
     {
+        this.data.crewels += 150;
         this.scene.start(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitSpike(){

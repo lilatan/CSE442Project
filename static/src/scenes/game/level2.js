@@ -99,14 +99,8 @@ export class level2 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
-        
-       // this.door1 = this.physics.add.staticGroup();
-       this.door2 = this.physics.add.staticGroup();
 
-       
-       // this.door1.create(-63, 290, null).setScale(4).refreshBody();
-       // this.door1.create(-63, 420, null).setScale(4).refreshBody();
-       // this.door1.create(-63, 550, null).setScale(4).refreshBody();
+       this.door2 = this.physics.add.staticGroup();
       // this.door2.create(862, 300, null).setScale(4).refreshBody();
       // this.door2.create(862, 400, null).setScale(4).refreshBody();
        this.door2.create(862, 600, null).setScale(4).refreshBody();
@@ -300,7 +294,7 @@ export class level2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.question_block, this.playerHitQuestionBlock,null, this);
-        //this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);``
 
         // add shield to scene (if purchased)
@@ -313,10 +307,6 @@ export class level2 extends Phaser.Scene {
     }
 
     update(){
-        //Variables used in update function
-
-
-
     //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
         var idle = false;
 
@@ -437,17 +427,13 @@ export class level2 extends Phaser.Scene {
         }
 
     }
-    // playerHitdoor1()
-    // {
-    //     this.scene.start(Constants.Scenes.lvl1_2,this.data);
-    // }
     playerHitdoor2()
     {
+        this.data.crewels += 100;
         this.scene.start(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
         if (!this.invincible) {
-
             // set invincibility frame
             this.invincible = true;
             setTimeout(() => {  this.invincible = false; }, 750);

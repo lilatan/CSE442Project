@@ -8,7 +8,6 @@ export class level1 extends Phaser.Scene {
     }
     player;
     coin;
-    //door1;
     door2;
     platforms;
     cursors;
@@ -40,6 +39,7 @@ export class level1 extends Phaser.Scene {
     init(data){
         this.data = data;
         this.invincible = false;
+        this.data.currentLevel = this.scene;
         this.shieldStatus = this.data.shield;
     }
 
@@ -77,14 +77,8 @@ export class level1 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>{this.pause();this.sound.play(Constants.SFX.back);});
-        //this.door1 = this.physics.add.staticGroup();
-       this.door2 = this.physics.add.staticGroup();
-        //delete this line if adding an actual door and not an invisible door
-       // door2.create(860, 590, null).setScale(4).refreshBody();
-       // this.door1.create(-63, 290, null).setScale(4).refreshBody();
-       // this.door1.create(-63, 420, null).setScale(4).refreshBody();
-       // this.door1.create(-63, 550, null).setScale(4).refreshBody();
 
+       this.door2 = this.physics.add.staticGroup();
        this.door2.create(862, 300, null).setScale(4).refreshBody();
        this.door2.create(862, 400, null).setScale(4).refreshBody();
        this.door2.create(862, 500, null).setScale(4).refreshBody();
@@ -234,7 +228,6 @@ export class level1 extends Phaser.Scene {
         this.lifeCount.setPosition(150, 140);
 
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
-        //this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
 
@@ -257,9 +250,7 @@ export class level1 extends Phaser.Scene {
 
     }
 
-
     update(){
-
        this.moveplatformhorizontal(this.tutmp1, 170, 300, 30)        
 
         if (this.spike1.y <= 100) { 
@@ -270,7 +261,7 @@ export class level1 extends Phaser.Scene {
             this.increasingspike1 = false ;
             console.log("test");
         }
-        if (this.increasingspike1 == true) { 
+        if (this.increasingspike1 === true) {
             this.spike1.y += 2;
         } else { 
             this.spike1.y -= 2;
@@ -288,8 +279,6 @@ export class level1 extends Phaser.Scene {
             this.player.setVelocityX(200);
             this.player.anims.play('right', true);
             this.player.flipX = false;
-         
-          //  player.scale.setTo(-1,1);
         }
         else //else
         {
@@ -390,13 +379,9 @@ export class level1 extends Phaser.Scene {
             }
         }
     }
-    playerHitdoor1()
-    {
-        this.scene.start(Constants.Scenes.lvl4,this.data);
-        
-    }
     playerHitdoor2()
     {
+        this.data.crewels += 50;
         this.scene.start(Constants.Scenes.lvl1_2,this.data);
         
     }

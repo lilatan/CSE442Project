@@ -9,7 +9,7 @@ export class nameInput extends Phaser.Scene{
     level;
     init(data){//[Score, Game Scene]
         this.score = data[0];
-        // this.level = data.currentLevel;
+        this.level = data.currentLevel;
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
@@ -87,8 +87,8 @@ export class nameInput extends Phaser.Scene{
         this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#ffffff'}, {fill: '#999999'}, 32,
             ()=> {
             if (userInputted) {
-                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level.key)
-                this.scene.stop(this.level.key);
+                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level)
+                //this.scene.stop(this.level.key);
                 this.sound.play(Constants.SFX.back);
                 this.scene.start(Constants.Scenes.leaderboard);
             }
