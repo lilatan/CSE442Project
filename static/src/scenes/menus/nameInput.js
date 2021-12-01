@@ -109,6 +109,10 @@ export class nameInput extends Phaser.Scene{
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/update-leaderboard', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        /* SAME ISSUE OCCURS FOR endgame.js [victory scene] */
+        // Console error on line below:
+        //nameInput.js:113 POST http://10.84.102.107:8000/update-leaderboard 500 (INTERNAL SERVER ERROR)
+        //Entry does not appear on leaderboard after clicking submit button
         xhr.send(JSON.stringify({
             name: name,
             score: score,
