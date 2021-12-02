@@ -242,10 +242,10 @@ export class level4 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
-        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
-        this.bossHealthDisplay = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#fff' });
+        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#fff' });
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' });
+        this.bossHealthDisplay = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#fff' });
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);

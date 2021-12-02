@@ -266,9 +266,9 @@ export class level2 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' });
-        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#000' });
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#fff' });
+        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#fff' });
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' });
 
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
