@@ -7,9 +7,10 @@ export class endgame extends Phaser.Scene{
     }
     score;
     level;
-    init(data){//[Score, Game Scene]
-        this.score = data[0];
-        this.level = data.currentLevel;
+    init(data){
+        this.data = data;
+        this.score = this.data.score;
+        this.level = this.data.currentLevel;
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
@@ -90,7 +91,7 @@ export class endgame extends Phaser.Scene{
                 this.send_leaderboard_entry(nameDisplay.text, this.score, this.level)
                 //this.scene.stop(this.level.key);
                 this.sound.play(Constants.SFX.back);
-                this.scene.launch(Constants.Scenes.leaderboard);
+                this.scene.start(Constants.Scenes.leaderboard);
             }
         });
         this.add.existing(this.submitButton);
@@ -109,14 +110,14 @@ export class endgame extends Phaser.Scene{
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/update-leaderboard', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        /* SAME ISSUE OCCURS FOR nameInput.js [game over scene] */
-        // Console error on line below:
-        //nameInput.js:113 POST http://10.84.102.107:8000/update-leaderboard 500 (INTERNAL SERVER ERROR)
-        //Entry does not appear on leaderboard after clicking submit button
+        console.log("printing leaderboard entry..................")
+        console.log(name);
+        console.log(score);
+        console.log(level);
         xhr.send(JSON.stringify({
             name: name,
             score: score,
-            level: 4
+            level: level
         }));
     }
 }

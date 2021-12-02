@@ -39,7 +39,7 @@ export class level1 extends Phaser.Scene {
     init(data){
         this.data = data;
         this.invincible = false;
-        this.data.currentLevel = this.scene;
+        this.data.currentLevel = "level1";
         this.shieldStatus = this.data.shield;
     }
 
@@ -259,7 +259,7 @@ export class level1 extends Phaser.Scene {
         } 
         if (this.spike1.y >= 300) { 
             this.increasingspike1 = false ;
-            console.log("test");
+            // console.log("test");
         }
         if (this.increasingspike1 === true) {
             this.spike1.y += 2;
@@ -329,16 +329,16 @@ export class level1 extends Phaser.Scene {
 
         if(obj.x <= bound1) { 
 
-            console.log("this1")
+            // console.log("this1")
             obj.setVelocityX(speed);
 
         } else if (obj.x >= bound2) {
-            console.log("this2")
+            // console.log("this2")
     
             obj.setVelocityX(-1 * speed);
 
         }
-        console.log(obj.x)
+        // console.log(obj.x)
 
         // update shield position
         if (this.shieldStatus === 1) {
@@ -374,14 +374,14 @@ export class level1 extends Phaser.Scene {
 
                 // go to graveyard scene if lives hit zero
                 if (this.data.lives === 0) {
-                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
         }
     }
     playerHitdoor2()
     {
-        this.data.crewels += 50;
+        this.data.score += 50;
         this.scene.start(Constants.Scenes.lvl1_2,this.data);
         
     }
@@ -411,7 +411,9 @@ export class level1 extends Phaser.Scene {
     }
 
     playerHitQuestionBlock(player, question_block, wall){
-         this.wall.destroy();
-         this.question_block.destroy();
+        this.wall.destroy();
+        this.question_block.destroy();
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
     }
 }

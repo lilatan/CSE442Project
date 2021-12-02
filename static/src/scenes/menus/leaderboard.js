@@ -47,8 +47,10 @@ export class leaderboard extends Phaser.Scene {
                 }
             }
         };
-        xhr.open('GET', '/get-leaderboard', true);
-        xhr.send();
+        setTimeout(() => {
+            xhr.open('GET', '/get-leaderboard', true);
+            xhr.send();
+            }, 500);
     }
 
     //make the leaderboard page (static content only)

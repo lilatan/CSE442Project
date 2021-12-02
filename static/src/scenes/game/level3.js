@@ -39,7 +39,7 @@ export class level3 extends Phaser.Scene {
 
     init(data){
         this.data = data;
-        this.data.currentLevel = this.scene;
+        this.data.currentLevel = "level3";
         this.invincible = false;
         this.shieldStatus = this.data.shield;
     }
@@ -82,6 +82,12 @@ export class level3 extends Phaser.Scene {
         this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
     create(){
+        // restart level once to ensure there is no gravity bug
+        if (this.data.restarted_level_3 === false) {
+            this.data.restarted_level_3 = true;
+            this.scene.start(Constants.Scenes.lvl3,this.data);
+        }
+
         console.log("im at level 3");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -500,7 +506,7 @@ export class level3 extends Phaser.Scene {
     }
     playerHitdoor2()
     {
-        this.data.crewels += 150;
+        this.data.score += 150;
         this.scene.start(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitSpike(){
@@ -530,7 +536,7 @@ export class level3 extends Phaser.Scene {
 
                 // go to graveyard scene if lives hit zero
                 if (this.data.lives === 0) {
-                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
         }

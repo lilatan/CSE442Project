@@ -48,6 +48,7 @@ export class level2 extends Phaser.Scene {
         this.data.currentLevel = this.scene;
         this.invincible = false;
         this.shieldStatus = this.data.shield;
+        this.data.currentLevel = "level2";
     }
 
     preload(){
@@ -82,11 +83,11 @@ export class level2 extends Phaser.Scene {
     }
 
     create(){
+        // restart level once to ensure there is no gravity bug
         if (this.data.restarted_level_2 === false) {
             this.data.restarted_level_2 = true;
             this.scene.start(Constants.Scenes.lvl2,this.data);
         }
-        
         console.log("im at level 2");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -429,7 +430,7 @@ export class level2 extends Phaser.Scene {
     }
     playerHitdoor2()
     {
-        this.data.crewels += 100;
+        this.data.score += 100;
         this.scene.start(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
@@ -458,7 +459,7 @@ export class level2 extends Phaser.Scene {
 
                 // go to graveyard scene if lives hit zero
                 if (this.data.lives === 0) {
-                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
         }
@@ -484,10 +485,12 @@ export class level2 extends Phaser.Scene {
         this.sound.play(Constants.SFX.coin);
     }
     playerHitQuestionBlock(player, question_block, wall){
-         // wall.disableBody(true,true);
+        // wall.disableBody(true,true);
         //  question_block.disableBody(true,true);
-          this.wall.destroy();
-          this.question_block.destroy();
+        this.wall.destroy();
+        this.question_block.destroy();
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
      }
     
     pause(){

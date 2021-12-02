@@ -41,7 +41,7 @@ export class level4 extends Phaser.Scene {
 
     init(data){
         this.data = data;
-        this.data.currentLevel = this.scene;
+        this.data.currentLevel = "level4";
         this.invincible = false;
         this.shieldStatus = this.data.shield;
     }
@@ -70,6 +70,12 @@ export class level4 extends Phaser.Scene {
     }
 
     create(){
+        // restart level once to ensure there is no gravity bug
+        if (this.data.restarted_level_4 === false) {
+            this.data.restarted_level_4 = true;
+            this.scene.start(Constants.Scenes.lvl4,this.data);
+        }
+
         this.bossHealth = 100;
         console.log("im at level 4");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -516,7 +522,7 @@ export class level4 extends Phaser.Scene {
 
                 // go to graveyard scene if lives hit zero
                 if (this.data.lives === 0) {
-                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
         }
@@ -548,11 +554,16 @@ export class level4 extends Phaser.Scene {
         this.bossHealth-=25;
         this.bossHealthDisplay.setText('Boss Health: ' + this.bossHealth + '%');
 
+        console.log("remaining boss health....");
+        console.log(this.bossHealth);
+
         // If player defeats the boss, go to endgame scene
         if (this.bossHealth === 0) {
-            // Coin Multiplier, finish boss => coins multiplied by 4
-            this.data.crewels = this.data.crewels * 4;
-            this.scene.start(Constants.Scenes.endgame, [this.data.crewels, this.scene]);
+            // Add remaining crewels to score with a multiplier
+            this.data.score += this.data.crewels * 10
+            // Score Multiplier, finish boss => score multiplied by 4
+            this.data.score *= 4;
+            this.scene.start(Constants.Scenes.endgame, this.data);
         }
     }
 }
