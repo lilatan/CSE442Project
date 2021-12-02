@@ -1,5 +1,5 @@
 import { Constants } from "/static/src/Constants.js"
-// import { pause } from "../menus/pausemenu.js";
+
 export class level4 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl4);
@@ -38,12 +38,14 @@ export class level4 extends Phaser.Scene {
     inAir;
     invincible;
     shieldStatus;
+    paused = false;
 
     init(data){
         this.data = data;
-        this.data.currentLevel = this.scene;
+        this.data.currentLevel = "4";
         this.invincible = false;
         this.shieldStatus = this.data.shield;
+        this.timeElapsed = 0;
     }
 
     preload(){
@@ -70,6 +72,12 @@ export class level4 extends Phaser.Scene {
     }
 
     create(){
+        // restart level once to ensure there is no gravity bug
+        if (this.data.restarted_level_4 === false) {
+            this.data.restarted_level_4 = true;
+            this.scene.start(Constants.Scenes.lvl4,this.data);
+        }
+
         this.bossHealth = 100;
         console.log("im at level 4");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -262,10 +270,21 @@ export class level4 extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
 
+        // add shield to scene (if purchased)
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
+
         //line below doesn't work for overlap for some reason
        // this.physics.add.collider(this.boss_claw, this.platforms);
        // this.physics.add.overlap(this.player, this.boss_claw, this.playerHitSpike,null, this);
        // this.physics.add.collider(this.player, this.boss_claw, this.playerHitSpike,null, this);
+
+        // set start time
+        this.startTime = new Date();
 
     }
     //this.time.addEvent({delay: 100, callback: this.hover_enabled, callbackScope: this, loop: false});
@@ -394,13 +413,6 @@ export class level4 extends Phaser.Scene {
         }
         this.boss_claw3.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw3, this.playerHitSpike,null, this);
-        // add shield to scene (if purchased)
-        if (this.shieldStatus === 1) {
-            this.shield = this.physics.add.image(100, 460, 'shield');
-            this.shield.body.moves = false;
-            this.shield.body.setAllowGravity(false);
-            this.shield.setAlpha(0.5);
-        }
     }
     update(){
         if (this.cursors.left.isDown || this.keyA.isDown)
@@ -489,6 +501,12 @@ export class level4 extends Phaser.Scene {
             this.keyE.enabled = false;
             // console.log("touching\n");
         }
+
+        // reset startTime if pause menu was opened
+        if (this.paused) {
+            this.paused = false;
+            this.startTime = new Date();
+        }
     }
     playerHitSpike(){
         if (!this.invincible) {
@@ -514,9 +532,12 @@ export class level4 extends Phaser.Scene {
                 // play take damage sound
                 this.sound.play(Constants.SFX.damage);
 
-                // go to graveyard scene if lives hit zero
+                // game ends if lives hit zero
                 if (this.data.lives === 0) {
-                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                    this.updateTimeElapsed();
+
+                    // switch scene to graveyard
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
         }
@@ -540,6 +561,8 @@ export class level4 extends Phaser.Scene {
         this.sound.play(Constants.SFX.coin);
     }
     pause(){
+        this.updateTimeElapsed();
+        this.paused = true;
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
@@ -548,11 +571,26 @@ export class level4 extends Phaser.Scene {
         this.bossHealth-=25;
         this.bossHealthDisplay.setText('Boss Health: ' + this.bossHealth + '%');
 
+        console.log(this.bossHealth + "% BOSS HP LEFT....");
+
         // If player defeats the boss, go to endgame scene
         if (this.bossHealth === 0) {
-            // Coin Multiplier, finish boss => coins multiplied by 4
-            this.data.crewels = this.data.crewels * 4;
-            this.scene.start(Constants.Scenes.endgame, [this.data.crewels, this.scene]);
+            this.updateTimeElapsed();
+
+            // Add remaining crewels to score with a multiplier
+            this.data.score += this.data.crewels * 10
+            // Score Multiplier, finish boss => score multiplied by 4
+            this.data.score *= 4;
+
+            // switch scene to next level
+            this.scene.start(Constants.Scenes.endgame, this.data);
         }
+    }
+
+    updateTimeElapsed(){
+        // update time elapsed
+        this.endTime = new Date();
+        this.data.timeElapsed += Math.round((this.endTime - this.startTime) / 1000);
+        console.log(this.data.timeElapsed + " seconds");
     }
 }
