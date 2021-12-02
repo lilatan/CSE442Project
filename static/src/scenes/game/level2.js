@@ -1,6 +1,5 @@
 import { Constants } from "/static/src/Constants.js"
-import {dataFile} from "../../data.js";
-// import { pause } from "../menus/pausemenu.js";
+
 export class level2 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl2);
@@ -42,13 +41,15 @@ export class level2 extends Phaser.Scene {
     inAir;
     invincible;
     shieldStatus;
+    paused = false;
 
     init(data){
         this.data = data;
         this.data.currentLevel = this.scene;
         this.invincible = false;
         this.shieldStatus = this.data.shield;
-        this.data.currentLevel = "level2";
+        this.data.currentLevel = "2";
+        this.timeElapsed = 0;
     }
 
     preload(){
@@ -305,6 +306,10 @@ export class level2 extends Phaser.Scene {
             this.shield.body.setAllowGravity(false);
             this.shield.setAlpha(0.5);
         }
+
+        // set start time
+        this.startTime = new Date();
+
     }
 
     update(){
@@ -427,10 +432,21 @@ export class level2 extends Phaser.Scene {
             this.shield.y = this.player.y + 17;
         }
 
+        // reset startTime if pause menu was opened
+        if (this.paused) {
+            this.paused = false;
+            this.startTime = new Date();
+        }
+
     }
     playerHitdoor2()
     {
+        this.updateTimeElapsed();
+
+        // update score
         this.data.score += 100;
+
+        // switch scene to next level
         this.scene.start(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
@@ -457,8 +473,11 @@ export class level2 extends Phaser.Scene {
                 // play take damage sound
                 this.sound.play(Constants.SFX.damage);
 
-                // go to graveyard scene if lives hit zero
+                // game ends if lives hit zero
                 if (this.data.lives === 0) {
+                    this.updateTimeElapsed();
+
+                    // switch scene to graveyard
                     this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
@@ -494,6 +513,8 @@ export class level2 extends Phaser.Scene {
      }
     
     pause(){
+        this.updateTimeElapsed();
+        this.paused = true;
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
@@ -503,4 +524,11 @@ export class level2 extends Phaser.Scene {
     //  this.bigboy_enemy.body.setSize(this.player.width/1,this.player.height/1,true);
     //  this.bigboy_enemy.body.setSize(64,64,true);
     //}
+
+    updateTimeElapsed(){
+        // update time elapsed
+        this.endTime = new Date();
+        this.data.timeElapsed += Math.round((this.endTime - this.startTime) / 1000);
+        console.log(this.data.timeElapsed + " seconds");
+    }
 }

@@ -11,6 +11,7 @@ export class dataFile {
     restarted_level_3;
     restarted_level_4;
     score;
+    timeElapsed;
 
     constructor(){
         this.score = 0;
@@ -23,5 +24,6 @@ export class dataFile {
         this.restarted_level_2 = false;
         this.restarted_level_3 = false;
         this.restarted_level_4 = false;
+        this.timeElapsed = 0;
     }
 }

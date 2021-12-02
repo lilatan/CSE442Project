@@ -11,6 +11,7 @@ export class endgame extends Phaser.Scene{
         this.data = data;
         this.score = this.data.score;
         this.level = this.data.currentLevel;
+        this.timeElapsed = this.data.timeElapsed;
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
@@ -88,8 +89,7 @@ export class endgame extends Phaser.Scene{
         this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#474747'}, {fill: '#999999'}, 32,
             ()=> {
             if (userInputted) {
-                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level)
-                //this.scene.stop(this.level.key);
+                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level, this.timeElapsed);
                 this.sound.play(Constants.SFX.back);
                 this.scene.start(Constants.Scenes.leaderboard);
             }
@@ -106,7 +106,7 @@ export class endgame extends Phaser.Scene{
 
     }
 
-    send_leaderboard_entry(name, score, level){
+    send_leaderboard_entry(name, score, level, time){
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/update-leaderboard', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -114,10 +114,12 @@ export class endgame extends Phaser.Scene{
         console.log(name);
         console.log(score);
         console.log(level);
+        console.log(time);
         xhr.send(JSON.stringify({
             name: name,
             score: score,
-            level: level
+            level: level,
+            time: time
         }));
     }
 }
