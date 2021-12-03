@@ -33,16 +33,13 @@ export class level2_3 extends Phaser.Scene {
 
     preload() {
 
-        this.load.video('background2_3', '/static/src/assets/background_2_3.mp4', 'loadeddata', false, true);
-        this.load.image('ground2_3', '/static/src/assets/sand_platform.png');
+        // this.load.video('backgorund1_2', '/static/src/assets/background_2_3.mp4', 'loadeddata', false, true);
 
-        this.load.image('shop', '/static/src/assets/hotel-sign.png');
         //----------------------------------------------------------------------------------------------------------------------------------
-        //this.load.spritesheet('player_one', '/static/src/assets/brawler.png', { frameWidth: 48, frameHeight: 48 });
-        this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
         //----------------------------------------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------------------------------------------------
 
@@ -121,6 +118,7 @@ export class level2_3 extends Phaser.Scene {
 
         //add shop
         this.shopFront = this.physics.add.image(400, 450, 'shop');
+        this.shopFront.setScale(0.25);
         this.shopFront.body.moves = false;
         this.shopFront.body.setAllowGravity(false);
         this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });

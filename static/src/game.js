@@ -51,7 +51,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 700},
-            debug: false
+            debug: true
         }
     },
     audio:{

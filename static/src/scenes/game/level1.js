@@ -17,8 +17,8 @@ export class level1 extends Phaser.Scene {
     zoom;
     inAir;
     invincible;
-    spike1; 
-    increasingspike1; 
+    spike; 
+    increasingspike; 
     movingPlatform; 
     jump_count = 0;
 
@@ -45,21 +45,8 @@ export class level1 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background1', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground1', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('coin1', '/static/src/assets/single_coin.png');
-        // this.load.image('player_one', '/static/src/assets/spear_player.png');
-        //-----------
-       this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-       this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-       this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-       this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
-       //----------------------------------------------------------------------------------------------------------------------
-
-       //--------------------
-        this.load.image('spike1', '/static/src/assets/spikes.png');
-        this.load.image('wall2', '/static/src/assets/stone_wall1.png');
-        this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
+        this.load.image('wall', '/static/src/assets/stone_wall1.png');
+        this.load.image('question_block', '/static/src/assets/question_mark_block.png');
 
         this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
@@ -85,7 +72,7 @@ export class level1 extends Phaser.Scene {
        this.door2.create(862, 500, null).setScale(4).refreshBody();
         
         
-        this.add.image(400, 300, 'background1');
+        this.add.image(400, 300, 'background');
 
         this.platforms = this.physics.add.staticGroup();
        // this.pillar = this.physics.add.staticGroup();
@@ -93,17 +80,17 @@ export class level1 extends Phaser.Scene {
         
 
 
-        this.platforms.create(400, 630, 'ground1').setScale(2).refreshBody();
+        this.platforms.create(400, 630, 'ground').setScale(2).refreshBody();
 
    
 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //tutorial level part 1: jumping and basic movement 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        this.platforms.create(25,500,'ground1').setScale(.25).refreshBody(); 
-        this.platforms.create(100, 400, 'ground1').setScale(.15, .25).refreshBody(); 
-        this.platforms.create(25, 300, 'ground1').setScale(.15, .25).refreshBody(); 
-        this.platforms.create(100, 200, 'ground1').setScale(.15, .25).refreshBody(); 
+        this.platforms.create(25,500,'ground').setScale(.25).refreshBody(); 
+        this.platforms.create(100, 400, 'ground').setScale(.15, .25).refreshBody(); 
+        this.platforms.create(25, 300, 'ground').setScale(.15, .25).refreshBody(); 
+        this.platforms.create(100, 200, 'ground').setScale(.15, .25).refreshBody(); 
 
 
          //possible future task: change color of the text 
@@ -125,11 +112,11 @@ export class level1 extends Phaser.Scene {
          //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //tutorial level part 2:  introduce moving platforms 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        this.tutmp1 = this.physics.add.image(168,200, 'ground1').setScale(.15,.25); //create moving platforms for tutorial part 2.
-        this.tutmp2 = this.physics.add.image(500,200, 'ground1').setScale(.15,.25); 
+        this.tutmp1 = this.physics.add.image(168,200, 'ground').setScale(.15,.25); //create moving platforms for tutorial part 2.
+        this.tutmp2 = this.physics.add.image(500,200, 'ground').setScale(.15,.25); 
         
-        this.tutmp1.setImmovable(true)
-        this.tutmp2.setImmovable(true)
+        this.tutmp1.setImmovable(true);
+        this.tutmp2.setImmovable(true);
 
         this.tutmp1.body.allowGravity = false; //set them to not allow gravity. 
         this.tutmp2.body.allowGravity = false;  
@@ -140,7 +127,7 @@ export class level1 extends Phaser.Scene {
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
        
-        this.spike1 = this.spikes.create(450, 500, 'spike1').body.setAllowGravity(false);
+        this.spike = this.spikes.create(450, 500, 'spike').body.setAllowGravity(false);
 
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         this.player.body.offset.x=15;
@@ -197,7 +184,7 @@ export class level1 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin1',
+            key: 'coin',
             repeat: this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
@@ -223,7 +210,7 @@ export class level1 extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(1.5);
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null,this)
-        this.increasingspike1 = false; 
+        this.increasingspike = false; 
         this.coinCount.setPosition(150, 100);
         this.level1Text.setPosition(150, 120);
         this.lifeCount.setPosition(150, 140);
@@ -232,18 +219,18 @@ export class level1 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
 
 
-        this.question_block = this.physics.add.image(400, 100, 'question_block2');
+        this.question_block = this.physics.add.image(400, 100, 'question_block');
         this.question_block.setImmovable(true);
         this.question_block.body.allowGravity = false;
 
-        this.wall = this.physics.add.image(740, 550, 'wall2').setScale(.75).refreshBody();
+        this.wall = this.physics.add.image(740, 550, 'wall').setScale(.75).refreshBody();
         this.wall.setImmovable(true);
         this.wall.body.allowGravity = false;
 
         this.tempwallvar = this.physics.add.staticGroup();
         for (var x = 1; x < 8; x++ ) { 
             this.ycord = 550 - (x * 70);
-            this.tempwallvar.create(740,this.ycord,'wall2').setScale(1).refreshBody(); 
+            this.tempwallvar.create(740,this.ycord,'wall').setScale(1).refreshBody(); 
         }
         this.physics.add.overlap(this.player, this.question_block, this.playerHitQuestionBlock,null, this);
         this.physics.add.collider(this.player, this.wall);
@@ -257,18 +244,18 @@ export class level1 extends Phaser.Scene {
     update(){
        this.moveplatformhorizontal(this.tutmp1, 170, 300, 30)        
 
-        if (this.spike1.y <= 100) { 
-            this.increasingspike1 = true ;
+        if (this.spike.y <= 100) { 
+            this.increasingspike = true ;
 
         } 
-        if (this.spike1.y >= 300) { 
-            this.increasingspike1 = false ;
+        if (this.spike.y >= 300) { 
+            this.increasingspike = false ;
             // console.log("test");
         }
-        if (this.increasingspike1 === true) {
-            this.spike1.y += 2;
+        if (this.increasingspike === true) {
+            this.spike.y += 2;
         } else { 
-            this.spike1.y -= 2;
+            this.spike.y -= 2;
         }
 
         if (this.cursors.left.isDown || this.keyA.isDown)
@@ -327,6 +314,12 @@ export class level1 extends Phaser.Scene {
             this.startTime = new Date();
         }
 
+        // update shield position
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
+       
     }
 
 
@@ -357,7 +350,9 @@ export class level1 extends Phaser.Scene {
     }
 
     playerHitSpike(){
+        console.log('here');
         if (!this.invincible) {
+            console.log('not invi');
 
             // set invincibility frame
             this.invincible = true;
@@ -365,6 +360,7 @@ export class level1 extends Phaser.Scene {
 
             // if shield is available
             if (this.shieldStatus === 1) {
+                console.log('shield');
                 // disable shield
                 this.shieldStatus = 0;
                 this.shield.setAlpha(0);
@@ -374,6 +370,7 @@ export class level1 extends Phaser.Scene {
 
             // otherwise, player takes damage
             } else {
+                console.log('damage');
                 // update player lives
                 this.data.lives -= 1;
                 this.lifeCount.setText('lives: ' + this.data.lives);

@@ -121,6 +121,7 @@ export class shop extends Phaser.Scene {
             this.noMoneyText.setVisible(false);
             // deduct crewels when item is "bought"
             this.data.crewels-=cost;
+            this.sound.play(Constants.SFX.purchase);
             return true;
         }
     }

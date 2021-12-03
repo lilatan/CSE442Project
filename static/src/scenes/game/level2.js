@@ -53,34 +53,6 @@ export class level2 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background2', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground2', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('coin2', '/static/src/assets/single_coin.png');
-        this.load.image('spike2', '/static/src/assatiets/spikes.png');
-        this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
-        this.load.image('block2', '/static/src/assets/cyberpunk_block.png');
-        this.load.image('wall2', '/static/src/assets/stone_wall1.png');
-        
-         //----PLAYER SPRITE SHEET ---------
-        this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
-        //---PLAYER SPRITE SHEET--------
-        //---BIG BOY SPRITE SHEET-----
-        this.load.spritesheet('big_boy_walk', '/static/src/assets/assets_2/walk_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_attack', '/static/src/assets/assets_2/attack_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_idle', '/static/src/assets/assets_2/idle_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        //---BIG BOY SPRITE SHEET----
-        this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
-      //  this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        //----WATCHER SPRITE SHEET-----
-
-        //----WATCHER SPRITE SHEET
-
-        this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
 
     create(){
@@ -108,7 +80,7 @@ export class level2 extends Phaser.Scene {
        this.door2.create(862, 600, null).setScale(4).refreshBody();
         
 
-        this.add.image(400, 300, 'background2');
+        this.add.image(400, 300, 'background');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
@@ -116,46 +88,66 @@ export class level2 extends Phaser.Scene {
         this.block = this.physics.add.staticGroup();
        // this.wall = this.physics.add.staticGroup();
 
-        this.platforms.create(200, 600, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(400, 600, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(600, 600, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(200, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(400, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(600, 600, 'ground').setScale(1).refreshBody();
 
     
-        //climb up sprites. 
-        for (var x = 0; x < 5; x++) { 
-            this.xcord = 500-(x*100);
-            this.ycord = 200+(x*70);
-            this.platforms.create(this.xcord, this.ycord, 'ground2').setScale(.25).refreshBody();
-    
-        }
+        // //climb up sprites.
+        // for (var x = 0; x < 5; x++) {
+        //     this.xcord = 500-(x*100);
+        //     this.ycord = 200+(x*70);
+        //     this.platforms.create(this.xcord, this.ycord, 'ground').setScale(.25).refreshBody();
+        // }
+
+        // ------------------MOVING PLATFORMS-----------------------------
+        this.movingPlatform1 = this.physics.add.image(500,200, 'ground').setScale(.15,.25);
+        this.movingPlatform1.setImmovable(true);
+        this.movingPlatform1.body.allowGravity = false;
+
+        this.movingPlatform2 = this.physics.add.image(400,270, 'ground').setScale(.15,.25);
+        this.movingPlatform2.setImmovable(true);
+        this.movingPlatform2.body.allowGravity = false;
+
+        this.movingPlatform3 = this.physics.add.image(300,340, 'ground').setScale(.15,.25);
+        this.movingPlatform3.setImmovable(true);
+        this.movingPlatform3.body.allowGravity = false;
+
+        this.movingPlatform4 = this.physics.add.image(200,410, 'ground').setScale(.15,.25);
+        this.movingPlatform4.setImmovable(true);
+        this.movingPlatform4.body.allowGravity = false;
+
+        this.movingPlatform5 = this.physics.add.image(100,480, 'ground').setScale(.15,.25);
+        this.movingPlatform5.setImmovable(true);
+        this.movingPlatform5.body.allowGravity = false;
         
         //top floor. 
-        for (var x = 0; x < 9; x++) { 
+        for (var x = 0; x < 7; x++) {
 
-            this.xcord = 450 - (x * 50);
-            this.platforms.create(this.xcord, 130, 'ground2').setScale(.25).refreshBody();
+            this.xcord = x * 50;
+            this.platforms.create(this.xcord, 130, 'ground').setScale(.25).refreshBody();
 
         }
         
 
-       // this.spikes.create(300, 100, 'spike2');
+       // this.spikes.create(300, 100, 'spike');
 
         //add question block that player has to get 
-        this.block.create(230,131, 'block2').setScale(0.5).refreshBody();
-        this.question_block = this.physics.add.image(75, 110, 'question_block2');
+        // this.block.create(230,131, 'block').setScale(0.5).refreshBody();
+        this.question_block = this.physics.add.image(75, 110, 'question_block');
         this.question_block.setImmovable(true);
         this.question_block.body.allowGravity = false;
 
         this.tempwallvar = this.physics.add.staticGroup();
         for (var x = 1; x < 8; x++ ) { 
             this.ycord = 550 - (x * 70);
-            this.tempwallvar.create(740,this.ycord,'wall2').setScale(1).refreshBody(); 
+            this.tempwallvar.create(740,this.ycord,'wall').setScale(1).refreshBody(); 
         }
      //this.physics.add.collider(this.player, this.tempwallvar);
         
 
         
-        this.wall = this.physics.add.image(740, 550, 'wall2').setScale(1).refreshBody();
+        this.wall = this.physics.add.image(740, 550, 'wall').setScale(1).refreshBody();
         this.wall.setImmovable(true);
         this.wall.body.allowGravity = false;
 
@@ -257,9 +249,9 @@ export class level2 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin2',
-            repeat: 0,//this.totalCoin-1,
-            setXY: { x: 12, y: 0, stepX: 70 }
+            key: 'coin',
+            repeat: 8,//this.totalCoin-1,
+            setXY: { x: 30, y: 0, stepX: 75 }
         });
 
         this.coin.children.iterate(function (child) {
@@ -274,9 +266,24 @@ export class level2 extends Phaser.Scene {
 
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
+        this.physics.add.collider(this.bigboy_enemy, this.wall);
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.player, this.block);
         this.physics.add.collider(this.player, this.wall);
+
+        // collider (moving platform and player)
+        this.physics.add.collider(this.player, this.movingPlatform1);
+        this.physics.add.collider(this.player, this.movingPlatform2);
+        this.physics.add.collider(this.player, this.movingPlatform3);
+        this.physics.add.collider(this.player, this.movingPlatform4);
+        this.physics.add.collider(this.player, this.movingPlatform5);
+
+        // collider (moving platform and coins)
+        // this.physics.add.collider(this.coin, this.movingPlatform1);
+        // this.physics.add.collider(this.coin, this.movingPlatform2);
+        // this.physics.add.collider(this.coin, this.movingPlatform3);
+        // this.physics.add.collider(this.coin, this.movingPlatform4);
+        // this.physics.add.collider(this.coin, this.movingPlatform5);
 
         this.physics.add.collider(this.player, this.tempwallvar);
 
@@ -309,11 +316,20 @@ export class level2 extends Phaser.Scene {
 
         // set start time
         this.startTime = new Date();
-
     }
 
     update(){
-    //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
+
+        // -----------------------UPDATE MOVING PLATFORMS-----------------
+        this.moveplatformhorizontal(this.movingPlatform1, 501, 600, 50);
+        this.moveplatformhorizontal(this.movingPlatform2, 401, 500, 30);
+        this.moveplatformhorizontal(this.movingPlatform3, 301, 400, 50);
+        this.moveplatformhorizontal(this.movingPlatform4, 201, 300, 30);
+        this.moveplatformhorizontal(this.movingPlatform5, 101, 200, 50);
+
+    
+
+        //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
         var idle = false;
 
         if (this.cursors.left.isDown || this.keyA.isDown)
@@ -377,13 +393,13 @@ export class level2 extends Phaser.Scene {
     //  if(this.bigboy_enemy.x = 500){
     // this.bigboy_enemy.setVelocityX(100);  
     //  }
-       if(this.bigboy_enemy.x < 500)
+       if(this.bigboy_enemy.x < 400)
         {
             this.bigboy_enemy.setVelocityX(100);
             this.bigboy_enemy.anims.play('left_boy', true);
             this.bigboy_enemy.flipX = false;
         }
-       if(this.bigboy_enemy.x > 750)
+       if(this.bigboy_enemy.x > 650)
         {
             this.bigboy_enemy.setVelocityX(-100);
             this.bigboy_enemy.anims.play('right_boy', true);
@@ -439,6 +455,31 @@ export class level2 extends Phaser.Scene {
         }
 
     }
+
+    //function to handle moving platforms horizontally.
+    //takes a platform object and two bounds, where bound1 = min y val and bound2 = max y val.
+    //it also takes a speed value which is the velocity to move by.
+    //would lke to move this method to constants when organizing.
+    moveplatformhorizontal(obj, bound1, bound2, speed) {
+
+        if(obj.x <= bound1) {
+
+            // console.log("this1")
+            obj.setVelocityX(speed);
+
+        } else if (obj.x >= bound2) {
+            // console.log("this2")
+
+            obj.setVelocityX(-1 * speed);
+
+        }
+        // console.log(obj.x)
+    }
+
+    // playerHitdoor1()
+    // {
+    //     this.scene.start(Constants.Scenes.lvl1_2,this.data);
+    // }
     playerHitdoor2()
     {
         this.updateTimeElapsed();
