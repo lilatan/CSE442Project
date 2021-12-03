@@ -84,6 +84,8 @@ export class level4 extends Phaser.Scene {
     }
 
     create(){
+        this.check_if_present1 = false;
+
         this.bossHealth = 100;
         console.log("im at level 4");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -239,7 +241,7 @@ export class level4 extends Phaser.Scene {
         this.anims.create({
             key: 'boss_spell',
             frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63] }),
-            frameRate: 16,
+            frameRate: 8,
         });
 
         this.boss.setScale(2.5,2.5);
@@ -372,7 +374,7 @@ export class level4 extends Phaser.Scene {
         if(this.boss_claw1){
             this.boss_claw1.destroy();
         }
-        var rand_xx = Phaser.Math.Between(this.player.x - 200, this.player.x + 200);
+        var rand_xx = Phaser.Math.Between(this.player.x - 150, this.player.x + 150);
         var rand_yy = Phaser.Math.Between(this.player.y + 30, this.player.y + 100);
         if(rand_xx < this.player.x){
             rand_xx -= 75;
@@ -408,7 +410,7 @@ export class level4 extends Phaser.Scene {
             this.boss_claw1.body.offset.y=40;
         }
         this.boss_claw1.setScale(1.5,1.5);
-        this.physics.add.overlap(this.player, this.boss_claw1, this.playerHitSpike,null, this);
+        setTimeout(() => {  this.physics.add.overlap(this.player, this.boss_claw1, this.playerHitSpike,null, this); }, 750);
     }
     boss_fight2(){
         if(this.boss_claw2){
@@ -450,7 +452,8 @@ export class level4 extends Phaser.Scene {
             this.boss_claw2.body.offset.y=40;
         }
         this.boss_claw2.setScale(1.5,1.5);
-        this.physics.add.overlap(this.player, this.boss_claw2, this.playerHitSpike,null, this);
+        setTimeout(() => {  this.physics.add.overlap(this.player, this.boss_claw2, this.playerHitSpike,null, this); }, 750);
+        // this.physics.add.overlap(this.player, this.boss_claw2, this.playerHitSpike,null, this);
     }
     boss_fight3(){
         if(this.boss_claw3){
@@ -492,7 +495,7 @@ export class level4 extends Phaser.Scene {
             this.boss_claw3.body.offset.y=40;
         }
         this.boss_claw3.setScale(1.5,1.5);
-        this.physics.add.overlap(this.player, this.boss_claw3, this.playerHitSpike,null, this);
+        setTimeout(() => {  this.physics.add.overlap(this.player, this.boss_claw3, this.playerHitSpike,null, this); }, 750);
         // add shield to scene (if purchased)
         
 

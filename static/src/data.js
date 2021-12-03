@@ -14,7 +14,7 @@ export class dataFile {
         this.doubleJump = 0;
         this.dash = 0;
         this.wallJump = 0;
-        this.lives = 2;
+        this.lives = 1;
         this.shield = 0;
         this.restarted_level_2 = false;
     }

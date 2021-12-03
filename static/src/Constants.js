@@ -34,6 +34,7 @@ export const Constants = {
         coin: "collect-coin",
         damage: "take-damage",
         jump: "jump",
-        land: "land-ground"
+        land: "land-ground",
+        purchase: "purchase",
     }
 }

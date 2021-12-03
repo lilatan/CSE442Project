@@ -9,13 +9,14 @@ export class mainMenuLoad extends Phaser.Scene {
     preload(){
         this.load.image('background', '/static/src/assets/cyber_city_lvl2.png');
         this.load.image('ground', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('ground4', '/static/src/assets/twirl_platform.png');
+        this.load.image('ground4', '/static/src/assets/twirly_platform.png');
 
         this.load.image('coin', '/static/src/assets/single_coin.png');
 
         this.load.image('spike', '/static/src/assets/spikes.png');
         this.load.image('wall', '/static/src/assets/stone_wall1.png');
         this.load.image('question_block', '/static/src/assets/question_mark_block.png');
+        this.load.image('block', '/static/src/assets/cyberpunk_block.png');
         this.load.image('pillar', '/static/src/assets/pillar.png');
 
         this.load.video('background1_2', '/static/src/assets/background_1_2.mp4', 'loadeddata', false, true);

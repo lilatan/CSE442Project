@@ -140,6 +140,7 @@ export class shop extends Phaser.Scene {
         }else{
             this.noMoneyText.setVisible(false);
             this.data.crewels-=cost;
+            this.sound.play(Constants.SFX.purchase);
             return true;
         }
 

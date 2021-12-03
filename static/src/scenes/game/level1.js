@@ -44,16 +44,6 @@ export class level1 extends Phaser.Scene {
     }
 
     preload(){
-        // this.load.image('background', '/static/src/assets/cyber_city_lvl2.png');
-        // this.load.image('ground', '/static/src/assets/cyberpunk_platform.png');
-        // this.load.image('coin', '/static/src/assets/single_coin.png');
-        //-----------
-        // this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
-       //----------------------------------------------------------------------------------------------------------------------
-        this.load.image('spike', '/static/src/assets/spikes.png');
         this.load.image('wall', '/static/src/assets/stone_wall1.png');
         this.load.image('question_block', '/static/src/assets/question_mark_block.png');
 
@@ -130,8 +120,8 @@ export class level1 extends Phaser.Scene {
         this.tutmp1 = this.physics.add.image(168,200, 'ground').setScale(.15,.25); //create moving platforms for tutorial part 2.
         this.tutmp2 = this.physics.add.image(500,200, 'ground').setScale(.15,.25); 
         
-        this.tutmp1.setImmovable(true)
-        this.tutmp2.setImmovable(true)
+        this.tutmp1.setImmovable(true);
+        this.tutmp2.setImmovable(true);
 
         this.tutmp1.body.allowGravity = false; //set them to not allow gravity. 
         this.tutmp2.body.allowGravity = false;  
@@ -324,7 +314,12 @@ export class level1 extends Phaser.Scene {
         {
             this.player.setVelocityY(170);
         }
-    
+
+        // update shield position
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
        
     }
 
@@ -347,12 +342,6 @@ export class level1 extends Phaser.Scene {
 
         }
         console.log(obj.x)
-
-        // update shield position
-        if (this.shieldStatus === 1) {
-            this.shield.x = this.player.x;
-            this.shield.y = this.player.y + 17;
-        }
     }
 
     playerHitSpike(){

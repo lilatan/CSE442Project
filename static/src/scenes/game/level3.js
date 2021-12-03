@@ -47,45 +47,40 @@ export class level3 extends Phaser.Scene {
     }
 
     preload(){
-        // this.load.image('background', '/static/src/assets/cyber_city_lvl2.png');
-        // this.load.image('ground', '/static/src/assets/cyberpunk_platform.png');
-        // this.load.image('coin', '/static/src/assets/single_coin.png');
-        // this.load.image('pillar', '/static/src/assets/pillar.png');
-        // this.load.image('spike', '/static/src/assets/spikes.png');
-        // this.load.image('block', '/static/src/assets/cyberpunk_block.png');
-
-         //----PLAYER SPRITE SHEET ---------
-        // this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
-        //---PLAYER SPRITE SHEET--------
-        //---BIG BOY SPRITE SHEET-----
-        // this.load.spritesheet('big_boy_walk', '/static/src/assets/assets_2/walk_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('big_boy_attack', '/static/src/assets/assets_2/attack_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('big_boy_idle', '/static/src/assets/assets_2/idle_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        //---BIG BOY SPRITE SHEET----
-        
-      
-        //----WATCHER SPRITE SHEET-----
-        // this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        //----WATCHER SPRITE SHEET
-
-        //-------FLYING ALIEN SPRITE SHEET----------------------------
-        // this.load.spritesheet('flying_walk', '/static/src/assets/assets_2/flying_alien.png', { frameWidth: 64, frameHeight: 64 });
-        //-----------FLYING ALIEN SPRITE SHEET--------------------------
-        //----------WATCHER SPRITE SHEET------------
-        // this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        //-----------WATCHER SPRITE SHEET---------
-
-        // this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
 
     create(){
 
+        // ------------------MOVING SPIKES-----------------------------
+        this.movingSpike1 = this.physics.add.image(680,200, 'spike');
+        this.movingSpike1.setImmovable(true);
+        this.movingSpike1.body.allowGravity = false;
+        this.movingSpike1.setDepth(1);
+        this.movingSpike1.setVelocityY(200);
+
+        this.movingSpike2 = this.physics.add.image(560,270, 'spike');
+        this.movingSpike2.setImmovable(true);
+        this.movingSpike2.body.allowGravity = false;
+        this.movingSpike2.setDepth(1);
+        this.movingSpike2.setVelocityY(200);
+
+        this.movingSpike3 = this.physics.add.image(440,340, 'spike');
+        this.movingSpike3.setImmovable(true);
+        this.movingSpike3.body.allowGravity = false;
+        this.movingSpike3.setDepth(1);
+        this.movingSpike3.setVelocityY(200);
+
+        this.movingSpike4 = this.physics.add.image(320,410, 'spike');
+        this.movingSpike4.setImmovable(true);
+        this.movingSpike4.body.allowGravity = false;
+        this.movingSpike4.setDepth(1);
+        this.movingSpike4.setVelocityY(200);
+
+        this.movingSpike5 = this.physics.add.image(200,480, 'spike');
+        this.movingSpike5.setImmovable(true);
+        this.movingSpike5.body.allowGravity = false;
+        this.movingSpike5.setDepth(1);
+        this.movingSpike5.setVelocityY(200);
         
         console.log("im at level 3");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -279,8 +274,8 @@ export class level3 extends Phaser.Scene {
 
         this.coin = this.physics.add.group({
             key: 'coin',
-            repeat: 1,//this.totalCoin-1,
-            setXY: { x: 12, y: 0, stepX: 70 }
+            repeat: 10,
+            setXY: { x: 200, y: 530, stepX: 50 }
         });
 
         this.coin.children.iterate(function (child) {
@@ -330,6 +325,13 @@ export class level3 extends Phaser.Scene {
     
 
     update(){
+        // -----------------------UPDATE MOVING PLATFORMS-----------------
+        this.movingSpike(this.movingSpike1, 100, 550, 200);
+        this.movingSpike(this.movingSpike2, 100, 550, 200);
+        this.movingSpike(this.movingSpike3, 100, 550, 200);
+        this.movingSpike(this.movingSpike4, 100, 550, 200);
+        this.movingSpike(this.movingSpike5, 100, 550, 200);
+
         var idle = false;
         var left_wall = 1;
         var right_wall = 2;
@@ -575,5 +577,13 @@ export class level3 extends Phaser.Scene {
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
+    }
+
+    movingSpike(spike, lowerBound, upperBound, speed) {
+        if(spike.y <= lowerBound) {
+            spike.setVelocityY(speed);
+        } else if (spike.y >= upperBound) {
+            spike.setVelocityY(-1 * speed);
+        }
     }
 }
