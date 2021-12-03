@@ -117,18 +117,32 @@ export class level4 extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         //this.spikes = this.physics.add.staticGroup();
 
+        //PLATFORMS FOR FLOOR
         this.platforms.create(90,  588, 'ground4').setScale(1.5).refreshBody();
         this.platforms.create(280, 588, 'ground4').setScale(1.5).refreshBody();
         this.platforms.create(470, 588, 'ground4').setScale(1.5).refreshBody();
         this.platforms.create(660, 588, 'ground4').setScale(1.5).refreshBody();
         this.platforms.create(850, 588, 'ground4').setScale(1.5).refreshBody();
 
-        // this.platforms.create(150, 300, 'ground4').setScale(0.5).refreshBody();
-        // this.platforms.create(400, 230, 'ground4').setScale(0.5).refreshBody();
-        // this.platforms.create(100, 400, 'ground4');
-        // this.platforms.create(700, 450, 'ground4');
-        // this.platforms.create(550, 150, 'ground4');
-        // this.platforms.create(25, 125, 'ground4');
+        //PLATFORMS FOR PLAYER TO JUMP ON
+        this.platforms.create(100, 230, 'ground4').setScale(0.75).refreshBody();//left boss dmg platform
+        this.platforms.create(700, 280, 'ground4').setScale(0.75).refreshBody();//right boss dmg platform
+      
+      //  this.platforms.create(100, 330, 'ground4').setScale(0.75).refreshBody();//left
+        this.platforms.create(100, 430, 'ground4').setScale(0.75).refreshBody();//left
+
+       // this.platforms.create(700, 380, 'ground4').setScale(0.75).refreshBody();
+        this.platforms.create(700, 480, 'ground4').setScale(0.75).refreshBody();
+       
+        this.tutmp1 = this.physics.add.image(199,470, 'ground4').setScale(.35,.45); //create moving platforms for tutorial part 2.
+        this.tutmp2 = this.physics.add.image(601,330, 'ground4').setScale(.35,.45); 
+        
+        this.tutmp1.setImmovable(true)
+        this.tutmp2.setImmovable(true)
+
+        this.tutmp1.body.allowGravity = false; //set them to not allow gravity. 
+        this.tutmp2.body.allowGravity = false; 
+       
 
         // this.spikes.create(400, 500, 'spike');
 
@@ -310,7 +324,8 @@ export class level4 extends Phaser.Scene {
         //GENIE FIRE BALL TIMERERRRRRRRRRRRR
         this.time.addEvent({delay: 3000, callback: this.genie_fight1, callbackScope: this, loop: true}); //for genie
         //genie CODE END
-
+        this.physics.add.collider(this.player, this.tutmp1);
+        this.physics.add.collider(this.player, this.tutmp2);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -517,6 +532,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire1 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire1.setSize(30,30,false);
+        this.small_fire1.body.offset.x=20;
+        this.small_fire1.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire1.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -537,6 +554,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire2 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire2.setSize(30,30,false);
+        this.small_fire2.body.offset.x=20;
+        this.small_fire2.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire2.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -555,6 +574,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire3 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire3.setSize(30,30,false);
+        this.small_fire3.body.offset.x=20;
+        this.small_fire3.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire3.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -573,6 +594,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire4 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire4.setSize(30,30,false);
+        this.small_fire4.body.offset.x=20;
+        this.small_fire4.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire4.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -591,6 +614,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire5 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire5.setSize(30,30,false);
+        this.small_fire5.body.offset.x=20;
+        this.small_fire5.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire5.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -609,6 +634,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire6 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire6.setSize(30,30,false);
+        this.small_fire6.body.offset.x=20;
+        this.small_fire6.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire6.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -627,6 +654,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire7 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire7.setSize(30,30,false);
+        this.small_fire7.body.offset.x=20;
+        this.small_fire7.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire7.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -645,6 +674,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire8 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire8.setSize(30,30,false);
+        this.small_fire8.body.offset.x=20;
+        this.small_fire8.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire8.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -664,6 +695,8 @@ export class level4 extends Phaser.Scene {
         }
         this.small_fire9 = this.physics.add.sprite(400,100, 'fireball_sheet');
         this.small_fire9.setSize(30,30,false);
+        this.small_fire9.body.offset.x=20;
+        this.small_fire9.body.offset.y=20;
         var rand_num = Phaser.Math.Between(-170, 170);
         this.small_fire9.setGravity(rand_num,-500);
        // this.fireball.body.allowGravity = false;
@@ -678,82 +711,48 @@ export class level4 extends Phaser.Scene {
 
 
     update(){
-            
-        // if (this.movingPlatform.y <= 150) {
-        //     this.movingPlatform.setVelocityY(40)
-        // }
-        // if (this.movingPlatform.y >= 200) {
-        //     this.movingPlatform.setVelocityY(-40);
-        // }
-
-        // if (this.movingPlatformHorizontal.x <= 100) {
-        //     this.movingPlatformHorizontal.setVelocityX(40)
-        // }
-        // if (this.movingPlatformHorizontal.x >= 200) {
-        //     this.movingPlatformHorizontal.setVelocityX(-40);
-        // }
-
-        // if (this.spike.y <= 200) {
-        //     this.increasingspike = true ;
-
-        // }
-        // if (this.spike.y >= 500) {
-        //     this.increasingspike = false;
-        // }
-        // if (this.increasingspike === true) {
-        //     this.spike.y += 2;
-        // } else {
-        //     this.spike.y -= 2;
-        // }
-
-         
+        //moving platform1
+        if(this.tutmp1.x < 200)
+        {
+            this.tutmp1.setVelocityX(50);
+        }
+       if(this.tutmp1.x > 600)
+        {
+            this.tutmp1.setVelocityX(-50);
+        }
+        //moving platform 2
+        if(this.tutmp2.x < 200)
+        {
+            this.tutmp2.setVelocityX(50);
+        }
+       if(this.tutmp2.x > 600)
+        {
+            this.tutmp2.setVelocityX(-50);
+        }
+        
+        
         if(this.check_if_present1 == true){
             if(this.fireball.x < 310)
-        {
+            {
                 this.fireball.setVelocityX(200);
+            }  
         }
-            
-        }
-          
-        // if(this.check_if_present2 == true){
-            
-        //     if(this.fireball.y < 600)
-        //     {
-               
-        //         this.small_fire1.setVelocityX(rand_num1);
-        //         this.small_fire2.setVelocityX(rand_num2);
-        //         this.small_fire3.setVelocityX(rand_num3);
-        //         this.small_fire4.setVelocityX(rand_num4);
-        //         this.small_fire5.setVelocityX(rand_num5);
-        //         this.small_fire6.setVelocityX(rand_num6);
-        //         this.small_fire7.setVelocityX(rand_num7);
-        //         this.small_fire8.setVelocityX(rand_num8);
-        //         this.small_fire9.setVelocityX(rand_num9);
-        //     }
-           
-        // }
-       
-       
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
             this.player.anims.play('left', true);
             this.player.flipX = true;
-         
         }
         else if (this.cursors.right.isDown || this.keyD.isDown)
         {
             this.player.setVelocityX(200);
             this.player.anims.play('right', true);
             this.player.flipX = false;
-         
-          //  player.scale.setTo(-1,1);
         }
         else //else
         {
             this.player.setVelocityX(0); 
             this.player.anims.play('idle',true);
-         
         }
 
         const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
@@ -803,9 +802,6 @@ export class level4 extends Phaser.Scene {
             if(this.check_if_present1 == true){
                 this.genie.anims.play('genie_cast', true);
             }
-
-
-
         }
       //********************************************boss code end*************************************
 
