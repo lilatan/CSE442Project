@@ -41,7 +41,8 @@ export class level4 extends Phaser.Scene {
     keyP;
 
     data;
-    bossHealth;
+    bossHealth1;
+    bossHealth2;
 
     inAir;
     invincible;
@@ -55,38 +56,12 @@ export class level4 extends Phaser.Scene {
     }
 
     preload(){
-
-        // this.load.image('ground4', '/static/src/assets/twirl_platform.png');
-        // this.load.image('coin', '/static/src/assets/single_coin.png');
-        //this.load.image('bosshealth', 'static/src/assets/images/healthbar.png');
-        // this.load.image('spike', '/static/src/assets/spikes.png');
-        // this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
-
-       // this.load.video('boss_background_4', '/static/src/assets/ssbm_background_4.mp4', 'loadeddata', false, true);
-    //    this.load.video('boss_background_4', '/static/src/assets/ssbb_background_4.mp4', 'loadeddata', false, true);
-
-        //--------------BOSS SPRITE SHEET-----------
-        this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
-        this.load.spritesheet('genie_sheet', '/static/src/assets/assets_2/genie_sheet.png', { frameWidth: 240, frameHeight: 240 }); //this is for genie character
-        //--------BOSS SPRITE SHEET----------------
-        //fire_ball_spritesheet
-        this.load.spritesheet('fireball_sheet', '/static/src/assets/assets_2/fireball_spritesheet.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('small_fire_sheet', '/static/src/assets/assets_2/small_fireball_sheet.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('explosion1', '/static/src/assets/assets_2/explosion1.png', { frameWidth: 64, frameHeight: 64 });
-
-        // this.load.image('shield', '/static/src/assets/assets_2/shield.png');
-        // this.load.image('detonator', '/static/src/assets/detonator.png');
-        // this.load.image('dynamite', '/static/src/assets/dynamite.png');
-        // this.load.spritesheet('explosions', '/static/src/assets/explosions.png', { frameWidth: 64, frameHeight: 64 });
     }
 
     create(){
         this.check_if_present1 = false;
-
-        this.bossHealth = 100;
+        this.bossHealth1 = 100;
+        this.bossHealth2 = 100;
         console.log("im at level 4");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -97,7 +72,7 @@ export class level4 extends Phaser.Scene {
         this.keyP.on('up',()=>this.transition());
 
         this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-        this.keyE.on('up', () => this.damage());
+        // this.keyE.on('up', () => this.damage());
         this.keyE.enabled = false;
         
 
@@ -147,22 +122,69 @@ export class level4 extends Phaser.Scene {
        
 
         // this.spikes.create(400, 500, 'spike');
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //BOMB AREA KEEP CLEAR
 
+        this.hasBomb = false;
+        this.bomb1 = false;
+        this.zone1 = this.add.zone(700,250).setSize(150,50);
+        this.physics.world.enable(this.zone1);
+        this.zone1.body.moves = false;
+        this.zone1.body.setAllowGravity(false);
 
+        this.bomb2 = false;
+        this.zone2 = this.add.zone(100,190).setSize(150,50);
+        this.physics.world.enable(this.zone2);
+        this.zone2.body.moves = false;
+        this.zone2.body.setAllowGravity(false);
+        this.zoneText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.zoneText.setSize(24);
+        this.add.existing(this.zoneText);
 
-        this.detonator = this.physics.add.image(450, 500, 'detonator');
+        this.bombImage1 = new Phaser.GameObjects.Image(this, 0,0,'dynamite');
+        this.bombImage2 = new Phaser.GameObjects.Image(this, 0,0,'dynamite');
+        this.add.existing(this.bombImage1);
+        this.add.existing(this.bombImage2);
+        this.bombImage1.setVisible(false);
+        this.bombImage2.setVisible(false);
+        this.bombImage1.setScale(0.1);
+        this.bombImage2.setScale(0.1);
+
+        this.detonator = this.physics.add.image(250, 525, 'detonator');
         this.detonator.body.moves = false;
         this.detonator.body.setAllowGravity(false);
-        this.bombText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.bombText = new Phaser.GameObjects.Text(this, 25, 400, 'Press E', { fill: '#ffffff' });
         this.bombText.setFontSize(24);
         this.add.existing(this.bombText);
         this.detonator.depth = 1;
         this.bombText.depth = 1;
         this.detonator.setScale(0.1);
 
+        this.dynamite = this.physics.add.image(150, 525, 'dynamite');
+        this.dynamite.body.moves = false;
+        this.dynamite.body.setAllowGravity(false);
+        this.dynText = new Phaser.GameObjects.Text(this, 125, 400, 'Press E', { fill: '#ffffff' });
+        this.dynText.setFontSize(24);
+        this.add.existing(this.dynText);
+        this.dynamite.depth = 1;
+        this.dynText.depth = 1;
+        this.dynamite.setScale(0.1);
+
+        this.dynIcon = new Phaser.GameObjects.Image(this, 0,0,'dynamite');
+        this.add.existing(this.dynIcon);
+        this.dynIcon.setScale(0.05);
+
+        // this.keyE.on("up", ()=>this.detonate(), !this.detonator.body.touching.none);
+        // this.keyE.on("up", ()=>this.pickup(), !this.dynamite.body.touching.none);
+        // this.keyE.on("up", ()=>this.drop1(), !this.zone1.body.touching.none);
+        // this.keyE.on("up", ()=>this.drop2(), !this.zone2.body.touching.none);
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         this.player = this.physics.add.sprite(100, 450, 'player_one_idle');
         this.player.body.offset.x=15;
         this.player.body.offset.y=32;
+
+
         this.anims.create({
             key: 'idle',
             frames: this.anims.generateFrameNumbers('player_one_idle_sheet', { frames: [0,1,2,3,4,5] }),
@@ -246,9 +268,12 @@ export class level4 extends Phaser.Scene {
 
         this.boss.setScale(2.5,2.5);
         //BOSS FIGHT EVENT TIMERS
-        this.time.addEvent({delay: 1200, callback: this.boss_fight1, callbackScope: this, loop: true});//boss
-        this.time.addEvent({delay: 1200, callback: this.boss_fight2, callbackScope: this, loop: true});
-        this.time.addEvent({delay: 1200, callback: this.boss_fight3, callbackScope: this, loop: true});
+        this.bossEvent1 = new Phaser.Time.TimerEvent({delay: 1200, callback: this.boss_fight1, callbackScope: this, loop: true});
+        this.bossEvent2 = new Phaser.Time.TimerEvent({delay: 1200, callback: this.boss_fight2, callbackScope: this, loop: true});
+        this.bossEvent3 = new Phaser.Time.TimerEvent({delay: 1200, callback: this.boss_fight3, callbackScope: this, loop: true});
+        this.time.addEvent(this.bossEvent1);//boss
+        this.time.addEvent(this.bossEvent2);
+        this.time.addEvent(this.bossEvent3);
         
         //BOSS CODE END
         //genie CODE START
@@ -321,10 +346,17 @@ export class level4 extends Phaser.Scene {
             frameRate: 20,
             repeat: -1
         });
+        this.anims.create({
+            key: 'explosion1',
+            frames: this.anims.generateFrameNumbers('explosions', { frames: [0,1,2,3,4,5,6,7,8]}),
+            frameRate: 8,
+        });
+
 
         this.genie.setScale(0.75,0.75);
         //GENIE FIRE BALL TIMERERRRRRRRRRRRR
-        this.time.addEvent({delay: 3000, callback: this.genie_fight1, callbackScope: this, loop: true}); //for genie
+        this.fireballEvent = new Phaser.Time.TimerEvent({delay: 3000, callback: this.genie_fight1, callbackScope: this, loop: true})
+        this.time.addEvent(this.fireballEvent); //for genie
         //genie CODE END
         this.physics.add.collider(this.player, this.tutmp1);
         this.physics.add.collider(this.player, this.tutmp2);
@@ -343,10 +375,11 @@ export class level4 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#fff' });
         this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
-        this.bossHealthDisplay = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' });
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' });
+        this.bossHealthDisplay1 = this.add.text(16, 40, 'Boss 1 Health: ' + this.bossHealth1 + '%', { fontSize: '12px', fill: '#fff' });
+        this.bossHealthDisplay2 = this.add.text(16, 48, 'Boss 2 Health: ' + this.bossHealth2 + '%', { fontSize: '12px', fill: '#fff' });
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -356,6 +389,10 @@ export class level4 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.coin, this.collectcoin, null, this);
 
         this.physics.add.overlap(this.player, this.detonator);
+        this.physics.add.overlap(this.player, this.dynamite);
+        this.physics.add.overlap(this.player, this.zone1);
+        this.physics.add.overlap(this.player, this.zone2);
+        
 
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player);
@@ -787,23 +824,24 @@ export class level4 extends Phaser.Scene {
             this.sound.play(Constants.SFX.land);
         }
 
-        if (this.cursors.down.isDown || this.keyS.isDown) //if
-        {
+        if (this.cursors.down.isDown || this.keyS.isDown){
             this.player.setVelocityY(170);
            // this.player.anims.play('jump',true);
          
         }
       //******************************************boss code start *******************************************
-        var boss_died = false;
+        
 
-        if(boss_died != true)
-        {
+        if(this.bossHealth1>0){
             this.boss.anims.play('boss_cast', true);
+            
+        }
+        if(this.bossHealth2>0){
             if(this.check_if_present1 != true){
                 this.genie.anims.play('genie_idle', true);
             }
             if(this.check_if_present1 == true){
-                this.genie.anims.play('genie_cast', true);
+              this.genie.anims.play('genie_cast', true);
             }
         }
       //********************************************boss code end*************************************
@@ -811,14 +849,17 @@ export class level4 extends Phaser.Scene {
         this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
         this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
         this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
-        this.bossHealthDisplay.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
+        this.bossHealthDisplay1.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
+        this.bossHealthDisplay2.setPosition(this.player.body.position.x-75, this.player.body.position.y-100);
+        this.bossHealthDisplay1.setText('Boss 1 Health: ' + this.bossHealth1 + '%');
+        this.bossHealthDisplay2.setText('Boss 2 Health: ' + this.bossHealth2 + '%');
 
         //When player hits a lever, decrease bossHealth by a certain amt
         // if (lever hit) { this.bossHealth -= 10; }
         // If player defeats the boss, go to graveyard game-over scene
-        if (this.bossHealth === 0) {
+        if (this.bossHealth1 <= 0&& this.bossHealth2 <= 0) {
             this.data.crewels += 500;
-            this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            setTimeout(()=>{this.scene.start(Constants.Scenes.endgame, this.data);},5000);
         }
 
     
@@ -829,19 +870,59 @@ export class level4 extends Phaser.Scene {
             this.shield.y = this.player.y + 17;
         }
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //BOMB AREA KEEP CLEAR
+
+        this.zoneText.setPosition(this.player.body.position.x, this.player.body.position.y-60);
+        this.dynIcon.setPosition(this.player.body.position.x-25, this.player.body.position.y-60);
         if (!this.detonator.body.touching.none) {
             this.bombText.setVisible(true);
             this.keyE.enabled = true;
-            console.log("touching\n");
+            if(this.keyE.listenerCount('up')<1){
+                this.keyE.on("up", ()=>this.detonate());
+            }
+            console.log("touching deto");
+        } else if (!this.dynamite.body.touching.none) {
+            this.dynText.setVisible(true);
+            this.keyE.enabled = true;
+            if(this.keyE.listenerCount('up')<1){
+                this.keyE.on("up", ()=>this.pickup());
+            }
+            console.log("touching dynamite");
+        } else if (!this.zone1.body.touching.none) {
+            this.zoneText.setVisible(true);
+            this.keyE.enabled = true;
+            if(this.keyE.listenerCount('up')<1){
+                this.keyE.on("up", ()=>this.drop1());
+            }
+            console.log("touching zone1");
+        } else if (!this.zone2.body.touching.none) {
+            this.zoneText.setVisible(true);
+            this.keyE.enabled = true;
+            if(this.keyE.listenerCount('up')<1){
+                this.keyE.on("up", ()=>this.drop2());
+            }
+            console.log("touching zone2");
         } else {
+            this.zoneText.setVisible(false);
+            this.dynText.setVisible(false);
             this.bombText.setVisible(false);
             this.keyE.enabled = false;
-            // console.log("touching\n");
+            this.keyE.removeAllListeners();
+            console.log('touching nothing');
         }
 
+        if(this.hasBomb){
+            this.dynIcon.setVisible(true);
+        }else{
+            this.dynIcon.setVisible(false);
+        }
+        // console.log(this.keyE.listenerCount('up'));
+ 
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     }
-     playerHitdoor2()
+    playerHitdoor2()
      {
          this.scene.start(Constants.Scenes.lvl1,this.data);
      }
@@ -901,8 +982,80 @@ export class level4 extends Phaser.Scene {
         // console.log(this.scene);
         this.scene.pause();
     }
-    damage(){
-        this.bossHealth-=25;
-        this.bossHealthDisplay.setText('Boss Health: ' + this.bossHealth + '%');
+    detonate(){
+        console.log('detonate');
+        if(this.bomb1){
+            this.bossHealth1 -= 50;
+            this.bomb1 = false;
+            this.boom1 = this.physics.add.sprite(this.bombImage1.x,this.bombImage1.y, 'explosions');
+            this.boom1.setScale(2);
+            this.boom1.setSize(100,100,false);
+            this.boom1.setImmovable(true);
+            this.boom1.body.allowGravity = false;
+            this.bombImage1.setVisible(false);
+            this.boom1.anims.play("explosion1", true);
+            this.sound.play(Constants.SFX.explosion);
+            if(this.bossHealth1 === 0){
+                setTimeout(() => this.bossDeath1(), 750);
+            }
+        }
+        if(this.bomb2){
+            this.bossHealth2 -= 50;
+            this.bomb2 = false;
+            this.boom2 = this.physics.add.sprite(this.bombImage2.x,this.bombImage2.y, 'explosions');
+            this.boom2.setScale(2);
+            this.boom2.setSize(100,100,false);
+            this.boom2.setImmovable(true);
+            this.boom2.body.allowGravity = false;
+            this.bombImage2.setVisible(false);
+            this.boom2.anims.play("explosion1", true);
+            this.sound.play(Constants.SFX.explosion);
+            if(this.bossHealth2 === 0){
+                setTimeout(() => this.bossDeath2(), 750);
+            }
+        }
+    }
+    pickup(){
+        this.hasBomb = true;
+        console.log('pickedup');
+    }
+    drop1(){
+        console.log('drop1');
+        if(this.hasBomb){
+            console.log('actual drop1');
+            this.hasBomb = false;
+            this.bomb1 = true;
+            this.bombImage1.setVisible(true);
+            this.bombImage1.setPosition(this.player.x, this.player.y);
+        }
+    }
+    drop2(){
+        console.log('drop2');
+        if(this.hasBomb){
+            console.log('actual drop2');
+            this.hasBomb = false;
+            this.bomb2 = true;
+            this.bombImage2.setVisible(true);
+            this.bombImage2.setPosition(this.player.x, this.player.y);
+        }
+    }
+    bossDeath1(){
+        this.time.removeEvent(this.bossEvent1);
+        this.time.removeEvent(this.bossEvent2);
+        this.time.removeEvent(this.bossEvent3);
+        this.boss.anims.play('boss_death', true);
+        this.boss_died = true;
+        setTimeout(()=>{this.boss.setVisible(false);
+                        this.boss.destroy();
+                    if(this.boss_claw1){this.boss_claw1.destroy();}
+                    if(this.boss_claw2){this.boss_claw2.destroy();}
+                    if(this.boss_claw3){this.boss_claw3.destroy();}},900);
+    }
+    bossDeath2(){
+        this.time.removeEvent(this.fireballEvent);
+        // this.genie.anims.play('genie_death', true);
+        
+        setTimeout(()=>{this.genie.setVisible(false);
+                        this.genie.destroy();},900);
     }
 }

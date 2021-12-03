@@ -33,6 +33,7 @@ export class mainMenu extends Phaser.Scene {
 
 
         this.load.audio('land-ground', 'static/src/assets/audio/sfx/damage01.wav');
+        this.load.audio('explosion', '/static/src/assets/audio/sfx/Explosion.wav');
         this.load.video('background_main', '/static/src/assets/high_way_view.mp4', 'loadeddata', false, true);
         this.load.video('background_main', '/static/src/assets/main_menu_foot.mp4', 'loadeddata', false, true);
         this.load.video('background_main', '/static/src/assets/main_menu_background.mp4', 'loadeddata', false, true);

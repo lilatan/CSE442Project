@@ -47,10 +47,16 @@ export class mainMenuLoad extends Phaser.Scene {
         this.load.spritesheet('flying_walk', '/static/src/assets/assets_2/flying_alien.png', { frameWidth: 64, frameHeight: 64 });
 
         this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
+        this.load.spritesheet('genie_sheet', '/static/src/assets/assets_2/genie_sheet.png', { frameWidth: 240, frameHeight: 240 });
+
+        this.load.spritesheet('fireball_sheet', '/static/src/assets/assets_2/fireball_spritesheet.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('small_fire_sheet', '/static/src/assets/assets_2/small_fireball_sheet.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('explosion1', '/static/src/assets/assets_2/explosion1.png', { frameWidth: 64, frameHeight: 64 });
+
 
         this.load.image('detonator', '/static/src/assets/detonator.png');
         this.load.image('dynamite', '/static/src/assets/dynamite.png');
-        this.load.spritesheet('explosions', '/static/src/assets/explosions.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('explosions', '/static/src/assets/explosions.png', { frameWidth: 185, frameHeight: 180 });
 
     }
     create(){

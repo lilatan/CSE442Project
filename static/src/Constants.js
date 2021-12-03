@@ -36,5 +36,6 @@ export const Constants = {
         jump: "jump",
         land: "land-ground",
         purchase: "purchase",
+        explosion: "explosion",
     }
 }
