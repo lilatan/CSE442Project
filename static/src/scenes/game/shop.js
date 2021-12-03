@@ -10,8 +10,8 @@ export class shop extends Phaser.Scene {
     // Keyboard key to access the shop
     keyEsc;
     items = {
-        itemA : 20,
-        itemB : 40,
+        itemA : 5,
+        itemB : 15,
         itemC : 10,
     }
     init(data){

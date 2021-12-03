@@ -1,6 +1,4 @@
 import { Constants } from "/static/src/Constants.js"
-// import { pause } from "../menus/pausemenu.js";
-import { dataFile } from "../../data.js";
 
 export class level1 extends Phaser.Scene {
     constructor(){
@@ -35,11 +33,14 @@ export class level1 extends Phaser.Scene {
     data;
     movingup;
     shieldStatus;
+    paused = false;
 
     init(data){
         this.data = data;
         this.invincible = false;
-        this.data.currentLevel = this.scene;
+        this.data.currentLevel = "1";
+        this.data.crewels = 0;
+        this.timeElapsed = 0;
         this.shieldStatus = this.data.shield;
     }
 
@@ -107,15 +108,15 @@ export class level1 extends Phaser.Scene {
 
          //possible future task: change color of the text 
 
-         this.add.text(16,530, 'Follow the Arrows!', { fontSize: '12px', fill: '#000' }).setScrollFactor(1); 
-         this.add.text(16,550, 'Use keys a or d to move left or right!' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
+         this.add.text(16,530, 'Follow the Arrows!', { fontSize: '12px', fill: '#fff' }).setScrollFactor(1);
+         this.add.text(16,550, 'Use keys a or d to move left or right!' , { fontSize: '12px', fill: '#fff' }).setScrollFactor(1);
  
          //want vertical text for jump as in press w to jump then an arrow upwards. 
          //get an asset for upwards arrows
-         this.add.text(10,410, 'press w to jump ' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
-         this.add.text(10,426, 'w to jump and press' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
-         this.add.text(10,442, ' \'a\' or \'d\' to control the direction' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
-         this.add.text(10,458, 'of the jump' , { fontSize: '12px', fill: '#000' }).setScrollFactor(1);
+         this.add.text(10,410, 'press w to jump ' , { fontSize: '12px', fill: '#fff' }).setScrollFactor(1);
+         this.add.text(10,426, 'w to jump and press' , { fontSize: '12px', fill: '#fff' }).setScrollFactor(1);
+         this.add.text(10,442, ' \'a\' or \'d\' to control the direction' , { fontSize: '12px', fill: '#fff' }).setScrollFactor(1);
+         this.add.text(10,458, 'of the jump' , { fontSize: '12px', fill: '#fff' }).setScrollFactor(1);
 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //tutorial level part 1: end
@@ -207,9 +208,9 @@ export class level1 extends Phaser.Scene {
 
     });
 
-        this.coinCount = this.add.text( 16,16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.level1Text = this.add.text( 16,24, 'Level 1', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.coinCount = this.add.text( 16,16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.level1Text = this.add.text( 16,24, 'Level 1', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -248,6 +249,9 @@ export class level1 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.wall);
         this.physics.add.collider(this.player, this.tempwallvar);
 
+        // set start time
+        this.startTime = new Date();
+
     }
 
     update(){
@@ -259,7 +263,7 @@ export class level1 extends Phaser.Scene {
         } 
         if (this.spike1.y >= 300) { 
             this.increasingspike1 = false ;
-            console.log("test");
+            // console.log("test");
         }
         if (this.increasingspike1 === true) {
             this.spike1.y += 2;
@@ -316,8 +320,13 @@ export class level1 extends Phaser.Scene {
         {
             this.player.setVelocityY(170);
         }
-    
-       
+
+        // reset startTime if pause menu was opened
+        if (this.paused) {
+            this.paused = false;
+            this.startTime = new Date();
+        }
+
     }
 
 
@@ -329,16 +338,16 @@ export class level1 extends Phaser.Scene {
 
         if(obj.x <= bound1) { 
 
-            console.log("this1")
+            // console.log("this1")
             obj.setVelocityX(speed);
 
         } else if (obj.x >= bound2) {
-            console.log("this2")
+            // console.log("this2")
     
             obj.setVelocityX(-1 * speed);
 
         }
-        console.log(obj.x)
+        // console.log(obj.x)
 
         // update shield position
         if (this.shieldStatus === 1) {
@@ -372,16 +381,24 @@ export class level1 extends Phaser.Scene {
                 // play take damage sound
                 this.sound.play(Constants.SFX.damage);
 
-                // go to graveyard scene if lives hit zero
+                // game ends if lives hit zero
                 if (this.data.lives === 0) {
-                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                    this.updateTimeElapsed();
+
+                    // switch scene to graveyard
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
         }
     }
     playerHitdoor2()
     {
-        this.data.crewels += 50;
+        this.updateTimeElapsed();
+
+        // update score
+        this.data.score += 50;
+
+        // switch scene to next level
         this.scene.start(Constants.Scenes.lvl1_2,this.data);
         
     }
@@ -399,19 +416,30 @@ export class level1 extends Phaser.Scene {
         coin.disableBody(true, true);
         this.data.crewels += 1;
         this.coinCount.setText('crewels: ' + this.data.crewels);
-        console.log(this.data.crewels);
+
         // play coin collection sound
         this.sound.play(Constants.SFX.coin);
     }
 
     pause(){
+        this.updateTimeElapsed();
+        this.paused = true;
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
     }
 
     playerHitQuestionBlock(player, question_block, wall){
-         this.wall.destroy();
-         this.question_block.destroy();
+        this.wall.destroy();
+        this.question_block.destroy();
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
+    }
+
+    updateTimeElapsed(){
+        // update time elapsed
+        this.endTime = new Date();
+        this.data.timeElapsed += Math.round((this.endTime - this.startTime) / 1000);
+        console.log(this.data.timeElapsed + " seconds");
     }
 }

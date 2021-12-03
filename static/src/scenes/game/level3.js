@@ -1,5 +1,5 @@
 import { Constants } from "/static/src/Constants.js"
-// import { pause } from "../menus/pausemenu.js";
+
 export class level3 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl3);
@@ -36,12 +36,14 @@ export class level3 extends Phaser.Scene {
     inAir;
     invincible;
     shieldStatus;
+    paused = false;
 
     init(data){
         this.data = data;
-        this.data.currentLevel = this.scene;
+        this.data.currentLevel = "3";
         this.invincible = false;
         this.shieldStatus = this.data.shield;
+        this.timeElapsed = 0;
     }
 
     preload(){
@@ -82,6 +84,12 @@ export class level3 extends Phaser.Scene {
         this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
     create(){
+        // restart level once to ensure there is no gravity bug
+        if (this.data.restarted_level_3 === false) {
+            this.data.restarted_level_3 = true;
+            this.scene.start(Constants.Scenes.lvl3,this.data);
+        }
+
         console.log("im at level 3");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -280,9 +288,9 @@ export class level3 extends Phaser.Scene {
 
         });
      
-        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.level3Text = this.add.text( 16,24, 'Level 3', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.level3Text = this.add.text( 16,24, 'Level 3', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
 
         //----COLLIDER CODE----
 
@@ -315,6 +323,10 @@ export class level3 extends Phaser.Scene {
             this.shield.body.setAllowGravity(false);
             this.shield.setAlpha(0.5);
         }
+
+        // set start time
+        this.startTime = new Date();
+
     }
     
 
@@ -497,10 +509,22 @@ export class level3 extends Phaser.Scene {
             this.shield.x = this.player.x;
             this.shield.y = this.player.y + 17;
         }
+
+        // reset startTime if pause menu was opened
+        if (this.paused) {
+            this.paused = false;
+            this.startTime = new Date();
+        }
+
     }
     playerHitdoor2()
     {
-        this.data.crewels += 150;
+        this.updateTimeElapsed();
+
+        // update score
+        this.data.score += 150;
+
+        // switch scene to next level
         this.scene.start(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitSpike(){
@@ -528,9 +552,12 @@ export class level3 extends Phaser.Scene {
                 // play take damage sound
                 this.sound.play(Constants.SFX.damage);
 
-                // go to graveyard scene if lives hit zero
+                // game ends if lives hit zero
                 if (this.data.lives === 0) {
-                    this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+                    this.updateTimeElapsed();
+
+                    // switch scene to graveyard
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
                 }
             }
         }
@@ -557,8 +584,17 @@ export class level3 extends Phaser.Scene {
     }
 
     pause(){
+        this.updateTimeElapsed();
+        this.paused = true;
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
+    }
+
+    updateTimeElapsed(){
+        // update time elapsed
+        this.endTime = new Date();
+        this.data.timeElapsed += Math.round((this.endTime - this.startTime) / 1000);
+        console.log(this.data.timeElapsed + " seconds");
     }
 }

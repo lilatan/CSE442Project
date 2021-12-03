@@ -34,12 +34,19 @@ export class leaderboard extends Phaser.Scene {
                     let entry_name = "" + entry.name;
                     let entry_score = "" + entry.score;
                     let entry_level = "" + entry.level;
+                    let entry_time = "" + entry.time;
+
+                    // Limit time elapsed to 9999 seconds (~3 hours)
+                    if (entry.time > 9999) {
+                        entry_time = "9999";
+                    }
 
                     // Pad name and score to align columns
                     while (entry_name.length < 12) {entry_name += " "}
-                    while (entry_score.length < 12) {entry_score += " "}
+                    while (entry_score.length < 15) {entry_score += " "}
+                    while (entry_level.length < 12) {entry_level += " "}
 
-                    let value = entry_name + entry_score + entry_level;
+                    let value = entry_name + entry_score + entry_level + entry_time;
                     parent.leaderboardText = new Phaser.GameObjects.Text(parent, x, y, value, {fill: '#ffffff', align: 'center'});
                     parent.leaderboardText.setFontSize(20);
                     parent.add.existing(parent.leaderboardText);
@@ -47,8 +54,10 @@ export class leaderboard extends Phaser.Scene {
                 }
             }
         };
-        xhr.open('GET', '/get-leaderboard', true);
-        xhr.send();
+        setTimeout(() => {
+            xhr.open('GET', '/get-leaderboard', true);
+            xhr.send();
+            }, 500);
     }
 
     //make the leaderboard page (static content only)
@@ -61,10 +70,10 @@ export class leaderboard extends Phaser.Scene {
         let scale = Math.max(scaleX, scaleY);
         image.setScale(scale).setScrollFactor(0);
 
-        this.leaderboardText = new Phaser.GameObjects.Text(this, 100, 80, 'LEADERBOARD', {fill: '#ffffff', align: 'center'});
+        this.leaderboardText = new Phaser.GameObjects.Text(this, 100, 80, 'LEADERBOARD (TOP 10)', {fill: '#ffffff', align: 'center'});
         this.leaderboardText.setFontSize(40);
         this.add.existing(this.leaderboardText);
-        this.nameText = new Phaser.GameObjects.Text(this, 100, 120, 'NAME - SCORE - LEVEL', {fill: '#ffffff', align: 'center'});
+        this.nameText = new Phaser.GameObjects.Text(this, 100, 120, 'NAME - SCORE - LEVEL - TIME(S)', {fill: '#ffffff', align: 'center'});
         this.nameText.setFontSize(32);
         this.add.existing(this.nameText);
 

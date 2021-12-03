@@ -7,9 +7,11 @@ export class nameInput extends Phaser.Scene{
     }
     score;
     level;
-    init(data){//[Score, Game Scene]
-        this.score = data[0];
-        this.level = data.currentLevel;
+    init(data){
+        this.data = data;
+        this.score = this.data.score;
+        this.level = this.data.currentLevel;
+        this.timeElapsed = this.data.timeElapsed;
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
@@ -20,6 +22,8 @@ export class nameInput extends Phaser.Scene{
         // this.load.html('nameform', '/static/src/assets/html/nameform.html');
     }
     create(){
+        console.log("printing score...");
+        console.log(this.data.score);
         // add image to background and scale it
         let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'graveyard')
         let scaleX = this.cameras.main.width / image.width
@@ -87,8 +91,7 @@ export class nameInput extends Phaser.Scene{
         this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#ffffff'}, {fill: '#999999'}, 32,
             ()=> {
             if (userInputted) {
-                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level)
-                //this.scene.stop(this.level.key);
+                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level, this.timeElapsed);
                 this.sound.play(Constants.SFX.back);
                 this.scene.start(Constants.Scenes.leaderboard);
             }
@@ -105,18 +108,20 @@ export class nameInput extends Phaser.Scene{
 
     }
 
-    send_leaderboard_entry(name, score, level){
+    send_leaderboard_entry(name, score, level, time){
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/update-leaderboard', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        /* SAME ISSUE OCCURS FOR endgame.js [victory scene] */
-        // Console error on line below:
-        //nameInput.js:113 POST http://10.84.102.107:8000/update-leaderboard 500 (INTERNAL SERVER ERROR)
-        //Entry does not appear on leaderboard after clicking submit button
+        console.log("printing leaderboard entry..................")
+        console.log(name);
+        console.log(score);
+        console.log(level);
+        console.log(time);
         xhr.send(JSON.stringify({
             name: name,
             score: score,
-            level: level
+            level: level,
+            time: time
         }));
     }
 }
