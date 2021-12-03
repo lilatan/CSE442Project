@@ -24,6 +24,11 @@ export class level4 extends Phaser.Scene {
     boss_claw1;
     boss_claw2;
     boss_claw3;
+    genie;
+    target;
+    fireball;
+    check_if_present1 = false;
+    check_if_present2 = false;
 
     keyW;
     keyA;
@@ -64,8 +69,13 @@ export class level4 extends Phaser.Scene {
     //    this.load.video('boss_background_4', '/static/src/assets/ssbb_background_4.mp4', 'loadeddata', false, true);
 
         //--------------BOSS SPRITE SHEET-----------
-        // this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
+        this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
+        this.load.spritesheet('genie_sheet', '/static/src/assets/assets_2/genie_sheet.png', { frameWidth: 240, frameHeight: 240 }); //this is for genie character
         //--------BOSS SPRITE SHEET----------------
+        //fire_ball_spritesheet
+        this.load.spritesheet('fireball_sheet', '/static/src/assets/assets_2/fireball_spritesheet.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('small_fire_sheet', '/static/src/assets/assets_2/small_fireball_sheet.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('explosion1', '/static/src/assets/assets_2/explosion1.png', { frameWidth: 64, frameHeight: 64 });
 
         // this.load.image('shield', '/static/src/assets/assets_2/shield.png');
         // this.load.image('detonator', '/static/src/assets/detonator.png');
@@ -92,18 +102,15 @@ export class level4 extends Phaser.Scene {
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
 
+        //target
+        this.target = this.physics.add.staticGroup();
+        this.target.create(400,100, null).setScale(0.1).refreshBody();
+
+
+
         this.vid = this.add.video(400, 300, 'boss_background_4');
         this.vid.play(true);
         this.vid.setPaused(false);
-
-        // this.door1 = this.physics.add.staticGroup();
-        // this.door2 = this.physics.add.staticGroup();
-        // this.door1.create(-63, 290, null).setScale(4).refreshBody();
-        // this.door1.create(-63, 420, null).setScale(4).refreshBody();
-        // this.door1.create(-63, 550, null).setScale(4).refreshBody();
-        // this.door2.create(862, 300, null).setScale(4).refreshBody();
-        // this.door2.create(862, 400, null).setScale(4).refreshBody();
-        // this.door2.create(862, 500, null).setScale(4).refreshBody();
 
         // this.add.image(400, 300, 'background4');
 
@@ -183,26 +190,6 @@ export class level4 extends Phaser.Scene {
         var rand_yy = Phaser.Math.Between(this.player.y - 0, this.player.y - 25);
         var rand_aaa = Phaser.Math.Between(100, 200);
 
-
-        // this.boss_claw = this.physics.add.group({
-        //     key: 'boss_sheet',
-        //     immovable: true,
-        //     allowGravity: false,
-        //     repeat: 2,
-        //     setXY: { x: rand_xx, y: rand_yy, stepX: rand_aaa }
-        // });
-
-        // this.boss_claw.children.iterate(function (child) {
-        //      this.boss_claw.anims.playAnimation('boss_spell', true);
-        //  });
-
-
-
-        // this.boss_claw = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
-        // this.boss_claw.setImmovable(true);
-        // this.boss_claw.body.allowGravity = false;
-        // this.boss_claw.setScale(1.5,1.5);
-
         this.anims.create({
             key: 'boss_idle',
             frames: this.anims.generateFrameNumbers('boss_sheet', { frames: [0,1,2,3,4,5,6,7] }),
@@ -243,13 +230,86 @@ export class level4 extends Phaser.Scene {
 
         this.boss.setScale(2.5,2.5);
         //BOSS FIGHT EVENT TIMERS
-        this.time.addEvent({delay: 1500, callback: this.boss_fight1, callbackScope: this, loop: true});
-        this.time.addEvent({delay: 1500, callback: this.boss_fight2, callbackScope: this, loop: true});
-        this.time.addEvent({delay: 1500, callback: this.boss_fight3, callbackScope: this, loop: true});
-
-
-
+        this.time.addEvent({delay: 1200, callback: this.boss_fight1, callbackScope: this, loop: true});//boss
+        this.time.addEvent({delay: 1200, callback: this.boss_fight2, callbackScope: this, loop: true});
+        this.time.addEvent({delay: 1200, callback: this.boss_fight3, callbackScope: this, loop: true});
+        
         //BOSS CODE END
+        //genie CODE START
+        this.genie = this.physics.add.sprite(100,100, 'genie_sheet');
+        this.genie.setImmovable(true);
+        this.genie.body.allowGravity = false;
+
+        this.anims.create({
+            key: 'genie_idle',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [0,1,2,3,4,5,6] }),
+            frameRate: 7,
+            repeat: -1,
+
+        });
+        this.anims.create({
+            key: 'genie_cast',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [7,8,9,10,11,12,13,14,15,16,17,18,19] }),
+            frameRate: 13,
+           // repeat: -1
+        });
+        this.anims.create({
+            key: 'genie_range',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [12,13,14,15,16,17,18,19,20] }),
+            frameRate: 15,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'genie_melee',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [21,22,23,24,25,26,27] }),
+            frameRate: 18,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'genie_something',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [28,29,30,31,32,33,34] }),
+            frameRate: 21,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'genie_laser',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [35,36,37,38,39,40,41,42,43,44,45,46,47,48] }),
+            frameRate: 6,
+        });
+        this.anims.create({
+            key: 'genie_armor',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [49,50,51,52,53,54,55,56,57,58,59] }),
+            frameRate: 5,
+        });
+        this.anims.create({
+            key: 'genie_death',
+            frames: this.anims.generateFrameNumbers('genie_sheet', { frames: [60,61,62,63,64,65,66,67,68,69,70,71,72,73] }),
+            frameRate: 22,
+        });
+        this.anims.create({
+            key: 'genie_fireball',
+            frames: this.anims.generateFrameNumbers('fireball_sheet', { frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,141,5,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]}),
+            frameRate: 60,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'genie_small_fire',
+            frames: this.anims.generateFrameNumbers('small_fire_sheet', { frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,141,5,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]}),
+            frameRate: 60,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'genie_explosion',
+            frames: this.anims.generateFrameNumbers('explosion1', { frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,141,5,16,17,18,19]}),
+            frameRate: 20,
+            repeat: -1
+        });
+
+        this.genie.setScale(0.75,0.75);
+        //GENIE FIRE BALL TIMERERRRRRRRRRRRR
+        this.time.addEvent({delay: 3000, callback: this.genie_fight1, callbackScope: this, loop: true}); //for genie
+        //genie CODE END
 
 
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -292,17 +352,7 @@ export class level4 extends Phaser.Scene {
             this.shield.body.setAllowGravity(false);
             this.shield.setAlpha(0.5);
         }
-
-        //line below doesn't work for overlap for some reason
-       // this.physics.add.collider(this.boss_claw, this.platforms);
-       // this.physics.add.overlap(this.player, this.boss_claw, this.playerHitSpike,null, this);
-       // this.physics.add.collider(this.player, this.boss_claw, this.playerHitSpike,null, this);
-        // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
-
-       // this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
-
     }
-    //this.time.addEvent({delay: 100, callback: this.hover_enabled, callbackScope: this, loop: false});
     boss_fight1(){
         if(this.boss_claw1){
             this.boss_claw1.destroy();
@@ -310,37 +360,37 @@ export class level4 extends Phaser.Scene {
         var rand_xx = Phaser.Math.Between(this.player.x - 200, this.player.x + 200);
         var rand_yy = Phaser.Math.Between(this.player.y + 30, this.player.y + 100);
         if(rand_xx < this.player.x){
-            rand_xx -= 50;
+            rand_xx -= 75;
         }
         if(rand_xx > this.player.x){
-            rand_xx += 50;
+            rand_xx += 75;
         }
-        if(rand_xx < this.player.y){
+        if(rand_yy < this.player.y){
             rand_yy -= 50;
         }
-        if(rand_xx > this.player.y){
+        if(rand_yy > this.player.y){
             rand_yy += 50;
         }
 
         var rand_aaa = Phaser.Math.Between(0, 4);
         this.boss_claw1 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
-       this.boss_claw1.setSize(33,52,false);
-       this.boss_claw1.body.offset.x=52;
+       this.boss_claw1.setSize(15,52,false);
+       this.boss_claw1.body.offset.x=60;
        this.boss_claw1.body.offset.y=30;
         this.boss_claw1.setImmovable(true);
         this.boss_claw1.body.allowGravity = false;
         this.boss_claw1.anims.play('boss_spell', true);
         if(this.boss_claw1.x < this.player.x && rand_aaa == 4){
             this.boss_claw1.setAngle(-90);
-            this.boss_claw1.setSize(52,33,false);
+            this.boss_claw1.setSize(52,15,false);
             this.boss_claw1.body.offset.x=60;
-            this.boss_claw1.body.offset.y=32;
+            this.boss_claw1.body.offset.y=40;
         }
         if(this.boss_claw1.x > this.player.x && rand_aaa == 4){
             this.boss_claw1.setAngle(90);
-            this.boss_claw1.setSize(52,33,false);
+            this.boss_claw1.setSize(52,15,false);
             this.boss_claw1.body.offset.x=30;
-            this.boss_claw1.body.offset.y=25;
+            this.boss_claw1.body.offset.y=40;
         }
         this.boss_claw1.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw1, this.playerHitSpike,null, this);
@@ -352,37 +402,37 @@ export class level4 extends Phaser.Scene {
         var rand_xx = Phaser.Math.Between(this.player.x - 300, this.player.x + 300);
         var rand_yy = Phaser.Math.Between(this.player.y + 30, this.player.y + 60);
         if(rand_xx < this.player.x){
-            rand_xx -= 50;
+            rand_xx -= 75;
         }
         if(rand_xx > this.player.x){
-            rand_xx += 50;
+            rand_xx += 75;
         }
         if(rand_xx < this.player.y){
-            rand_yy -= 50;
+            rand_yy -= 75;
         }
         if(rand_xx > this.player.y){
-            rand_yy += 50;
+            rand_yy += 75;
         }
 
         var rand_aaa = Phaser.Math.Between(0, 4);
         this.boss_claw2 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
-        this.boss_claw2.setSize(33,52,false);
-        this.boss_claw2.body.offset.x=52;
+        this.boss_claw2.setSize(15,52,false);
+        this.boss_claw2.body.offset.x=60;
         this.boss_claw2.body.offset.y=30;
         this.boss_claw2.setImmovable(true);
         this.boss_claw2.body.allowGravity = false;
         this.boss_claw2.anims.play('boss_spell', true);
         if(this.boss_claw2.x < this.player.x && rand_aaa == 4){
             this.boss_claw2.setAngle(-90);
-            this.boss_claw2.setSize(52,33,false);
+            this.boss_claw2.setSize(52,15,false);
             this.boss_claw2.body.offset.x=60;
-            this.boss_claw2.body.offset.y=32;
+            this.boss_claw2.body.offset.y=40;
         }
         if(this.boss_claw2.x > this.player.x && rand_aaa == 4){
             this.boss_claw2.setAngle(90);
-            this.boss_claw2.setSize(52,33,false);
+            this.boss_claw2.setSize(52,15,false);
             this.boss_claw2.body.offset.x=30;
-            this.boss_claw2.body.offset.y=25;
+            this.boss_claw2.body.offset.y=40;
         }
         this.boss_claw2.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw2, this.playerHitSpike,null, this);
@@ -394,45 +444,241 @@ export class level4 extends Phaser.Scene {
         var rand_xx = Phaser.Math.Between(this.player.x - 400, this.player.x + 400);
         var rand_yy = Phaser.Math.Between(this.player.y + 30, this.player.y + 60);
         if(rand_xx < this.player.x){
-            rand_xx -= 50;
+            rand_xx -= 75;
         }
         if(rand_xx > this.player.x){
-            rand_xx += 50;
+            rand_xx += 75;
         }
         if(rand_xx < this.player.y){
-            rand_yy -= 50;
+            rand_yy -= 75;
         }
         if(rand_xx > this.player.y){
-            rand_yy += 50;
+            rand_yy += 75;
         }
 
         var rand_aaa = Phaser.Math.Between(0, 4);
         this.boss_claw3 = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
-        this.boss_claw3.setSize(33,52,false);
-        this.boss_claw3.body.offset.x=52;
+        this.boss_claw3.setSize(15,52,false);
+        this.boss_claw3.body.offset.x=60;
         this.boss_claw3.body.offset.y=30;
         this.boss_claw3.setImmovable(true);
         this.boss_claw3.body.allowGravity = false;
         this.boss_claw3.anims.play('boss_spell', true);
         if(this.boss_claw3.x < this.player.x && rand_aaa == 4){
             this.boss_claw3.setAngle(-90);
-            this.boss_claw3.setSize(52,33,false);
+            this.boss_claw3.setSize(52,15,false);
             this.boss_claw3.body.offset.x=60;
-            this.boss_claw3.body.offset.y=32;
+            this.boss_claw3.body.offset.y=40;
         }
         if(this.boss_claw3.x > this.player.x && rand_aaa == 4){
             this.boss_claw3.setAngle(90);
-            this.boss_claw3.setSize(52,33,false);
+            this.boss_claw3.setSize(52,15,false);
             this.boss_claw3.body.offset.x=30;
-            this.boss_claw3.body.offset.y=25;
+            this.boss_claw3.body.offset.y=40;
         }
         this.boss_claw3.setScale(1.5,1.5);
         this.physics.add.overlap(this.player, this.boss_claw3, this.playerHitSpike,null, this);
         // add shield to scene (if purchased)
         
 
+        
+
     }
+    genie_fight1(){
+        if(this.fireball){
+            this.check_if_present1 = false;
+            this.fireball.destroy();
+        }
+        this.fireball = this.physics.add.sprite(100,100, 'fireball_sheet');
+        this.fireball.setSize(10,10,false);
+        this.fireball.body.offset.x=15;
+        this.fireball.body.offset.y=22;
+        this.fireball.setGravity(0,-700);
+       // this.fireball.body.allowGravity = false;
+        this.fireball.anims.play('genie_fireball', true);
+        this.check_if_present1 = true;
+        this.fireball.setScale(1.5,1.5);
+       // this.physics.accelerateToObject(this.fireball, this.target);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell1,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell2,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell3,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell4,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell5,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell6,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell7,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell8,null, this);
+        this.physics.add.overlap(this.fireball, this.target, this.explosion_spell9,null, this);
+    }
+    explosion_spell1(){
+        if(this.small_fire1){
+            this.check_if_present2 = false;
+            this.small_fire1.destroy();
+            
+        }
+        this.small_fire1 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire1.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire1.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire1.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire1.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire1, this.target);
+        this.physics.add.overlap(this.small_fire1, this.player, this.playerHitSpike,null, this);
+        
+        
+   
+    }
+    explosion_spell2(){
+        if(this.small_fire2){
+            this.check_if_present2 = false;
+            this.small_fire2.destroy();
+        }
+        this.small_fire2 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire2.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire2.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire2.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire2.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire2, this.target);
+        this.physics.add.overlap(this.small_fire2, this.player, this.playerHitSpike,null, this);
+       
+    }
+    explosion_spell3(){
+        if(this.small_fire3){
+            this.check_if_present2 = false;
+            this.small_fire3.destroy();
+        }
+        this.small_fire3 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire3.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire3.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire3.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire3.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire3, this.target);
+        this.physics.add.overlap(this.small_fire3, this.player, this.playerHitSpike,null, this);
+    
+    }
+    explosion_spell4(){
+        if(this.small_fire4){
+            this.check_if_present2 = false;
+            this.small_fire4.destroy();
+        }
+        this.small_fire4 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire4.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire4.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire4.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire4.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire4, this.target);
+        this.physics.add.overlap(this.small_fire4, this.player, this.playerHitSpike,null, this);
+        
+    }
+    explosion_spell5(){
+        if(this.small_fire5){
+            this.check_if_present2 = false;
+            this.small_fire5.destroy();
+        }
+        this.small_fire5 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire5.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire5.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire5.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire5.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire5, this.target);
+        this.physics.add.overlap(this.small_fire5, this.player, this.playerHitSpike,null, this);
+       
+    }
+    explosion_spell6(){
+        if(this.small_fire6){
+            this.check_if_present2 = false;
+            this.small_fire6.destroy();
+        }
+        this.small_fire6 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire6.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire6.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire6.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire6.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire6, this.target);
+        this.physics.add.overlap(this.small_fire6, this.player, this.playerHitSpike,null, this);
+       
+    }
+    explosion_spell7(){
+        if(this.small_fire7){
+            this.check_if_present2 = false;
+            this.small_fire7.destroy();
+        }
+        this.small_fire7 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire7.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire7.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire7.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire7.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire7, this.target);
+        this.physics.add.overlap(this.small_fire7, this.player, this.playerHitSpike,null, this);
+       
+    }
+    explosion_spell8(){
+        if(this.small_fire8){
+            this.check_if_present2 = false;
+            this.small_fire8.destroy();
+        }
+        this.small_fire8 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire8.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire8.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire8.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire8.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire8, this.target);
+        this.physics.add.overlap(this.small_fire8, this.player, this.playerHitSpike,null, this);
+       
+    }
+    explosion_spell9(){
+        if(this.small_fire9){
+            this.check_if_present2 = false;
+            this.small_fire9.destroy();
+            this.fireball.destroy();
+        }
+        this.small_fire9 = this.physics.add.sprite(400,100, 'fireball_sheet');
+        this.small_fire9.setSize(30,30,false);
+        var rand_num = Phaser.Math.Between(-170, 170);
+        this.small_fire9.setGravity(rand_num,-500);
+       // this.fireball.body.allowGravity = false;
+        this.small_fire9.anims.play('genie_fireball', true);
+        this.check_if_present2 = true;
+        this.small_fire9.setScale(0.5,0.5);
+       
+       // this.physics.accelerateToObject(this.small_fire9, this.target);
+        this.physics.add.overlap(this.small_fire9, this.player, this.playerHitSpike,null, this);
+     
+    }
+
+
     update(){
+            
         // if (this.movingPlatform.y <= 150) {
         //     this.movingPlatform.setVelocityY(40)
         // }
@@ -460,6 +706,34 @@ export class level4 extends Phaser.Scene {
         //     this.spike.y -= 2;
         // }
 
+         
+        if(this.check_if_present1 == true){
+            if(this.fireball.x < 310)
+        {
+                this.fireball.setVelocityX(200);
+        }
+            
+        }
+          
+        // if(this.check_if_present2 == true){
+            
+        //     if(this.fireball.y < 600)
+        //     {
+               
+        //         this.small_fire1.setVelocityX(rand_num1);
+        //         this.small_fire2.setVelocityX(rand_num2);
+        //         this.small_fire3.setVelocityX(rand_num3);
+        //         this.small_fire4.setVelocityX(rand_num4);
+        //         this.small_fire5.setVelocityX(rand_num5);
+        //         this.small_fire6.setVelocityX(rand_num6);
+        //         this.small_fire7.setVelocityX(rand_num7);
+        //         this.small_fire8.setVelocityX(rand_num8);
+        //         this.small_fire9.setVelocityX(rand_num9);
+        //     }
+           
+        // }
+       
+       
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -522,12 +796,16 @@ export class level4 extends Phaser.Scene {
 
         if(boss_died != true)
         {
-            //this.boss_claw = this.physics.add.sprite(rand_xx,rand_yy, 'boss_sheet');
-           // this.boss_claw.children.iterate(function (child) {
-               // this.boss_claw.anims.play('boss_spell', true);
-          //  });
-         //   this.boss_claw.anims.play('boss_spell', true);
             this.boss.anims.play('boss_cast', true);
+            if(this.check_if_present1 != true){
+                this.genie.anims.play('genie_idle', true);
+            }
+            if(this.check_if_present1 == true){
+                this.genie.anims.play('genie_cast', true);
+            }
+
+
+
         }
       //********************************************boss code end*************************************
 
