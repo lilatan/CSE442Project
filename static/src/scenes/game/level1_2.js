@@ -37,17 +37,16 @@ export class level1_2 extends Phaser.Scene {
 
     preload() {
 
-        this.load.video('background1_2', '/static/src/assets/background_1_2.mp4', 'loadeddata', false, true);
-        this.load.image('ground1_2', '/static/src/assets/sand_platform.png');
+        // this.load.video('background1_2', '/static/src/assets/background_1_2.mp4', 'loadeddata', false, true);
 
         //----------------------------------------------------------------------------------------------------------------------------------
-        this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
         //----------------------------------------------------------------------------------------------------------------------------------
 
-        this.load.image('shop', '/static/src/assets/hotel-sign.png');
+        // this.load.image('shop', '/static/src/assets/hotel-sign.png');
 
     }
 
@@ -142,6 +141,7 @@ export class level1_2 extends Phaser.Scene {
 
         //add shop
         this.shopFront = this.physics.add.image(400, 450, 'shop');
+        this.shopFront.setScale(0.25);
         this.shopFront.body.moves = false;
         this.shopFront.body.setAllowGravity(false);
         this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });

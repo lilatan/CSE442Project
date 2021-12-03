@@ -15,8 +15,8 @@ export class level4 extends Phaser.Scene {
     lifeCount;
     totalCoin = 12;
     spikes;
-    spike4;
-    increasingspike4;
+    spike;
+    increasingspike;
     zoom;
     jump_count = 0;
     vid;
@@ -51,26 +51,26 @@ export class level4 extends Phaser.Scene {
 
     preload(){
 
-        this.load.image('ground4', '/static/src/assets/twirl_platform.png');
-        this.load.image('coin4', '/static/src/assets/single_coin.png');
+        // this.load.image('ground4', '/static/src/assets/twirl_platform.png');
+        // this.load.image('coin', '/static/src/assets/single_coin.png');
         //this.load.image('bosshealth', 'static/src/assets/images/healthbar.png');
-        this.load.image('spike4', '/static/src/assets/spikes.png');
-        this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.image('spike', '/static/src/assets/spikes.png');
+        // this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
 
        // this.load.video('boss_background_4', '/static/src/assets/ssbm_background_4.mp4', 'loadeddata', false, true);
-       this.load.video('boss_background_4', '/static/src/assets/ssbb_background_4.mp4', 'loadeddata', false, true);
+    //    this.load.video('boss_background_4', '/static/src/assets/ssbb_background_4.mp4', 'loadeddata', false, true);
 
         //--------------BOSS SPRITE SHEET-----------
-        this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
+        // this.load.spritesheet('boss_sheet', '/static/src/assets/assets_2/boss_spritesheet.png', { frameWidth: 140, frameHeight:93 });
         //--------BOSS SPRITE SHEET----------------
 
-        this.load.image('shield', '/static/src/assets/assets_2/shield.png');
-        this.load.image('detonator', '/static/src/assets/detonator.png');
-        this.load.image('dynamite', '/static/src/assets/dynamite.png');
-        this.load.spritesheet('explosions', '/static/src/assets/explosions.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.image('shield', '/static/src/assets/assets_2/shield.png');
+        // this.load.image('detonator', '/static/src/assets/detonator.png');
+        // this.load.image('dynamite', '/static/src/assets/dynamite.png');
+        // this.load.spritesheet('explosions', '/static/src/assets/explosions.png', { frameWidth: 64, frameHeight: 64 });
     }
 
     create(){
@@ -123,7 +123,7 @@ export class level4 extends Phaser.Scene {
         // this.platforms.create(550, 150, 'ground4');
         // this.platforms.create(25, 125, 'ground4');
 
-        // this.spikes.create(400, 500, 'spike4');
+        // this.spikes.create(400, 500, 'spike');
 
 
 
@@ -255,7 +255,7 @@ export class level4 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin4',
+            key: 'coin',
             repeat: 0,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
@@ -447,17 +447,17 @@ export class level4 extends Phaser.Scene {
         //     this.movingPlatformHorizontal.setVelocityX(-40);
         // }
 
-        // if (this.spike4.y <= 200) {
-        //     this.increasingspike4 = true ;
+        // if (this.spike.y <= 200) {
+        //     this.increasingspike = true ;
 
         // }
-        // if (this.spike4.y >= 500) {
-        //     this.increasingspike4 = false;
+        // if (this.spike.y >= 500) {
+        //     this.increasingspike = false;
         // }
-        // if (this.increasingspike4 === true) {
-        //     this.spike4.y += 2;
+        // if (this.increasingspike === true) {
+        //     this.spike.y += 2;
         // } else {
-        //     this.spike4.y -= 2;
+        //     this.spike.y -= 2;
         // }
 
         if (this.cursors.left.isDown || this.keyA.isDown)

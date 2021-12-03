@@ -51,34 +51,34 @@ export class level2 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('background2', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground2', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('coin2', '/static/src/assets/single_coin.png');
-        this.load.image('spike2', '/static/src/assatiets/spikes.png');
-        this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
-        this.load.image('block2', '/static/src/assets/cyberpunk_block.png');
-        this.load.image('wall2', '/static/src/assets/stone_wall1.png');
+        // this.load.image('background', '/static/src/assets/cyber_city_lvl2.png');
+        // this.load.image('ground', '/static/src/assets/cyberpunk_platform.png');
+        // this.load.image('coin', '/static/src/assets/single_coin.png');
+        // this.load.image('spike', '/static/src/assatiets/spikes.png');
+        // this.load.image('question_block', '/static/src/assets/question_mark_block.png');
+        // this.load.image('block', '/static/src/assets/cyberpunk_block.png');
+        // this.load.image('wall', '/static/src/assets/stone_wall1.png');
         
          //----PLAYER SPRITE SHEET ---------
-        this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
         //---PLAYER SPRITE SHEET--------
         //---BIG BOY SPRITE SHEET-----
-        this.load.spritesheet('big_boy_walk', '/static/src/assets/assets_2/walk_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_attack', '/static/src/assets/assets_2/attack_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_idle', '/static/src/assets/assets_2/idle_bigboy.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('big_boy_walk', '/static/src/assets/assets_2/walk_bigboy.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('big_boy_attack', '/static/src/assets/assets_2/attack_bigboy.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('big_boy_idle', '/static/src/assets/assets_2/idle_bigboy.png', { frameWidth: 64, frameHeight: 64 });
         //---BIG BOY SPRITE SHEET----
-        this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
+        // this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
       //  this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
         //----WATCHER SPRITE SHEET-----
 
         //----WATCHER SPRITE SHEET
 
-        this.load.image('shield', '/static/src/assets/assets_2/shield.png');
+        // this.load.image('shield', '/static/src/assets/assets_2/shield.png');
     }
 
     create(){
@@ -112,7 +112,7 @@ export class level2 extends Phaser.Scene {
        this.door2.create(862, 600, null).setScale(4).refreshBody();
         
 
-        this.add.image(400, 300, 'background2');
+        this.add.image(400, 300, 'background');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
@@ -120,16 +120,16 @@ export class level2 extends Phaser.Scene {
         this.block = this.physics.add.staticGroup();
        // this.wall = this.physics.add.staticGroup();
 
-        this.platforms.create(200, 600, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(400, 600, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(600, 600, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(200, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(400, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(600, 600, 'ground').setScale(1).refreshBody();
 
     
         //climb up sprites. 
         for (var x = 0; x < 5; x++) { 
             this.xcord = 500-(x*100);
             this.ycord = 200+(x*70);
-            this.platforms.create(this.xcord, this.ycord, 'ground2').setScale(.25).refreshBody();
+            this.platforms.create(this.xcord, this.ycord, 'ground').setScale(.25).refreshBody();
     
         }
         
@@ -137,29 +137,29 @@ export class level2 extends Phaser.Scene {
         for (var x = 0; x < 9; x++) { 
 
             this.xcord = 450 - (x * 50);
-            this.platforms.create(this.xcord, 130, 'ground2').setScale(.25).refreshBody();
+            this.platforms.create(this.xcord, 130, 'ground').setScale(.25).refreshBody();
 
         }
         
 
-       // this.spikes.create(300, 100, 'spike2');
+       // this.spikes.create(300, 100, 'spike');
 
         //add question block that player has to get 
-        this.block.create(230,131, 'block2').setScale(0.5).refreshBody();
-        this.question_block = this.physics.add.image(75, 110, 'question_block2');
+        this.block.create(230,131, 'block').setScale(0.5).refreshBody();
+        this.question_block = this.physics.add.image(75, 110, 'question_block');
         this.question_block.setImmovable(true);
         this.question_block.body.allowGravity = false;
 
         this.tempwallvar = this.physics.add.staticGroup();
         for (var x = 1; x < 8; x++ ) { 
             this.ycord = 550 - (x * 70);
-            this.tempwallvar.create(740,this.ycord,'wall2').setScale(1).refreshBody(); 
+            this.tempwallvar.create(740,this.ycord,'wall').setScale(1).refreshBody(); 
         }
      //this.physics.add.collider(this.player, this.tempwallvar);
         
 
         
-        this.wall = this.physics.add.image(740, 550, 'wall2').setScale(1).refreshBody();
+        this.wall = this.physics.add.image(740, 550, 'wall').setScale(1).refreshBody();
         this.wall.setImmovable(true);
         this.wall.body.allowGravity = false;
 
@@ -261,7 +261,7 @@ export class level2 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin2',
+            key: 'coin',
             repeat: 0,//this.totalCoin-1,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
