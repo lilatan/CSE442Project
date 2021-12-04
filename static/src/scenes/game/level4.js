@@ -868,15 +868,12 @@ export class level4 extends Phaser.Scene {
         this.bossHealthDisplay1.setText('Boss 1 Health: ' + this.bossHealth1 + '%');
         this.bossHealthDisplay2.setText('Boss 2 Health: ' + this.bossHealth2 + '%');
 
-        //When player hits a lever, decrease bossHealth by a certain amt
-        // if (lever hit) { this.bossHealth -= 10; }
-        // If player defeats the boss, go to graveyard game-over scene
+        // If player defeats the boss, go to endgame scene
         if (this.bossHealth1 <= 0&& this.bossHealth2 <= 0) {
-            // this.data.crewels += 500;
             this.updateTimeElapsed();
 
             // Add remaining crewels to score with a multiplier
-            this.data.score += this.data.crewels * 10
+            //this.data.score += this.data.crewels;
             // Score Multiplier, finish boss => score multiplied by 4
             this.data.score *= 4;
             setTimeout(()=>{this.scene.start(Constants.Scenes.endgame, this.data);},5000);
@@ -1017,15 +1014,6 @@ export class level4 extends Phaser.Scene {
     //     this.bossHealthDisplay.setText('Boss Health: ' + this.bossHealth + '%');
 
     //     console.log(this.bossHealth + "% BOSS HP LEFT....");
-
-    //     // If player defeats the boss, go to endgame scene
-    //     if (this.bossHealth === 0) {
-    //         this.updateTimeElapsed();
-
-    //         // Add remaining crewels to score with a multiplier
-    //         this.data.score += this.data.crewels * 10
-    //         // Score Multiplier, finish boss => score multiplied by 4
-    //         this.data.score *= 4;
 
     //         // switch scene to next level
     //         this.scene.start(Constants.Scenes.endgame, this.data);
