@@ -66,6 +66,8 @@ export class level4 extends Phaser.Scene {
         this.check_if_present1 = false;
         this.bossHealth1 = 100;
         this.bossHealth2 = 100;
+        this.victory = false;
+
         console.log("im at level 4");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -869,13 +871,14 @@ export class level4 extends Phaser.Scene {
         this.bossHealthDisplay2.setText('Boss 2 Health: ' + this.bossHealth2 + '%');
 
         // If player defeats the boss, go to endgame scene
-        if (this.bossHealth1 <= 0&& this.bossHealth2 <= 0) {
+        if (this.bossHealth1 <= 0&& this.bossHealth2 <= 0&&!this.victory) {
             this.updateTimeElapsed();
 
             // Add remaining crewels to score with a multiplier
             //this.data.score += this.data.crewels;
             // Score Multiplier, finish boss => score multiplied by 4
             this.data.score *= 4;
+            this.victory = true;
             setTimeout(()=>{this.scene.start(Constants.Scenes.endgame, this.data);},5000);
         }
 
