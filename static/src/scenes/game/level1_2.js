@@ -140,11 +140,12 @@ export class level1_2 extends Phaser.Scene {
 
 
         //add shop
-        this.shopFront = this.physics.add.image(400, 450, 'shop');
+        this.shopFront = this.physics.add.image(250, 425, 'shop');
         this.shopFront.setScale(0.25);
+        this.shopFront.setSize(900,900);
         this.shopFront.body.moves = false;
         this.shopFront.body.setAllowGravity(false);
-        this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.shopText = new Phaser.GameObjects.Text(this, 200, 400, 'Press E', { fill: '#ffffff' });
         this.shopText.setFontSize(24);
         this.add.existing(this.shopText);
         this.shopFront.depth = 1;
@@ -173,6 +174,7 @@ export class level1_2 extends Phaser.Scene {
         //
        // enemy =  this.physics.add.sprite(700, 450, null);
        this.player = this.physics.add.sprite(100, 400, 'player_one_idle');
+       this.player.setDepth(2);
        this.player.body.offset.x=15;
        this.player.body.offset.y=32;
         //remove this if you want

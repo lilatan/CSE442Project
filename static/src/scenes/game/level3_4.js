@@ -117,10 +117,13 @@ export class level3_4 extends Phaser.Scene {
         //platforms to climb higher
 
         //add shop
-        this.shopFront = this.physics.add.image(400, 450, 'shop');
+        this.shopFront = this.physics.add.image(625, 375, 'shop');
+        this.shopFront.setScale(0.25);
+        this.shopFront.setSize(900,900);
+        this.shopFront.body.offset.y=300;
         this.shopFront.body.moves = false;
         this.shopFront.body.setAllowGravity(false);
-        this.shopText = new Phaser.GameObjects.Text(this, 350, 400, 'Press E', { fill: '#ffffff' });
+        this.shopText = new Phaser.GameObjects.Text(this, 550, 375, 'Press E', { fill: '#000000' });
         this.shopText.setFontSize(24);
         this.add.existing(this.shopText);
         this.shopFront.depth = 1;
@@ -138,6 +141,7 @@ export class level3_4 extends Phaser.Scene {
 
 
         this.player = this.physics.add.sprite(100, 300, 'player_one_idle');
+        this.player.setDepth(2);
         this.player.body.offset.x = 15;
         this.player.body.offset.y = 32;
         this.anims.create({
