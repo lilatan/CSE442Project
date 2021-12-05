@@ -361,7 +361,7 @@ export class level3 extends Phaser.Scene {
         const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
         const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
-        if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
+        if (this.cursors.up.isDown && this.player.body.onFloor() || this.keyW.isDown && this.player.body.onFloor()) //if
         {
             idle = false;
             this.player.setVelocityY(-400);
@@ -371,15 +371,18 @@ export class level3 extends Phaser.Scene {
             this.jump_count = 1;
         }
         //for double jump
-        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+        if((isJumpJustDownc && (!this.player.body.onFloor() && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.onFloor() && this.jump_count < 2)){
             this.doublejump_enabled();
         }
         //reset jump counter
-        if(this.player.body.touching.down){
+        if(this.player.body.onFloor()){
             this.jump_count = 0;
         }
+        if(!this.player.body.onFloor()){
+            setTimeout(() => {  this.inAir = true; }, 100);
+        }
         // landing sound
-        if (this.inAir && this.player.body.touching.down) {
+        if (this.inAir && this.player.body.onFloor()) {
             this.inAir = false;
             this.sound.play(Constants.SFX.land);
         }
@@ -394,19 +397,19 @@ export class level3 extends Phaser.Scene {
       //  }
       //if positive can do this
       
-        if(this.player.body.touching.down && (!this.player.body.touching.right || !this.player.body.touching.left)){
+        if(this.player.body.onFloor() && (!this.player.body.touching.right || !this.player.body.touching.left)){
             this.player.setGravity(0,700);
         }
-        if(this.player.body.touching.right && !this.player.body.touching.down){
+        if(this.player.body.touching.right && !this.player.body.onFloor()){
             this.player.setGravity(0,-400);
             this.player.flipX = true;
         }
-        if(this.player.body.touching.left && !this.player.body.touching.down){
+        if(this.player.body.touching.left && !this.player.body.onFloor()){
             this.player.setGravity(0,-400);
             this.player.flipX = false;
         }
       //right wall
-        if((this.cursors.up.isDown && (this.player.body.touching.right && this.player.body.touching.down) || this.keyW.isDown && (this.player.body.touching.right && this.player.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touching.right && this.player.body.onFloor()) || this.keyW.isDown && (this.player.body.touching.right && this.player.body.onFloor())))
         {       
             idle = false;
            // this.player.setGravity(0,-700);
@@ -414,7 +417,7 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('jump',true);
         }
         //right wall
-        if((this.cursors.up.isDown && (this.player.body.touching.right && !this.player.body.touching.down) || this.keyW.isDown && (this.player.body.touching.right && !this.player.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touching.right && !this.player.body.onFloor()) || this.keyW.isDown && (this.player.body.touching.right && !this.player.body.onFloor())))
         {
             idle = false;
            // this.player.setGravity(0,-700);
@@ -422,7 +425,7 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('jump',true);
         }
         //left wall
-        if((this.cursors.up.isDown && (this.player.body.touchingleft && this.hero.body.touching.down) || this.keyW.isDown && (this.player.body.touchingleft && this.hero.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touchingleft && this.hero.body.onFloor()) || this.keyW.isDown && (this.player.body.touchingleft && this.hero.body.onFloor())))
         {
             idle = false;
            // this.player.setGravity(0,-300);
@@ -430,7 +433,7 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('jump',true);
         }
         //left wall
-        if((this.cursors.up.isDown && (this.player.body.touching.left && !this.player.body.touching.down) || this.keyW.isDown && (this.player.body.touching.left && !this.player.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touching.left && !this.player.body.onFloor()) || this.keyW.isDown && (this.player.body.touching.left && !this.player.body.onFloor())))
         {
             idle = false;
            // this.player.setGravity(0,-300);
@@ -572,7 +575,7 @@ export class level3 extends Phaser.Scene {
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
             this.jump_count = 2;
-            this.data.doubleJump -= 1;
+            // this.data.doubleJump -= 1;
         }
     }
 

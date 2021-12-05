@@ -230,10 +230,10 @@ export class level3_4 extends Phaser.Scene {
             }
 
             // jump
-            if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) {
+            if (this.cursors.up.isDown && this.player.body.onFloor() || this.keyW.isDown && this.player.body.onFloor()) {
                 //Phaser.Input.Keyboard.JustDown(this.cursors.up)
                 //this.player.body.onFloor()
-                //this.player.body.touching.down
+                //this.player.body.onFloor()
                 this.player.setVelocityY(-400);
                 setTimeout(() => { this.inAir = true; }, 100);
                 this.sound.play(Constants.SFX.jump);
@@ -243,7 +243,10 @@ export class level3_4 extends Phaser.Scene {
                 // this.player.anims.play('jump', this.player)
             }
             // landing sound
-            if (this.inAir && this.player.body.touching.down) {
+            if(!this.player.body.onFloor()){
+                setTimeout(() => {  this.inAir = true; }, 100);
+            }
+            if (this.inAir && this.player.body.onFloor()) {
                 this.inAir = false;
                 this.sound.play(Constants.SFX.land);
             }

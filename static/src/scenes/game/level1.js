@@ -280,7 +280,7 @@ export class level1 extends Phaser.Scene {
         const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
         const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
-        if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down)
+        if (this.cursors.up.isDown && this.player.body.onFloor() || this.keyW.isDown && this.player.body.onFloor())
         {
            
             this.player.setVelocityY(-400);
@@ -290,15 +290,18 @@ export class level1 extends Phaser.Scene {
             this.jump_count = 1;
         }
         // for double jump
-        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+        if((isJumpJustDownc && (!this.player.body.onFloor() && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.onFloor() && this.jump_count < 2)){
             this.doublejump_enabled();
         }
         // reset jump counter
-        if(this.player.body.touching.down){
+        if(this.player.body.onFloor()){
             this.jump_count = 0;
         }
         // landing sound
-        if (this.inAir && this.player.body.touching.down) {
+        if(!this.player.body.onFloor()){
+            setTimeout(() => {  this.inAir = true; }, 100);
+        }
+        if (this.inAir && this.player.body.onFloor()) {
             this.inAir = false;
             this.sound.play(Constants.SFX.land);
           // this.player.anims.play('jump', this.player)

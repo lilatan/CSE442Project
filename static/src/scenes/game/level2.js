@@ -354,7 +354,7 @@ export class level2 extends Phaser.Scene {
         const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
         const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
-        if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
+        if (this.cursors.up.isDown && this.player.body.onFloor() || this.keyW.isDown && this.player.body.onFloor()) //if
         {
             this.player.setVelocityY(-400);
             setTimeout(() => {  this.inAir = true; }, 100);
@@ -363,16 +363,19 @@ export class level2 extends Phaser.Scene {
             idle = false;
             this.jump_count = 1;
         }
-        if((isJumpJustDownc && (!this.player.body.touching.down && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.touching.down && this.jump_count < 2)){
+        if((isJumpJustDownc && (!this.player.body.onFloor() && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.onFloor() && this.jump_count < 2)){
             this.doublejump_enabled();
         }
-        if(this.player.body.touching.down){
+        if(this.player.body.onFloor()){
             this.jump_count = 0;
         }
 
 
         // landing sound
-        if (this.inAir && this.player.body.touching.down) {
+        if(!this.player.body.onFloor()){
+            setTimeout(() => {  this.inAir = true; }, 100);
+        }
+        if (this.inAir && this.player.body.onFloor()) {
             this.inAir = false;
             this.sound.play(Constants.SFX.land);
         }
@@ -381,7 +384,7 @@ export class level2 extends Phaser.Scene {
         {
             this.player.setVelocityY(170); 
         }  
-        if(idle&& this.player.body.touching.down){
+        if(idle&& this.player.body.onFloor()){
             this.player.anims.play('idle',true);
         }
     //-----------------PLAYER ANIMATION ABOVE------------------------------------------------------------
@@ -531,7 +534,7 @@ export class level2 extends Phaser.Scene {
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
             this.jump_count = 2;
-            this.data.doubleJump -= 1;
+            // this.data.doubleJump -= 1;
         }
     }
 
