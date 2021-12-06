@@ -1,7 +1,6 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
-import pymongo
 import os
-from database import database_tools, tests
+from database import database_tools
 
 app = Flask(__name__, template_folder='templates')
 
@@ -30,7 +29,8 @@ def updateLeaderboard():
     name = content['name']
     score = content['score']
     level = content['level']
-    database_tools.add_leaderboard(name, score, level)
+    time = content['time']
+    database_tools.add_leaderboard(name, score, level, time)
     return jsonify(success=True)
 
 

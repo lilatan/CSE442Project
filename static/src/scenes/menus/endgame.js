@@ -7,16 +7,17 @@ export class endgame extends Phaser.Scene{
     }
     score;
     level;
-    init(data){//[Score, Game Scene]
-        this.score = data[0] + 100;
-        this.level = data[1];
+    init(data){
+        this.data = data;
+        this.score = this.data.score;
+        this.level = this.data.currentLevel;
+        this.timeElapsed = this.data.timeElapsed;
     }
     preload(){
         this.screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 
         this.load.image('endgame', '/static/src/assets/images/endgame.jpg');
         // <a href="https://www.freepik.com/vectors/tree">Tree vector created by upklyak - www.freepik.com</a>
-
         // this.load.html('nameform', '/static/src/assets/html/nameform.html');
     }
     create(){
@@ -43,7 +44,7 @@ export class endgame extends Phaser.Scene{
         //     { fontSize: '32px', fill: '#730000' }
         // ).setOrigin(0.5);
         this.displayScore = this.add.text(this.screenCenterX, 170,
-            this.score.toString(),
+            this.score,
             { fontSize: '32px', fill: '#ffffff' }
         ).setOrigin(0.5);
 
@@ -88,8 +89,7 @@ export class endgame extends Phaser.Scene{
         this.submitButton = new TextButton(this, 340, 480, 'SUBMIT', {fill: '#474747'}, {fill: '#999999'}, 32,
             ()=> {
             if (userInputted) {
-                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level.key)
-                this.scene.stop(this.level.key);
+                this.send_leaderboard_entry(nameDisplay.text, this.score, this.level, this.timeElapsed);
                 this.sound.play(Constants.SFX.back);
                 this.scene.start(Constants.Scenes.leaderboard);
             }
@@ -99,7 +99,6 @@ export class endgame extends Phaser.Scene{
         // back to menu button
         this.menuButton = new TextButton(this, 25, 550, 'SKIP LEADERBOARD', {fill: '#474747'}, {fill: '#999999'}, 32,
             ()=> {
-            this.scene.stop(this.level.key);
             this.scene.start(Constants.Scenes.mainMenu);
             this.sound.play(Constants.SFX.back)
         });
@@ -107,14 +106,20 @@ export class endgame extends Phaser.Scene{
 
     }
 
-    send_leaderboard_entry(name, score, level){
+    send_leaderboard_entry(name, score, level, time){
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/update-leaderboard', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log("printing leaderboard entry..................")
+        console.log(name);
+        console.log(score);
+        console.log(level);
+        console.log(time);
         xhr.send(JSON.stringify({
             name: name,
             score: score,
-            level: level
+            level: level,
+            time: time
         }));
     }
 }

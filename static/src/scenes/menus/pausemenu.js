@@ -21,10 +21,10 @@ export class pauseMenu extends Phaser.Scene {
         this.pauseText = new Phaser.GameObjects.Text(this,275,200,'PAUSED',{fill: '#ffffff'});
         this.pauseText.setFontSize(72);
         this.add.existing(this.pauseText);
-        this.resumeButton = new TextButton(this, 25, 400,'RESUME',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.resumeGame());
+        this.resumeButton = new TextButton(this, 25, 450,'RESUME',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.resumeGame());
         this.add.existing(this.resumeButton);
-        this.restartButton = new TextButton(this, 25, 450,'RESTART',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.restartGame());
-        this.add.existing(this.restartButton);
+        // this.restartButton = new TextButton(this, 25, 450,'RESTART',{fill: '#ffffff'}, {fill: '#888888'},48, ()=>this.restartGame());
+        // this.add.existing(this.restartButton);
         this.optionsButton = new TextButton(this, 25, 500,'OPTIONS',{fill: '#ffffff'}, {fill: '#888888'},48,
             ()=> {this.scene.start(Constants.Scenes.options,this.scene); this.sound.play(Constants.SFX.menu)});
         this.add.existing(this.optionsButton);

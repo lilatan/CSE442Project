@@ -1,11 +1,12 @@
 import { Constants } from "/static/src/Constants.js"
-import {dataFile} from "../../data.js";
-// import { pause } from "../menus/pausemenu.js";
+
 export class level2 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl2);
     }
 
+    xcord; 
+    ycord; 
     player;
     bigboy_enemy;
     bigboy_speed = 100;
@@ -15,15 +16,18 @@ export class level2 extends Phaser.Scene {
     wall;
     block;
     coin;
-    door1;
+    tempwallvar;
+    //door1;
     door2;
     platforms;
     cursors;
     crewels;
     coinCount;
+    lifeCount;
     totalCoin = 12;
     spikes;
     zoom;
+    jump_count = 0;
 
     keyW;
     keyA;
@@ -35,43 +39,28 @@ export class level2 extends Phaser.Scene {
     keyP;
 
     inAir;
+    invincible;
+    shieldStatus;
+    paused = false;
 
     init(data){
         this.data = data;
         this.data.currentLevel = this.scene;
+        this.invincible = false;
+        this.shieldStatus = this.data.shield;
+        this.data.currentLevel = "2";
+        this.timeElapsed = 0;
     }
 
     preload(){
-        this.load.image('background2', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground2', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('coin2', '/static/src/assets/single_coin.png');
-        this.load.image('spike2', '/static/src/assets/spikes.png');
-        this.load.image('question_block2', '/static/src/assets/question_mark_block.png');
-        this.load.image('block2', '/static/src/assets/cyberpunk_block.png');
-        this.load.image('wall2', '/static/src/assets/stone_wall1.png');
-        
-         //----PLAYER SPRITE SHEET ---------
-        this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
-        //---PLAYER SPRITE SHEET--------
-        //---BIG BOY SPRITE SHEET-----
-        this.load.spritesheet('big_boy_walk', '/static/src/assets/assets_2/walk_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_attack', '/static/src/assets/assets_2/attack_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_idle', '/static/src/assets/assets_2/idle_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        //---BIG BOY SPRITE SHEET----
-        this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
-      //  this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        //----WATCHER SPRITE SHEET-----
-
-        //----WATCHER SPRITE SHEET
     }
 
     create(){
-        
+        // restart level once to ensure there is no gravity bug
+        if (this.data.restarted_level_2 === false) {
+            this.data.restarted_level_2 = true;
+            this.scene.start(Constants.Scenes.lvl2,this.data);
+        }
         console.log("im at level 2");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -84,18 +73,14 @@ export class level2 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
-        
-       this.door1 = this.physics.add.staticGroup();
+
        this.door2 = this.physics.add.staticGroup();
-       this.door1.create(-63, 290, null).setScale(4).refreshBody();
-       this.door1.create(-63, 420, null).setScale(4).refreshBody();
-       this.door1.create(-63, 550, null).setScale(4).refreshBody();
       // this.door2.create(862, 300, null).setScale(4).refreshBody();
       // this.door2.create(862, 400, null).setScale(4).refreshBody();
        this.door2.create(862, 600, null).setScale(4).refreshBody();
         
 
-        this.add.image(400, 300, 'background2');
+        this.add.image(400, 300, 'background');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
@@ -103,34 +88,66 @@ export class level2 extends Phaser.Scene {
         this.block = this.physics.add.staticGroup();
        // this.wall = this.physics.add.staticGroup();
 
-        this.platforms.create(200, 600, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(400, 600, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(600, 600, 'ground2').setScale(1).refreshBody();
+        this.platforms.create(200, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(400, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(600, 600, 'ground').setScale(1).refreshBody();
 
-        this.platforms.create(300, 150, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(150, 150, 'ground2').setScale(1).refreshBody();
+    
+        // //climb up sprites.
+        // for (var x = 0; x < 5; x++) {
+        //     this.xcord = 500-(x*100);
+        //     this.ycord = 200+(x*70);
+        //     this.platforms.create(this.xcord, this.ycord, 'ground').setScale(.25).refreshBody();
+        // }
 
+        // ------------------MOVING PLATFORMS-----------------------------
+        this.movingPlatform1 = this.physics.add.image(500,200, 'ground').setScale(.15,.25);
+        this.movingPlatform1.setImmovable(true);
+        this.movingPlatform1.body.allowGravity = false;
 
-        this.platforms.create(800, 250, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(400, 250, 'ground2').setScale(1).refreshBody();
+        this.movingPlatform2 = this.physics.add.image(400,270, 'ground').setScale(.15,.25);
+        this.movingPlatform2.setImmovable(true);
+        this.movingPlatform2.body.allowGravity = false;
+
+        this.movingPlatform3 = this.physics.add.image(300,340, 'ground').setScale(.15,.25);
+        this.movingPlatform3.setImmovable(true);
+        this.movingPlatform3.body.allowGravity = false;
+
+        this.movingPlatform4 = this.physics.add.image(200,410, 'ground').setScale(.15,.25);
+        this.movingPlatform4.setImmovable(true);
+        this.movingPlatform4.body.allowGravity = false;
+
+        this.movingPlatform5 = this.physics.add.image(100,480, 'ground').setScale(.15,.25);
+        this.movingPlatform5.setImmovable(true);
+        this.movingPlatform5.body.allowGravity = false;
         
-        this.platforms.create(100, 350, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(300, 500, 'ground2').setScale(1).refreshBody();
-        this.platforms.create(700, 500, 'ground2')
+        //top floor. 
+        for (var x = 0; x < 7; x++) {
 
-        this.spikes.create(300, 100, 'spike2');
+            this.xcord = x * 50;
+            this.platforms.create(this.xcord, 130, 'ground').setScale(.25).refreshBody();
 
-       // this.wall.create(200, 550, 'wall2').setScale(0.75).refreshBody();
+        }
+        
 
-       // this.question_block.create(75, 110, 'question_block2');
+       // this.spikes.create(300, 100, 'spike');
 
-        this.block.create(350, 400, 'block2').setScale(0.5).refreshBody();
-
-        this.question_block = this.physics.add.image(75, 110, 'question_block2');
+        //add question block that player has to get 
+        // this.block.create(230,131, 'block').setScale(0.5).refreshBody();
+        this.question_block = this.physics.add.image(75, 110, 'question_block');
         this.question_block.setImmovable(true);
         this.question_block.body.allowGravity = false;
 
-        this.wall = this.physics.add.image(200, 550, 'wall2').setScale(.75).refreshBody();
+        this.tempwallvar = this.physics.add.staticGroup();
+        for (var x = 1; x < 8; x++ ) { 
+            this.ycord = 550 - (x * 70);
+            this.tempwallvar.create(740,this.ycord,'wall').setScale(1).refreshBody(); 
+        }
+     //this.physics.add.collider(this.player, this.tempwallvar);
+        
+
+        
+        this.wall = this.physics.add.image(740, 550, 'wall').setScale(1).refreshBody();
         this.wall.setImmovable(true);
         this.wall.body.allowGravity = false;
 
@@ -232,9 +249,9 @@ export class level2 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin2',
-            repeat: 0,//this.totalCoin-1,
-            setXY: { x: 12, y: 0, stepX: 70 }
+            key: 'coin',
+            repeat: 8,//this.totalCoin-1,
+            setXY: { x: 30, y: 0, stepX: 75 }
         });
 
         this.coin.children.iterate(function (child) {
@@ -243,13 +260,37 @@ export class level2 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(14, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+
+        this.coinCount.setPosition(200, 150);
+        this.level2Text.setPosition(200, 170);
+        this.lifeCount.setPosition(200, 190);
 
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
+        this.physics.add.collider(this.bigboy_enemy, this.wall);
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.player, this.block);
         this.physics.add.collider(this.player, this.wall);
+
+        // collider (moving platform and player)
+        this.physics.add.collider(this.player, this.movingPlatform1);
+        this.physics.add.collider(this.player, this.movingPlatform2);
+        this.physics.add.collider(this.player, this.movingPlatform3);
+        this.physics.add.collider(this.player, this.movingPlatform4);
+        this.physics.add.collider(this.player, this.movingPlatform5);
+
+        // collider (moving platform and coins)
+        // this.physics.add.collider(this.coin, this.movingPlatform1);
+        // this.physics.add.collider(this.coin, this.movingPlatform2);
+        // this.physics.add.collider(this.coin, this.movingPlatform3);
+        // this.physics.add.collider(this.coin, this.movingPlatform4);
+        // this.physics.add.collider(this.coin, this.movingPlatform5);
+
+        this.physics.add.collider(this.player, this.tempwallvar);
+
       //  this.physics.add.collider(this.player, this.watcher_enemy);
        // this.physics.add.collider(this.bigboy_enemy, this.player);
         this.physics.add.collider(this.coin, this.platforms);
@@ -266,15 +307,35 @@ export class level2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.question_block, this.playerHitQuestionBlock,null, this);
-        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);``
 
+        // add shield to scene (if purchased)
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
+
+        // set start time
+        this.startTime = new Date();
     }
 
     update(){
 
-    //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
+        // -----------------------UPDATE MOVING PLATFORMS-----------------
+        this.moveplatformhorizontal(this.movingPlatform1, 501, 600, 50);
+        this.moveplatformhorizontal(this.movingPlatform2, 401, 500, 30);
+        this.moveplatformhorizontal(this.movingPlatform3, 301, 400, 50);
+        this.moveplatformhorizontal(this.movingPlatform4, 201, 300, 30);
+        this.moveplatformhorizontal(this.movingPlatform5, 101, 200, 50);
+
+    
+
+        //-----------------PLAYER ANIMATION BELOW-------------------------------------------------
         var idle = false;
+
         if (this.cursors.left.isDown || this.keyA.isDown)
         {
             this.player.setVelocityX(-200);
@@ -294,18 +355,31 @@ export class level2 extends Phaser.Scene {
             // this.player.anims.play('idle',true);
             idle = true;
         }
-
+        const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
-        if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
+        if (this.cursors.up.isDown && this.player.body.onFloor() || this.keyW.isDown && this.player.body.onFloor()) //if
         {
             this.player.setVelocityY(-400);
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
             idle = false;
+            this.jump_count = 1;
         }
+        if((isJumpJustDownc && (!this.player.body.onFloor() && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.onFloor() && this.jump_count < 2)){
+            this.doublejump_enabled();
+        }
+        if(this.player.body.onFloor()){
+            this.jump_count = 0;
+        }
+
+
         // landing sound
-        if (this.inAir && this.player.body.touching.down) {
+        if(!this.player.body.onFloor()){
+            setTimeout(() => {  this.inAir = true; }, 100);
+        }
+        if (this.inAir && this.player.body.onFloor()) {
             this.inAir = false;
             this.sound.play(Constants.SFX.land);
         }
@@ -314,7 +388,7 @@ export class level2 extends Phaser.Scene {
         {
             this.player.setVelocityY(170); 
         }  
-        if(idle&& this.player.body.touching.down){
+        if(idle&& this.player.body.onFloor()){
             this.player.anims.play('idle',true);
         }
     //-----------------PLAYER ANIMATION ABOVE------------------------------------------------------------
@@ -326,13 +400,13 @@ export class level2 extends Phaser.Scene {
     //  if(this.bigboy_enemy.x = 500){
     // this.bigboy_enemy.setVelocityX(100);  
     //  }
-       if(this.bigboy_enemy.x < 350)
+       if(this.bigboy_enemy.x < 400)
         {
             this.bigboy_enemy.setVelocityX(100);
             this.bigboy_enemy.anims.play('left_boy', true);
             this.bigboy_enemy.flipX = false;
         }
-       if(this.bigboy_enemy.x > 750)
+       if(this.bigboy_enemy.x > 650)
         {
             this.bigboy_enemy.setVelocityX(-100);
             this.bigboy_enemy.anims.play('right_boy', true);
@@ -362,39 +436,111 @@ export class level2 extends Phaser.Scene {
         }
     //---------WATCHER ANIMATION ABOVE------
 
-
-
-
-
-
-
-
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
-        // if(this.keyESC.isDown){
-        //     this.scene.pause();
-        //     this.scene.launch(Constants.Scenes.pause);
+        // this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        // // if(this.keyESC.isDown){
+        // //     this.scene.pause();
+        // //     this.scene.launch(Constants.Scenes.pause);
+        // // }
+        // this.level2Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+        // this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+        // // if(this.crewels==this.totalCoin){
+        //     // this.scene.pause();
+        //     // this.scene.launch(Constants.Scenes.nameInput, this.scene);
+        //     console.log(this.scene.key)
+        //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
         // }
-        if(this.crewels==this.totalCoin){
-            // this.scene.pause();
-            // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-            console.log(this.scene.key)
-            this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+
+        // update shield position
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
         }
-       
+
+        // reset startTime if pause menu was opened
+        if (this.paused) {
+            this.paused = false;
+            this.startTime = new Date();
+        }
+
     }
-    playerHitdoor1()
-    {
-        this.scene.start(Constants.Scenes.lvl1_2,this.data);
+
+    //function to handle moving platforms horizontally.
+    //takes a platform object and two bounds, where bound1 = min y val and bound2 = max y val.
+    //it also takes a speed value which is the velocity to move by.
+    //would lke to move this method to constants when organizing.
+    moveplatformhorizontal(obj, bound1, bound2, speed) {
+
+        if(obj.x <= bound1) {
+
+            // console.log("this1")
+            obj.setVelocityX(speed);
+
+        } else if (obj.x >= bound2) {
+            // console.log("this2")
+
+            obj.setVelocityX(-1 * speed);
+
+        }
+        // console.log(obj.x)
     }
+
+    // playerHitdoor1()
+    // {
+    //     this.scene.start(Constants.Scenes.lvl1_2,this.data);
+    // }
     playerHitdoor2()
     {
+        this.updateTimeElapsed();
+
+        // update score
+        this.data.score += 100;
+
+        // switch scene to next level
         this.scene.start(Constants.Scenes.lvl2_3,this.data);
     }
     playerHitSpike(){
-        // play take damage sound
-        this.sound.play(Constants.SFX.damage);
+        if (!this.invincible) {
+            // set invincibility frame
+            this.invincible = true;
+            setTimeout(() => {  this.invincible = false; }, 750);
 
-        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            // if shield is available
+            if (this.shieldStatus === 1) {
+                // disable shield
+                this.shieldStatus = 0;
+                this.shield.setAlpha(0);
+
+                // shield recovers after 8 seconds
+                setTimeout(() => {  this.shieldStatus = 1; this.shield.setAlpha(0.5);}, 5000);
+
+                // otherwise, player takes damage
+            } else {
+                // update player lives
+                this.data.lives -= 1;
+                this.lifeCount.setText('lives: ' + this.data.lives);
+
+                // play take damage sound
+                this.sound.play(Constants.SFX.damage);
+
+                // game ends if lives hit zero
+                if (this.data.lives === 0) {
+                    this.updateTimeElapsed();
+
+                    // switch scene to graveyard
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
+                }
+            }
+        }
+    }
+    doublejump_enabled(){
+        if(this.data.doubleJump > 0){
+            this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
+            this.jump_count = 2;
+            // this.data.doubleJump -= 1;
+        }
     }
 
     collectcoin (player, coin){
@@ -407,20 +553,20 @@ export class level2 extends Phaser.Scene {
         this.sound.play(Constants.SFX.coin);
     }
     playerHitQuestionBlock(player, question_block, wall){
-         // wall.disableBody(true,true);
+        // wall.disableBody(true,true);
         //  question_block.disableBody(true,true);
-          this.wall.destroy();
-          this.question_block.destroy();
+        this.wall.destroy();
+        this.question_block.destroy();
+        // play coin collection sound
+        this.sound.play(Constants.SFX.coin);
      }
     
     pause(){
+        this.updateTimeElapsed();
+        this.paused = true;
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
-    }
-    transition(){
-        // this.scene.start(Constants.Scenes.lvl2_3,this.data);
-      
     }
     // bigboy_ATTACK()
     //{
@@ -428,5 +574,10 @@ export class level2 extends Phaser.Scene {
     //  this.bigboy_enemy.body.setSize(64,64,true);
     //}
 
-    
+    updateTimeElapsed(){
+        // update time elapsed
+        this.endTime = new Date();
+        this.data.timeElapsed += Math.round((this.endTime - this.startTime) / 1000);
+        console.log(this.data.timeElapsed + " seconds");
+    }
 }

@@ -1,5 +1,5 @@
 import { Constants } from "/static/src/Constants.js"
-// import { pause } from "../menus/pausemenu.js";
+
 export class level3 extends Phaser.Scene {
     constructor(){
         super(Constants.Scenes.lvl3);
@@ -10,7 +10,6 @@ export class level3 extends Phaser.Scene {
     watcher_enemy;
     flying_enemy;
     coin;
-    door1;
     door2;
     platforms;
     block;
@@ -18,10 +17,10 @@ export class level3 extends Phaser.Scene {
     cursors;
     crewels = 0;
     coinCount;
-    totalCoin = 12;
+    lifeCount;
     spikes;
     zoom;
- 
+    jump_count = 0;
 
     keyW;
     keyA;
@@ -35,49 +34,57 @@ export class level3 extends Phaser.Scene {
     data;
 
     inAir;
+    invincible;
+    shieldStatus;
+    paused = false;
 
     init(data){
         this.data = data;
+        this.data.currentLevel = "3";
+        this.invincible = false;
+        this.shieldStatus = this.data.shield;
+        this.timeElapsed = 0;
     }
 
     preload(){
-        this.load.image('background3', '/static/src/assets/cyber_city_lvl2.png');
-        this.load.image('ground3', '/static/src/assets/cyberpunk_platform.png');
-        this.load.image('coin3', '/static/src/assets/single_coin.png');
-        this.load.image('pillar3', '/static/src/assets/pillar.png');
-        this.load.image('spike3', '/static/src/assets/spikes.png');
-        this.load.image('block3', '/static/src/assets/cyberpunk_block.png');
-
-         //----PLAYER SPRITE SHEET ---------
-        this.load.spritesheet('player_one_walk', '/static/src/assets/assets_2/walk.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_death', '/static/src/assets/assets_2/death.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_idle_sheet', '/static/src/assets/assets_2/idle.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player_one_jump', '/static/src/assets/assets_2/jump.png', { frameWidth: 64, frameHeight: 64 });
-        //---PLAYER SPRITE SHEET--------
-        //---BIG BOY SPRITE SHEET-----
-        this.load.spritesheet('big_boy_walk', '/static/src/assets/assets_2/walk_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_attack', '/static/src/assets/assets_2/attack_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('big_boy_idle', '/static/src/assets/assets_2/idle_bigboy.png', { frameWidth: 64, frameHeight: 64 });
-        //---BIG BOY SPRITE SHEET----
-        
-      
-        //----WATCHER SPRITE SHEET-----
-        this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        //----WATCHER SPRITE SHEET
-
-        //-------FLYING ALIEN SPRITE SHEET----------------------------
-        this.load.spritesheet('flying_walk', '/static/src/assets/assets_2/flying_alien.png', { frameWidth: 64, frameHeight: 64 });
-        //-----------FLYING ALIEN SPRITE SHEET--------------------------
-        //----------WATCHER SPRITE SHEET------------
-        this.load.spritesheet('watcher_attack', '/static/src/assets/assets_2/attack_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_idle', '/static/src/assets/assets_2/idle_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('watcher_walk', '/static/src/assets/assets_2/walk_watcher.png', { frameWidth: 64, frameHeight: 64 });
-        //-----------WATCHER SPRITE SHEET---------
     }
-
     create(){
+        // restart level once to ensure there is no gravity bug
+        if (this.data.restarted_level_3 === false) {
+            this.data.restarted_level_3 = true;
+            this.scene.start(Constants.Scenes.lvl3,this.data);
+        }
 
+        // ------------------MOVING SPIKES-----------------------------
+        this.movingSpike1 = this.physics.add.image(680,200, 'spike');
+        this.movingSpike1.setImmovable(true);
+        this.movingSpike1.body.allowGravity = false;
+        this.movingSpike1.setDepth(1);
+        this.movingSpike1.setVelocityY(200);
+
+        this.movingSpike2 = this.physics.add.image(560,270, 'spike');
+        this.movingSpike2.setImmovable(true);
+        this.movingSpike2.body.allowGravity = false;
+        this.movingSpike2.setDepth(1);
+        this.movingSpike2.setVelocityY(200);
+
+        this.movingSpike3 = this.physics.add.image(440,340, 'spike');
+        this.movingSpike3.setImmovable(true);
+        this.movingSpike3.body.allowGravity = false;
+        this.movingSpike3.setDepth(1);
+        this.movingSpike3.setVelocityY(200);
+
+        this.movingSpike4 = this.physics.add.image(320,410, 'spike');
+        this.movingSpike4.setImmovable(true);
+        this.movingSpike4.body.allowGravity = false;
+        this.movingSpike4.setDepth(1);
+        this.movingSpike4.setVelocityY(200);
+
+        this.movingSpike5 = this.physics.add.image(200,480, 'spike');
+        this.movingSpike5.setImmovable(true);
+        this.movingSpike5.body.allowGravity = false;
+        this.movingSpike5.setDepth(1);
+        this.movingSpike5.setVelocityY(200);
         
         console.log("im at level 3");
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -91,67 +98,64 @@ export class level3 extends Phaser.Scene {
 
         this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keyESC.on('up',()=>this.pause());
-        
-        this.door1 = this.physics.add.staticGroup();
+
         this.door2 = this.physics.add.staticGroup();
-        //this.door1.create(-63, 290, null).setScale(4).refreshBody();
-        this.door1.create(-63, 420, null).setScale(4).refreshBody();
-        this.door1.create(-63, 550, null).setScale(4).refreshBody();
         //this.door2.create(862, 300, null).setScale(4).refreshBody();
         //this.door2.create(862, 400, null).setScale(4).refreshBody();
         this.door2.create(862, 530, null).setScale(4).refreshBody();
 
-        this.add.image(400, 300, 'background3');
+        this.add.image(400, 300, 'background');
 
         this.platforms = this.physics.add.staticGroup();
         this.spikes = this.physics.add.staticGroup();
         this.pillar = this.physics.add.staticGroup();
         this.block = this.physics.add.staticGroup();
 
-        this.platforms.create(200, 600, 'ground3').setScale(1).refreshBody();
-        this.platforms.create(400, 600, 'ground3').setScale(1).refreshBody();
-        this.platforms.create(600, 600, 'ground3').setScale(1).refreshBody();
+        this.platforms.create(200, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(400, 600, 'ground').setScale(1).refreshBody();
+        this.platforms.create(600, 600, 'ground').setScale(1).refreshBody();
 
-        this.pillar.create(125, 360, 'pillar3').setScale(1).refreshBody();
-        this.pillar.create(10, 360, 'pillar3').setScale(1).refreshBody();
+        this.pillar.create(125, 360, 'pillar').setScale(1).refreshBody();
+        this.pillar.create(10, 360, 'pillar').setScale(1).refreshBody();
 
         //not the ground platforms, to not have overlap need difference of 315 pixels horizontally
         //1st platforms from the top
-        this.platforms.create(265, 125, 'ground3').setScale(.75).refreshBody();
-        this.platforms.create(580, 125, 'ground3').setScale(.75).refreshBody();
+        this.platforms.create(265, 125, 'ground').setScale(.75).refreshBody();
+        this.platforms.create(580, 125, 'ground').setScale(.75).refreshBody();
 
         //2nd platforms from the top
-        this.platforms.create(335, 225, 'ground3').setScale(.75).refreshBody();
-        this.platforms.create(650, 225, 'ground3').setScale(.75).refreshBody();
+        this.platforms.create(335, 225, 'ground').setScale(.75).refreshBody();
+        this.platforms.create(650, 225, 'ground').setScale(.75).refreshBody();
 
         //3rd platforms from the top
-        this.platforms.create(300, 325, 'ground3').setScale(.75).refreshBody();
-        this.platforms.create(610, 325, 'ground3').setScale(.75).refreshBody();
+        this.platforms.create(300, 325, 'ground').setScale(.75).refreshBody();
+        this.platforms.create(610, 325, 'ground').setScale(.75).refreshBody();
 
         //4th platforms from the top
-        this.platforms.create(350, 470, 'ground3').setScale(.75).refreshBody();
-        this.platforms.create(660, 470, 'ground3').setScale(.75).refreshBody();
+        this.platforms.create(350, 470, 'ground').setScale(.75).refreshBody();
+        this.platforms.create(660, 470, 'ground').setScale(.75).refreshBody();
 
 
         //blocks at bigboy platform
-        this.block.create(750, 390, 'block3').setScale(.50).refreshBody();
-        this.block.create(775, 390, 'block3').setScale(.50).refreshBody();
-        this.block.create(800, 390, 'block3').setScale(.50).refreshBody();
+        this.block.create(750, 390, 'block').setScale(.50).refreshBody();
+        this.block.create(775, 390, 'block').setScale(.50).refreshBody();
+        this.block.create(800, 390, 'block').setScale(.50).refreshBody();
 
         //blocks at bottom with spikes
-        this.block.create(270, 550, 'block3').setScale(.30).refreshBody();
-        this.block.create(300, 540, 'block3').setScale(.30).refreshBody();
-        this.block.create(350, 530, 'block3').setScale(.30).refreshBody();
-        this.block.create(390, 540, 'block3').setScale(.30).refreshBody();
-        this.block.create(500, 540, 'block3').setScale(.30).refreshBody();
+        //removed these because it's too hard. 
+        // this.block.create(270, 550, 'block').setScale(.30).refreshBody();
+        // this.block.create(300, 540, 'block').setScale(.30).refreshBody();
+        // this.block.create(350, 530, 'block').setScale(.30).refreshBody();
+        // this.block.create(390, 540, 'block').setScale(.30).refreshBody();
+        // this.block.create(500, 540, 'block').setScale(.30).refreshBody();
 
-        //spikes in the level
-        this.spikes.create(300, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(350, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(400, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(500, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(580, 570, 'spike3').setScale(.50).refreshBody();
-        this.spikes.create(670, 570, 'spike3').setScale(.50).refreshBody();
+        // //spikes in the level
+        // this.spikes.create(300, 570, 'spike').setScale(.50).refreshBody();
+        // this.spikes.create(350, 570, 'spike').setScale(.50).refreshBody();
+        // this.spikes.create(400, 570, 'spike').setScale(.50).refreshBody();
+        // this.spikes.create(500, 570, 'spike').setScale(.50).refreshBody();
+        // this.spikes.create(580, 570, 'spike').setScale(.50).refreshBody();
+        // this.spikes.create(670, 570, 'spike').setScale(.50).refreshBody();
 
         //--- PLAYER CODE BELOW----------
         this.player = this.physics.add.sprite(50, 500, 'player_one_idle');
@@ -269,9 +273,9 @@ export class level3 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.coin = this.physics.add.group({
-            key: 'coin3',
-            repeat: 1,//this.totalCoin-1,
-            setXY: { x: 12, y: 0, stepX: 70 }
+            key: 'coin',
+            repeat: 10,
+            setXY: { x: 200, y: 530, stepX: 50 }
         });
 
         this.coin.children.iterate(function (child) {
@@ -279,8 +283,11 @@ export class level3 extends Phaser.Scene {
             child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
 
         });
+        this.coinCount = this.add.text( 16,16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.level3Text = this.add.text( 16,24, 'Level 1', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
 
-        this.coinCount = this.add.text(16, 16, 'crewels:'+this.data.crewels, { fontSize: '12px', fill: '#000' });
+
 
         this.crewels = 0;
         //----COLLIDER CODE----
@@ -298,19 +305,42 @@ export class level3 extends Phaser.Scene {
 
        this.cameras.main.setBounds(0, 0, 800, 600);
        this.cameras.main.startFollow(this.player);
-       this.cameras.main.setZoom(2);
+       this.cameras.main.setZoom(1.5);
+
+       this.coinCount.setPosition(150, 100);
+       this.level3Text.setPosition(150, 120);
+       this.lifeCount.setPosition(150, 140);
+ 
        
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.bigboy_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.flying_enemy, this.playerHitSpike,null, this);
         this.physics.add.overlap(this.player, this.watcher_enemy, this.playerHitSpike,null, this);
-        this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+
+        // add shield to scene (if purchased)
+        if (this.shieldStatus === 1) {
+            this.shield = this.physics.add.image(100, 460, 'shield');
+            this.shield.body.moves = false;
+            this.shield.body.setAllowGravity(false);
+            this.shield.setAlpha(0.5);
+        }
+
+        // set start time
+        this.startTime = new Date();
 
     }
     
 
     update(){
+        // -----------------------UPDATE MOVING PLATFORMS-----------------
+        this.movingSpike(this.movingSpike1, 100, 550, 200);
+        this.movingSpike(this.movingSpike2, 100, 550, 200);
+        this.movingSpike(this.movingSpike3, 100, 550, 200);
+        this.movingSpike(this.movingSpike4, 100, 550, 200);
+        this.movingSpike(this.movingSpike5, 100, 550, 200);
+
         var idle = false;
         var left_wall = 1;
         var right_wall = 2;
@@ -335,17 +365,31 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('idle',true);
         }
 
+        const isJumpJustDownc =  Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        const isJumpJustDownw = Phaser.Input.Keyboard.JustDown(this.keyW);
         // jump
-        if (this.cursors.up.isDown && this.player.body.touching.down || this.keyW.isDown && this.player.body.touching.down) //if
+        if (this.cursors.up.isDown && this.player.body.onFloor() || this.keyW.isDown && this.player.body.onFloor()) //if
         {
             idle = false;
             this.player.setVelocityY(-400);
             setTimeout(() => {  this.inAir = true; }, 100);
             this.sound.play(Constants.SFX.jump);
             this.player.anims.play('jump',true);
+            this.jump_count = 1;
+        }
+        //for double jump
+        if((isJumpJustDownc && (!this.player.body.onFloor() && this.jump_count < 2)) || isJumpJustDownw && (!this.player.body.onFloor() && this.jump_count < 2)){
+            this.doublejump_enabled();
+        }
+        //reset jump counter
+        if(this.player.body.onFloor()){
+            this.jump_count = 0;
+        }
+        if(!this.player.body.onFloor()){
+            setTimeout(() => {  this.inAir = true; }, 100);
         }
         // landing sound
-        if (this.inAir && this.player.body.touching.down) {
+        if (this.inAir && this.player.body.onFloor()) {
             this.inAir = false;
             this.sound.play(Constants.SFX.land);
         }
@@ -360,19 +404,19 @@ export class level3 extends Phaser.Scene {
       //  }
       //if positive can do this
       
-        if(this.player.body.touching.down && (!this.player.body.touching.right || !this.player.body.touching.left)){
+        if(this.player.body.onFloor() && (!this.player.body.touching.right || !this.player.body.touching.left)){
             this.player.setGravity(0,700);
         }
-        if(this.player.body.touching.right && !this.player.body.touching.down){
+        if(this.player.body.touching.right && !this.player.body.onFloor()){
             this.player.setGravity(0,-400);
             this.player.flipX = true;
         }
-        if(this.player.body.touching.left && !this.player.body.touching.down){
+        if(this.player.body.touching.left && !this.player.body.onFloor()){
             this.player.setGravity(0,-400);
             this.player.flipX = false;
         }
       //right wall
-        if((this.cursors.up.isDown && (this.player.body.touching.right && this.player.body.touching.down) || this.keyW.isDown && (this.player.body.touching.right && this.player.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touching.right && this.player.body.onFloor()) || this.keyW.isDown && (this.player.body.touching.right && this.player.body.onFloor())))
         {       
             idle = false;
            // this.player.setGravity(0,-700);
@@ -380,7 +424,7 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('jump',true);
         }
         //right wall
-        if((this.cursors.up.isDown && (this.player.body.touching.right && !this.player.body.touching.down) || this.keyW.isDown && (this.player.body.touching.right && !this.player.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touching.right && !this.player.body.onFloor()) || this.keyW.isDown && (this.player.body.touching.right && !this.player.body.onFloor())))
         {
             idle = false;
            // this.player.setGravity(0,-700);
@@ -388,7 +432,7 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('jump',true);
         }
         //left wall
-        if((this.cursors.up.isDown && (this.player.body.touchingleft && this.hero.body.touching.down) || this.keyW.isDown && (this.player.body.touchingleft && this.hero.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touchingleft && this.hero.body.onFloor()) || this.keyW.isDown && (this.player.body.touchingleft && this.hero.body.onFloor())))
         {
             idle = false;
            // this.player.setGravity(0,-300);
@@ -396,7 +440,7 @@ export class level3 extends Phaser.Scene {
             this.player.anims.play('jump',true);
         }
         //left wall
-        if((this.cursors.up.isDown && (this.player.body.touching.left && !this.player.body.touching.down) || this.keyW.isDown && (this.player.body.touching.left && !this.player.body.touching.down)))
+        if((this.cursors.up.isDown && (this.player.body.touching.left && !this.player.body.onFloor()) || this.keyW.isDown && (this.player.body.touching.left && !this.player.body.onFloor())))
         {
             idle = false;
            // this.player.setGravity(0,-300);
@@ -459,32 +503,87 @@ export class level3 extends Phaser.Scene {
         this.flying_enemy.flipX = true;
     }
     //-------FLYING ALIEN ANIMATION ABOVE
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
-        // if(this.keyESC.isDown){
-        //     this.scene.pause();
-        //     this.scene.launch(Constants.Scenes.pause);
-        // }
-        // if(this.crewels==this.totalCoin){
-        //     // this.scene.pause();
-        //     // this.scene.launch(Constants.Scenes.nameInput, this.scene);
-        //     console.log(this.scene.key)
-        //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
-        // }
-    }
+    //     this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+    //     // if(this.keyESC.isDown){
+    //     //     this.scene.pause();
+    //     //     this.scene.launch(Constants.Scenes.pause);
+    //     // }
+    //     // if(this.crewels==this.totalCoin){
+    //     //     // this.scene.pause();
+    //     //     // this.scene.launch(Constants.Scenes.nameInput, this.scene);
+    //     //     console.log(this.scene.key)
+    //     //     this.scene.start(Constants.Scenes.nameInput, [this.crewels, this.scene]);
+    //     // }
+    //   //  this.level3Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+    //     this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
 
-    playerHitdoor1()
-    {
-        this.scene.start(Constants.Scenes.lvl2_3,this.data);
+        // update shield position
+        if (this.shieldStatus === 1) {
+            this.shield.x = this.player.x;
+            this.shield.y = this.player.y + 17;
+        }
+
+        // reset startTime if pause menu was opened
+        if (this.paused) {
+            this.paused = false;
+            this.startTime = new Date();
+        }
+
     }
     playerHitdoor2()
     {
+        this.updateTimeElapsed();
+
+        // update score
+        this.data.score += 150;
+
+        // switch scene to next level
         this.scene.start(Constants.Scenes.lvl3_4,this.data);
     }
     playerHitSpike(){
-        // play take damage sound
-        this.sound.play(Constants.SFX.damage);
+        if (!this.invincible) {
 
-        this.scene.start(Constants.Scenes.nameInput, [this.data.crewels, this.scene]);
+            // set invincibility frame
+            this.invincible = true;
+            setTimeout(() => {  this.invincible = false; }, 750);
+
+            // if shield is available
+            if (this.shieldStatus === 1) {
+                // disable shield
+                this.shieldStatus = 0;
+                this.shield.setAlpha(0);
+
+                // shield recovers after 8 seconds
+                setTimeout(() => {  this.shieldStatus = 1; this.shield.setAlpha(0.5);}, 5000);
+
+                // otherwise, player takes damage
+            } else {
+                // update player lives
+                this.data.lives -= 1;
+                this.lifeCount.setText('lives: ' + this.data.lives);
+
+                // play take damage sound
+                this.sound.play(Constants.SFX.damage);
+
+                // game ends if lives hit zero
+                if (this.data.lives === 0) {
+                    this.updateTimeElapsed();
+
+                    // switch scene to graveyard
+                    this.scene.start(Constants.Scenes.nameInput, this.data);
+                }
+            }
+        }
+    }
+    doublejump_enabled(){
+        if(this.data.doubleJump > 0){
+            this.player.setVelocityY(-400);
+            setTimeout(() => {  this.inAir = true; }, 100);
+            this.sound.play(Constants.SFX.jump);
+            this.player.anims.play('jump',true);
+            this.jump_count = 2;
+            // this.data.doubleJump -= 1;
+        }
     }
 
     collectcoin (player, coin){
@@ -498,12 +597,24 @@ export class level3 extends Phaser.Scene {
     }
 
     pause(){
+        this.updateTimeElapsed();
+        this.paused = true;
         this.scene.launch(Constants.Scenes.pause,this.scene);
         // console.log(this.scene);
         this.scene.pause();
     }
-    transition(){
-        // this.scene.start(Constants.Scenes.lvl3_4,this.data)
-        
+
+    updateTimeElapsed(){
+        // update time elapsed
+        this.endTime = new Date();
+        this.data.timeElapsed += Math.round((this.endTime - this.startTime) / 1000);
+        console.log(this.data.timeElapsed + " seconds");
+    }
+    movingSpike(spike, lowerBound, upperBound, speed) {
+        if(spike.y <= lowerBound) {
+            spike.setVelocityY(speed);
+        } else if (spike.y >= upperBound) {
+            spike.setVelocityY(-1 * speed);
+        }
     }
 }
