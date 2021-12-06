@@ -263,9 +263,13 @@ export class level2 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' });
-        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#000' });
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(14, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+
+        this.coinCount.setPosition(200, 150);
+        this.level2Text.setPosition(200, 170);
+        this.lifeCount.setPosition(200, 190);
 
         //----COLLIDER CODE----
         this.physics.add.collider(this.bigboy_enemy, this.platforms);
@@ -387,14 +391,14 @@ export class level2 extends Phaser.Scene {
         }
     //---------WATCHER ANIMATION ABOVE------
 
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
-        // if(this.keyESC.isDown){
-        //     this.scene.pause();
-        //     this.scene.launch(Constants.Scenes.pause);
-        // }
-        this.level2Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
-        this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
-        // if(this.crewels==this.totalCoin){
+        // this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        // // if(this.keyESC.isDown){
+        // //     this.scene.pause();
+        // //     this.scene.launch(Constants.Scenes.pause);
+        // // }
+        // this.level2Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+        // this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+        // // if(this.crewels==this.totalCoin){
         //     // this.scene.pause();
         //     // this.scene.launch(Constants.Scenes.nameInput, this.scene);
         //     console.log(this.scene.key)
