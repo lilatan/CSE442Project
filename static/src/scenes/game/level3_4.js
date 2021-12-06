@@ -210,6 +210,7 @@ export class level3_4 extends Phaser.Scene {
     update() {
         //NOTE: IF ELSE block to stop player movement while shop scene is active
         if (!this.scene.isActive(Constants.Scenes.shop)) {
+            this.keyESC.enabled = true;
             if (this.cursors.left.isDown || this.keyA.isDown) {
                 this.player.setVelocityX(-200);
                 this.player.anims.play('left', true);
