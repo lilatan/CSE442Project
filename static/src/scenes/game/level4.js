@@ -159,10 +159,10 @@ export class level4 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' });
-        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' });
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' });
-        this.bossHealth = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' });
+        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.bossHealth = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -178,6 +178,10 @@ export class level4 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.spikes, this.playerHitSpike,null, this);
         // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+        this.coinCount.setPosition(150, 100);
+        this.level4Text.setPosition(150, 120);
+        this.lifeCount.setPosition(150, 140);
+        this.bossHealth.setPosition(150, 160);
 
     }
     update(){
@@ -255,10 +259,10 @@ export class level4 extends Phaser.Scene {
            // this.player.anims.play('jump',true);
          
         }
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
-        this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
-        this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
-        this.bossHealth.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
+        // this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        // this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+        // this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+        // this.bossHealth.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
 
         //When player hits a lever, decrease bossHealth by a certain amt
         // if (lever hit) { this.bossHealth -= 10; }
