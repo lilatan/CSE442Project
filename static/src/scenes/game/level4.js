@@ -420,11 +420,11 @@ export class level4 extends Phaser.Scene {
         this.startTime = new Date();
         // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
         this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
-        this.coinCount.setPosition(150, 100);
-        this.level4Text.setPosition(150, 120);
-        this.lifeCount.setPosition(150, 140);
-        this.bossHealthDisplay1.setPosition(150, 160);
-        this.bossHealthDisplay2.setPosition(150, 180);
+        this.coinCount.setPosition(300, 20);
+        this.level4Text.setPosition(300, 40);
+        this.lifeCount.setPosition(300, 60);
+        this.bossHealthDisplay1.setPosition(300, 80);
+        this.bossHealthDisplay2.setPosition(300, 100);
 
     }
     boss_fight1(){
