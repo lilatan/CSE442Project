@@ -260,9 +260,9 @@ export class level2 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(14, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#000' }).setScrollFactor(0);
+        this.coinCount = this.add.text(14, 16, 'crewels: ' + this.data.crewels, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.level2Text = this.add.text( 16,24, 'Level 2', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
 
         this.coinCount.setPosition(200, 150);
         this.level2Text.setPosition(200, 170);

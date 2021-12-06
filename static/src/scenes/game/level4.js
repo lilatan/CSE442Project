@@ -379,11 +379,18 @@ export class level4 extends Phaser.Scene {
 
         });
 
+<<<<<<< Updated upstream
         this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
         this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
         this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
         this.bossHealthDisplay1 = this.add.text(16, 40, 'Boss 1 Health: ' + this.bossHealth1 + '%', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
         this.bossHealthDisplay2 = this.add.text(16, 48, 'Boss 2 Health: ' + this.bossHealth2 + '%', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+=======
+        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#FFF' }).setScrollFactor(0);
+        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#FFF' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#FFF' }).setScrollFactor(0);
+        this.bossHealth = this.add.text(16, 40, 'Boss Health: ' + this.bossHealth + '%', { fontSize: '12px', fill: '#FFF' }).setScrollFactor(0);
+>>>>>>> Stashed changes
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
