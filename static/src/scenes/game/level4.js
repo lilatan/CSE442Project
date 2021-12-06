@@ -379,11 +379,11 @@ export class level4 extends Phaser.Scene {
 
         });
 
-        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#fff' });
-        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#fff' });
-        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' });
-        this.bossHealthDisplay1 = this.add.text(16, 40, 'Boss 1 Health: ' + this.bossHealth1 + '%', { fontSize: '12px', fill: '#fff' });
-        this.bossHealthDisplay2 = this.add.text(16, 48, 'Boss 2 Health: ' + this.bossHealth2 + '%', { fontSize: '12px', fill: '#fff' });
+        this.coinCount = this.add.text(16, 16, 'crewels:' + this.data.crewels, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.level4Text = this.add.text( 16,24, 'Level 4', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.lifeCount = this.add.text(16, 32, 'lives: ' + this.data.lives, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.bossHealthDisplay1 = this.add.text(16, 40, 'Boss 1 Health: ' + this.bossHealth1 + '%', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
+        this.bossHealthDisplay2 = this.add.text(16, 48, 'Boss 2 Health: ' + this.bossHealth2 + '%', { fontSize: '12px', fill: '#fff' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.coin, this.platforms);
@@ -418,6 +418,13 @@ export class level4 extends Phaser.Scene {
 
         // set start time
         this.startTime = new Date();
+        // this.physics.add.overlap(this.player, this.door1, this.playerHitdoor1,null, this);
+        this.physics.add.overlap(this.player, this.door2, this.playerHitdoor2,null, this);
+        this.coinCount.setPosition(150, 100);
+        this.level4Text.setPosition(150, 120);
+        this.lifeCount.setPosition(150, 140);
+        this.bossHealthDisplay1.setPosition(150, 160);
+        this.bossHealthDisplay2.setPosition(150, 180);
 
     }
     boss_fight1(){
@@ -865,11 +872,11 @@ export class level4 extends Phaser.Scene {
         }
       //********************************************boss code end*************************************
 
-        this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
-        this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
-        this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
-        this.bossHealthDisplay1.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
-        this.bossHealthDisplay2.setPosition(this.player.body.position.x-75, this.player.body.position.y-100);
+        // this.coinCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-60);
+        // this.level4Text.setPosition(this.player.body.position.x-75, this.player.body.position.y-70);
+        // this.lifeCount.setPosition(this.player.body.position.x-75, this.player.body.position.y-80);
+        // this.bossHealthDisplay1.setPosition(this.player.body.position.x-75, this.player.body.position.y-90);
+        // this.bossHealthDisplay2.setPosition(this.player.body.position.x-75, this.player.body.position.y-100);
         this.bossHealthDisplay1.setText('Boss 1 Health: ' + this.bossHealth1 + '%');
         this.bossHealthDisplay2.setText('Boss 2 Health: ' + this.bossHealth2 + '%');
 
